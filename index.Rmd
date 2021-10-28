@@ -8,3 +8,4 @@ title: "IMD Advanced R Training"
 # Placeholder for Advanced R training website
 
 This page will include topics and code for the advanced R training.
+More coming soon...
