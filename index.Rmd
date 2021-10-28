@@ -1,0 +1,8 @@
+---
+output: 
+  html_document:
+    css: custom_styles.css
+title: "IMD Advanced R Training"
+---
+
+# Placeholder for Advanced R training website
