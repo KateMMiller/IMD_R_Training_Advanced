@@ -5,7 +5,23 @@ output:
 title: "IMD Advanced R Training"
 ---
 
-# Placeholder for Advanced R training website
+<h2>NPS Inventory and Monitoring Division R Training II: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
+--------------------------------------------------
+### Prep for Training {.tabset}
 
-This page will include topics and code for the advanced R training.
-More coming soon...
+```{r Install_instructions, child = "IMD_D0_Training_Prep.Rmd"}
+
+```
+
+
+### Day 1: Data Retrievel {.tabset}
+
+### Day 2: Functional Programming {.tabset}
+
+### Day 3: R Markdown {.tabset}
+
+### Day 4: R Packages & Version Control {.tabset}
+
+```{r Rpackages, child = "IMD_D4_R_packages.Rmd"}
+
+```
