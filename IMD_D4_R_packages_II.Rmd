@@ -1,0 +1,148 @@
+---
+author: "Kate Miller & Sarah Wright"
+date: "1/10/2022"
+output: html_document
+---
+#### Build Tools
+
+<details open><summary class = 'drop'>Build Tools</summary>
+The last step before we get to start adding to our R package is to make sure the Build Tools are set up and functioning properly. 
+
+<ol><li>Go to Tools > Project Options > Build Tools. Make sure the "Generate documentation with Roxygen" box is checked.</li>
+<li>If you're not directed to the Roxygen Options window, click on the "Configure" button. Make sure that under "Use roxygen to generate:", you at least have checks next to Rd files, Collate field, NAMESPACE file. Under Automatically roxygenize when running:", make sure you have checks next to R CMD check, Source and binary package builds, and Install and Restart. See graphic below as example. If you plan to build vignettes and want them to be rendered each time you rebuild your package, you can check that box too.</li>
+
+```{r build1, echo=F, out.width = '650px'}
+knitr::include_graphics("./images/Project_Options_Build_Tools.png")
+```
+<li>We're going to change the roxygen text at the beginning of hello.R to make sure the build updates the hello.rd in the man folder. 
+<ol><li>First, delete the hello.Rd in the man folder. While you're at it delete the NAMESPACE in the main folder (we'll let Build Tools generate it from scratch).</li> 
+<li>Now, open hello.R, and delete all of the commented text. </li>
+<li>Add the following code at the top of the file, then save.</li>
+
+```{r roxy, echo=T, eval=F}
+#' @title hello
+#' @description test package for R training
+#' @export
+```
+</ol>
+<li>If you have Rtools installed and correctly created your package, you should see a <b>Build</b> tab in your Environment Pane for that project. Click on "Install and Restart". The hello.R file and Build output should look like the image below. </li>
+```{r build2, echo=F, out.width = '650px'}
+knitr::include_graphics("./images/Build_hello_example.png")
+```
+<br>
+<br>
+<li>Now run the code below to view the help file you just made for the hello function in hello.R</li>
+<br>
+```{r hellohelp, echo=T, eval=F}
+?testpackage::hello
+```
+</ol>
+
+If the text you added shows up in the help file, your Build tools are all set. If the Build exited with status 1, then something is wrong with the roxygen text in your hello.R file. Review the build results to see if you can find the line identified as failing. Also check that each of the lines you added are commented with both symbols ( `r #'`), and that the terms following the @ are spelled correctly and don't have a space.
+
+The last thing to do is delete the hello.R file to clean up the package. You don't need to delete the hello.Rd file, as it will be deleted the next time you rebuild your package.
+
+</details>
+<br>
+
+#### Package Development
+<details open><summary class = 'drop'>Add and document the first function</summary>
+
+Now we get to add to our package and make it useful! We're going to add a simple function to the package that I use all the time for my workflow. It's a function that takes the first 3 letters of a genus and species to create a species code. It saves me having to type out full species names when I'm filtering through a lot of data. 
+
+To follow along, go to File > New R Script (or key Ctrl + Shift + N) and copy the code below to the script.
+
+```{r fun1, echo=T, eval=F}
+#' @title make_sppcode
+#' @description Make a 6-letter code with first 3 letters of genus and species in a data.frame.
+#' @importFrom dplyr mutate
+#' @importFrom stringr word
+#' @export
+
+make_sppcode <- function(data, sppname){
+  data <- mutate(data, genus = word(sppname, 1),
+                       species = ifelse(is.na(word(sppname, 2)), "spp",
+                                        word(sppname, 2)),
+                       sppcode = toupper(paste0(substr(genus, 1, 3),
+                                                substr(species, 1, 3))))
+  return(data)
+}
+```
+
+
+Note in the Roxygen code above, we added the title, description, and export like we did for hello.R. Now we also added 2 imports, which are dependencies of your R package. The first is mutate in the dplyr package. The second is the word function in the stringr package. By adding these 2 lines to the Roxygen, these two functions will become part of the Namespace of the package (more on that later), and will be usable by any function in your package. 
+
+If you use all base R functions within the functions of your package, you don't need to use imports. In general, best coding practices are to minimize the number of dependencies to reduce the number of packages a user needs to install before using your package, and make it less likely that your package code will break because a dependency was updated. I use them here to show you the workflow when you need dependencies (e.g., it's hard for me not to want dplyr at some point in a package). Another note is that importFrom will only add the functions for that package in the Namespace, so you're less likely to have conflicts with other packages. If you want to make the entire package available to the package Namespace (e.g., I've done this with ggplot2), then you'd write:
+
+```{r fun2, echo=T, eval=F}
+#' @import ggplot2
+```
+</details>
+<br>
+
+<details open><summary class = 'drop'>Update DESCRIPTION file</summary>
+
+There's one last piece of documentation we need to complete before dependencies will be installed when your package is installed. Open the DOCUMENTATION file. It should look like: <br>
+<img src="./images/description_default.png" width="500px">
+<br>
+<br>
+You'll want to update the Title, Author, Maintainer, and Description, which are pretty self-explanatory.  
+
+Now we need to add the Imports and Suggests to the DESCRIPTION. <br>
+<b>Imports:</b> Packages listed under Imports will be installed at the same time your package is installed. You can also set the minimum version number that, if users don't have, will be installed. <br>
+<b>Suggests:</b> These packages are not installed at the time your package is installed. Suggests are helpful for external packages that are only used by one or a few functions in your package. For example, our forestNETN package has a function that imports data directly from our SQL Server, but only a few network staff can access the server. The packages that function uses are listed under Suggests. The import function that uses the suggested packages then checks to see if that package is installed on the user's computer. If not, it will stop and print an error that it needs to be installed. I'll show that workflow later. 
+
+You can either manually add these to the DESCRIPTION file like:<br> 
+<img src="./images/imports_suggests.png" width="100px"><br>
+
+OR, you can use the usethis package to do the heavy lifting!
+```{r sugimp, echo=T, eval=F}
+usethis::use_package("dplyr") # for imports
+usethis::use_package("stringr") # for imports
+usethis::use_package("ggplot2", "Suggests") # for suggests
+```
+
+Note also that the License should be MIT + file LICENSE, if you followed the workflow we showed earlier with usethis. I don't know a lot about licenses, other than it's best practice to set one. The MIT license is the most common passive license that means your code is open source and allows anyone to copy code with minimal restrictions. If you want all derivatives of your code by other users to be open source, the GPLv3 license is the most common license (usethis::use_gpl_license()).  
+
+</details>
+
+
+We're finally ready to document the package (note you could have done it after each step). Go to the Build tab and click "Install and Restart" (or Ctrl + Shift + B). Assuming the roxygen and DESCRIPTION were written correctly, you should now see a make_sppcode.Rd in the man folder. You can also check that help works for the function: 
+
+```{r testhelp, eval=F} 
+?testpackage::make_sppcode
+```
+
+<details open><summary class = 'drop'>Check your NAMESPACE</summary>
+Now open your NAMESPACE file. It should look like this: <br>
+<img src="./images/namespace.png" width="400px"><br>
+
+Namespace is a special beast, and can be a bit hard to wrap your head around. Basically each package has its own environment that is specific to the functions in the package and are separate from your global environment. The Namespace contains all of the functions you've built for your package, along with all of the external dependencies you are using within your functions. As you add more functions and dependencies, they'll get added here each time you rebuild your package. You can also store data in the namespace, which can then be accessed by your package functions. 
+</details>
+
+
+
+Now test that the make_sppcode() function actually works.
+
+```{r testfun}
+library(testpackage)
+example_dat <- data.frame(Latin_Name = c("Carex limosa", "Arethusa bulbosa", "Malaxis unifolia", "Calopogon tuberosus"), 
+                          cover = c(10, 40, 10, 50))
+
+head(example_dat)
+example_dat2 <- make_sppcode(example_dat, "Latin_Name")
+head(example_dat2)
+```
+
+</details>
+
+
+Next additions to make:
+<ul>
+<li> Add an example of Suggests with the namespace check at the beginning of the function.</li>
+<li> Add example of dependency with minimum version number</li>
+<li> Commit changes to github</li>
+<li> Show how to install from github</li>
+
+#### Resources
+<a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples. You really can't go wrong when Hadley Wickham and Jenny Bryan team up on a project.
