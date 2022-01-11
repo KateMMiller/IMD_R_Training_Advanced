@@ -42,7 +42,7 @@ Note that while you don't need GitHub to create a package, the workflow we are u
 
 There are multiple ways to build a package, and it just keeps getting easier thanks to RStudio. The steps below are the ones that most consistently have worked for me as of January 2022. 
 
-<details open><summary class = 'drop'>Creating a package with the file menu and git shell (the old way):</summary> 
+<details><summary class = 'drop'>Creating a package with the file menu and git shell (the old way):</summary> 
 <ol>
 <li>Create a repo on Github</li>
   <ol>
@@ -62,7 +62,7 @@ Once those steps are completed, check that it worked by clicking on the blue dow
 
 Example git shell code for setting up the repo on my account: 
 <br>
-```{r gitshell, echo=F, include=T, out.width='500px'}
+```{r gitshell, echo=F, include=T, out.width='600px', fig.align='center'}
 knitr::include_graphics("./images/gitshell_init_code.png")
 ```
 </details>
@@ -86,7 +86,8 @@ Obviously this is much easier than working through the git shell! This is the ap
 
 #### Package Anatomy
 The basic building blocks of an R package are defined in the list below. At a bare minimum, there are 2 files and 2 folders that make up an R package. The 2 required files are DESCRIPTION and NAMESPACE. The two folders are "R" and "man". Several additional files that improve documentation and git workflow are also added by RStudio's package template. Your Files pane should look something like this:
-<img src="./images/package_files.png" alt="RStudio" width="400px">
+
+<img src="./images/package_files.png" alt="RStudio" width="500px" class="center">
 
 <details open><summary class = 'drop'>Package files explained </summary>
 <ul>
