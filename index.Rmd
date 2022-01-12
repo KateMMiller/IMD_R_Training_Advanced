@@ -31,12 +31,17 @@ title: "IMD Advanced R Training"
 
 ```
 
+```{r RpackagesIII, child = "IMD_D4_R_packages_III.Rmd"}
+
+```
+
+
 ### Code printout {.tabset}
 ```{r Code_printout, child = "IMD_Code_Printout.Rmd"}
 
 ```
 
-### Meet the Trainers
+### Meet the Instructors
 ```{r about, child = "IMD_Meet_the_Trainers.Rmd"}
 
 ```
