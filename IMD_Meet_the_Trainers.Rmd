@@ -5,12 +5,12 @@ output:
   html_document:
     css: custom_styles.css
 ---
-<p style="font-size:14px">We are the trainers who designed and led the training for this week. We hope you found it useful, and that you keep with it! <br>
+<p style="font-size:14px">We are the people who designed and led the training for this week. We hope you found it useful, and that you keep with it! <br>
 
 <div class = 'row'>
 <div class = 'column'>
 <b>Andrew Birch</b> <br>
-WRD/IMD Water Quality Program Lead, <br>
+WRD/IMD Water Quality Program Lead <br>
 andrew_birch@nps.gov <br>
 <img src="./images/Andrew-Birch-2.jpg" width='200px'>
 <br>
@@ -33,9 +33,9 @@ kathryn_miller@nps.gov <br>
 <br>
 
 <b>Lauren Pandori</b> <br>
-MEDN Marine Biologist <br>
+CABR Marine Biologist - MEDN <br>
 lauren_pandori@nps.gov <br>
-<img src="./images/LPandori.jfif" width='200px'>
+<img src="./images/Pandori_CABR.jpg" width='200px'>
 <br>
 <br>
 
