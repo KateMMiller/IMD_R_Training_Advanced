@@ -4,8 +4,6 @@ output:
     css: custom_styles.css
 title: "IMD Advanced R Training"
 ---
-knitr::opts_chunk$set(echo = TRUE, fig.align="center", dpi=600)
-
 <h2>NPS Inventory and Monitoring Division R Training II: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
 --------------------------------------------------
 ### Prep for Training {.tabset}
@@ -30,5 +28,15 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center", dpi=600)
 ```
 
 ```{r RpackagesII, child = "IMD_D4_R_packages_II.Rmd"}
+
+```
+
+### Code printout {.tabset}
+```{r Code_printout, child = "IMD_Code_Printout.Rmd"}
+
+```
+
+### Meet the Trainers
+```{r about, child = "IMD_Meet_the_Trainers.Rmd"}
 
 ```
