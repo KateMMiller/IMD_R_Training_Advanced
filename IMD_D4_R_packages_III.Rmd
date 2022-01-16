@@ -6,12 +6,16 @@ output: html_document
 ---
 
 ```{r include = F}
+#------------------
+# R Packages III
+#------------------
 library(stringr)
 library(dplyr)
 example_dat <- data.frame(Latin_Name = c("Carex limosa", "Arethusa bulbosa", 
                                          "Malaxis unifolia", "Calopogon tuberosus"), 
                           cover = c(10, 40, 10, 50),
                           stems = c(50, 20, 10, 10))
+
 ```
 
 #### Error Handling
@@ -23,7 +27,6 @@ We're going to add one more function to our testpackage, so we can talk about su
 ```{r newfun, eval=F, echo=F}
 #' @title theme_IMD: custom ggplot2 theme for forestNETN
 #'
-#' @import ggplot2
 #'
 #' @description This is a custom ggplot2 theme that removes the default panel grids
 #' from ggplot2 figures, and makes the axes and tick marks grey instead of black.
@@ -156,7 +159,7 @@ make_sppcode_error(example_dat, sppname = "Latin_Name")
 
 ```
 
-I should fail, and the error message tells you that object 'dat' not found. You could then go look under the hood in your function to try to find where dat lived. Or, you can use `traceback()`, which shows you the code and line number that failed. If you have functions from your package that this function uses, and the other function is what failed, `traceback()` will tell you that too. Run the code below to see for yourself. 
+It should fail, and the error message tells you that object 'dat' not found. You could then go look under the hood in your function to try to find where dat lived. Or, you can use `traceback()`, which shows you the code and line number that failed. If you have functions from your package that this function uses, and the other function is what failed, `traceback()` will tell you that too. Run the code below to see for yourself. 
 
 ```{r funerror3, eval=F}
 traceback()
@@ -177,7 +180,7 @@ The code chunk below shows how to start using the `debug()` function to step thr
 <li><b>Q</b> to exit the browser and stop debugging.</li>
 </ul>
 
-```{r debugwindow, error=T, eval=F}
+```{r debugwindow, error = T, eval = F}
 debug(make_sppcode_error)
 make_sppcode_error(data, "Latin_Name")
 
@@ -190,10 +193,25 @@ In our case, we'll enter `n` and step our way through the function, printing the
 <hr>
 
 #### Share Package on GitHub
+<h4>Post to GitHub </h4>
+We're finally be ready to post our package to GitHub. You'll want to run the build (Ctrl + Shift + B or "Install and Restart" in Build tab) and check (Ctrl + Shift + E or "Check" in Build tab) one last time. If all checks out, then go to the Git tab in your environment pane. Click on the Commit button, which will open a pane like below. Go ahead and check all but the gitignore files, add a commit message, and then press commit. This will stage the changes. The last step is pushing to GitHub using the green up arrow in the top right. After you push to GitHub, you should see that your GitHub repo in your browser has the new files/changes in the main branch. You might need to refresh the page (F5). 
+
+```{r gitcom, echo=F, out.width = '650px', fig.align = "center", dpi=600}
+knitr::include_graphics("./images/package_commit.jpg")
+```
+
+<h4>Install from GitHub</h4>
+The package is is currently only installed on your local machine. The easiest way for others to use your package are for them to install the package using devtools. This will install the package based on the code in the `main` branch. Packages can also be installed from a branch by adding `ref = 'branchname'` to the function call.
+
+```{r instgit, echo = F, eval = F}
+devtools::install_github("KateMMiller/testpackage")
+```
+
+The other way to install the package is for the user to go through the process of cloning the GitHub repository to their local machine and then using the build tool to build the package on their machine. This is the preferred method only if other users of your package are also interested in contributing to the package. Be sure to use branches to keep the main branch protected, so that `install_github()` continues to work as you're developing on your package. 
 
 
 #### Resources
-<a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples. You really can't go wrong when Hadley Wickham and Jenny Bryan team up on a project.
+<a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples being added frequently. You can't go wrong when Hadley Wickham and Jenny Bryan team up on a project.
 
 <a href="https://adv-r.hadley.nz/conditions.html">Advanced R</a> is an excellent resource to learn the more advanced skills and concepts with R programming. The book is pretty advanced and assumes you already have a solid foundation in R programming. 
 

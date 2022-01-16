@@ -12,6 +12,9 @@ The last step before we get to start adding to our R package is to make sure the
 <li>If you're not directed to the Roxygen Options window, click on the "Configure" button. Make sure that under "Use roxygen to generate:", you at least have checks next to Rd files, Collate field, NAMESPACE file. Under Automatically roxygenize when running:", make sure you have checks next to R CMD check, Source and binary package builds, and Install and Restart. See graphic below as example. If you plan to build vignettes and want them to be rendered each time you rebuild your package, you can check that box too.</li>
 
 ```{r build1, echo=F, out.width = '650px', fig.align = "center", dpi=600}
+#------------------
+# R Packages 2
+#------------------
 knitr::include_graphics("./images/Project_Options_Build_Tools.png")
 ```
 <li>We're going to change the roxygen text at the beginning of hello.R to make sure the build updates the hello.rd in the man folder. 

@@ -64,6 +64,9 @@ Once those steps are completed, check that it worked by going to git tab to pull
 Example git code for setting up the repo on my account: 
 <br>
 ```{r gitshell, echo=F, include=T, out.width='600px', fig.align='center'}
+#------------------
+# R Packages I
+#------------------
 knitr::include_graphics("./images/gitshell_init_code.png")
 ```
 </details>
@@ -72,15 +75,30 @@ knitr::include_graphics("./images/gitshell_init_code.png")
 <details open><summary class = 'drop'>Creating a package in code (the easy way):</summary>
 The easiest way to create a new package in RStudio is using the <i>usethis</i> package. You'll first need to have a GitHub account and have RStudio connected to your GitHub account. Once that's working, you can run the code below in your console.  
 
-```{r altnewR, echo=T, eval=F}
-usethis::create_package("D:/NETN/R_Dev/testpackage") # Creates a new package called testpackage. 
-  # Be sure to update path to work for your computer.
-usethis::use_git() # sets up local git for new package
-usethis::use_github() # creates new github repo called testpackage. 
-usethis::use_mit_license() # set license to MIT license (or use a different license.)
+<ol>
+<li><b>Create a new package.</b> The code below should create a new package called testpackage and will open a project in a new R session.</li>
+```{r altnewR, echo = T, eval = F}
+usethis::create_package("D:/NETN/R_Dev/testpackage") # update to work with your file path
 ```
 
-Obviously this is much easier than working through the git shell! This is the approach we recommend, and this is the package we'll continue to build on through the training. We'll talk about the license piece later in the training. Now that we have a new package created, we'll talk about the pieces that make up a package and look through the default files included in the package. 
+<li><b>Set up local git repository.</b> After running the code below, you'll be prompted whether it is okay to commit the files created by the package template. Select 1 (Absolutely). Then you'll be prompted to restart RStudio. Select 2 to restart. </li>
+```{r altnewR2, echo = T, eval = F}
+usethis::use_git() # sets up local git for new package
+```
+
+<li><b>Create GitHub repo.</b> After running the code below, you'll be prompted whether it is okay to commit the files created by the package template to GitHub. Select 3: Definitely. This will establish the connections to GitHub. If you don't select 3, you'll have to establish the connection manually via the Terminal. </li>
+```{r altnewR3, echo = T, eval = F}
+usethis::use_github() # creates new github repo called testpackage. 
+```
+
+<li><b>Add license and change branch name.</b> AFter you run the code below, your browser will open to your GitHub repo (assuming you have the same settings as my computer). You'll be prompted to click "OK" to change the branch from master to main. After you complete that step, you should see the green and blue arrows in your RStudio Git pane get activated.</li> 
+```{r altnewR4, echo=T, eval = F}
+usethis::use_mit_license() # set license to MIT license (or use a different license.)
+usethis::git_default_branch_rename() # renames master to main 
+```
+</ol>
+
+And you're done! Obviously this is much easier than working through the git shell. This is the approach we recommend, and this is the package we'll continue to build on through the training. We'll talk about the license piece later in the training. Now that we have a new package created, we'll talk about the pieces that make up a package and look through the default files included in the package. 
 </details>
 <br>
 <hr>

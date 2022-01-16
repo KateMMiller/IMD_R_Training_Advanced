@@ -26,13 +26,17 @@ The installer for RStudio for PCs can be downloaded <a href="https://rstudio.com
 #       Prep
 #--------------------
 ```
+<details open><summary class='drop'>Day 3 Installs: tinytex</summary>
 
-<details open><summary class='drop'>Rtools, devtools, and roxygen2</summary>
+<b style="color:red">If you are attending Day 3: R Markdown</b>, you must have a LaTeX engine installed to output to pdf. The easiest, lightest weight install is tinytex. The <a href="https://yihui.org/tinytex/">tinytex website</a> includes download files and installation instructions.    
+</details>
+<br>
 
-<b>If you are attending Day 4: R packages and version control, you must also install RTools, and devtools and roxygen2 packages.</b> Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.  
+<details open><summary class='drop'>Day 4 Installs: Rtools, devtools, and roxygen2</summary>
+
+<b style="color:red">If you are attending Day 4: R packages and version control</b>, you must also install RTools, and devtools and roxygen2 packages.</b> Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.  
 
 After you install Rtools, you'll want to install the <i>devtools</i> package. The devtools package allows you to install packages from github, and will be the easiest way for others to install your packages in their R environment. Run the code chunk below to make sure everything is installed and running correctly. The devtools package has a lot of dependencies, and you often have to install new packages or update existing packages during the process. If you're asked to update libraries while trying to install devtools, you should update them. The most common reason the devtools install doesn't work is because you have an outdated version of one of its dependencies installed. 
-
 
 ```{r devtools, echo=T, eval=F}
 install.packages('devtools')
