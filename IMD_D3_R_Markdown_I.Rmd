@@ -193,7 +193,7 @@ Cons
 </details>
 <br>
 
-<details open><summary class = 'drop'>Output to PDF</summary>
+<details open><summary class='drop'>Output to PDF</summary>
 Rendering to .pdf requires a LaTeX engine that runs under the hood. The easiest engine to install is `tinytex`, and there are instructions and download files on the "Prep for Training" tab of this site.
 
 Pros
@@ -207,7 +207,7 @@ Cons
 </details>
 <br>
 
-<details open><summary class = 'drop>Output to Word</summary>
+<details open><summary class='drop'>Output to Word</summary>
 Pros
 1. It's very easy to import a word document with styles as a template, and then to output your document to Word.
 2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).
@@ -219,7 +219,7 @@ Cons
 </details>
 <br>
 
-<details open><summary class = 'drop>Other outputs</summary>
+<details open><summary class='drop'>Other outputs</summary>
 There are dozens of other types of output, including FlexTables/Dashboards, slide decks for presentations, and posters for scientific meetings. There are also templates for journal articles with certain journals, and even templates for building a CV or resume. 
 </details>
 <br>
