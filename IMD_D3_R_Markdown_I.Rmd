@@ -1,7 +1,9 @@
 ---
 author: "Kate Miller & Ellen Cheng"
 date: "1/10/2022"
-output: html_document
+output: 
+  html_document:
+    css: custom_styles.css
 ---
 
 ```{r setup2, include = FALSE}
@@ -9,23 +11,174 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #### Intro to R Markdown {.tabset}
-<details open><summary class = 'drop'> Background </summary>
+<details open><summary class='drop'>Background</summary>
+R Markdown is a special file format that you can open in RStudio (go to File > New File, and "R Markdown..." is the 3rd option). R Markdown takes what you put into the .Rmd file, knits the pieces together, and renders it into the format you specified using PanDoc, which is typically installed as part of the RStudio IDE bundle. The knit and render steps generally occur at the same time, and the terms are often used interchangeably. For example, the Knit button (<img src="./images/knit_button.png" alt="knit" width="70px">) knits and renders the .Rmd to your output file. The knit shortcut is also super handy, which is Ctrl + Shift + K. 
+
+The most commonly used outputs are HTML, PDF, and Word. Each output format has pros and cons, and drives which text editing language (e.g., HTML or LaTeX) you need to use for advanced/custom needs. We'll cover these in more detail in a minute.
+</details>
+<br>
+
+<details open><summary class='drop'>Reasons to use R Markdown</summary>
+We're all busy and it's hard to keep up on everything we need to know to do our jobs well. We wouldn't be promoting R Markdown like we are, if we didn't feel that it was a huge contributor to our efficiency and productivity. R Markdown has been described as the Swiss Army knife of Data Science, because there are so many things you can do with it. Below are just a few of the many reasons we use R Markdown.
+<ul>
+<li>My favorite part of R Markdown is that it's one stop shopping to store code, text/notes, results, etc., as I'm working on an analysis and writing a report. It saves me the hassle of copying and pasting figures and tables from an analysis into Word or PowerPoint, and allows me to write notes as I'm analyzing. These notes often end up going right into the Methods and Results sections my papers.</li>
+<li>They're reproducible and easily updated. If the data changes, or you realize there's an error in your analysis, all you have to do is fix the issue, then rerender the .Rmd to update the output file.</li>
+<li>You can use parameters (e.g., park code, year, species) to iterate through and generate multiple separate reports for each unique parameter. We'll show examples of that later. </li>
+<li>The learning curve is also very shallow at the outset. In about 5 minutes of playing with it, you'll get the basics of how it works. Then, as you learn more HTML/CSS or LaTeX, the sky is the limit. This website, in fact, is built from R Markdown and hosted as a GitPage for the <a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced">repo that hosts the code</a>. </li>
+</ul>
+</details>
+<br>
+
+<details open><summary class='drop'>Getting Started</summary>
+To get started, you'll need to make sure you have the `rmarkdown` package installed. The `knitr` package, which does a lot of heavy lifting, is a dependency of `rmarkdown`, so both will be installed with the line of code below.
+
+```{r installmark, eval = F, echo = T, out.width="400px"}
+install.packages("rmarkdown") 
+```
+
+Once you have `rmarkdown` installed, you should be able to go to <b>File > New File > R Markdown...</b>, and start a new .Rmd file. After selecting "R Markdown...", you will be taken to another window where you can add a title and author and choose the output format. For now, let's just use the default settings and output to HTML. You should now see an Untitled .Rmd file in your R session with some information already in the YAML and example plain text and code chunks. You can also start with a blank .Rmd, which will be more convenient once you get the hang of it. 
+
+</details>
+<br>
+<br>
+<hr>
+
+#### Anatomy of an .Rmd 
+<details open><summary class='drop'>YAML</summary>
+The .Rmd file itself consists of 3 main pieces. There's the YAML (Yet Another Markup Language) code at the top, which is contained within `---`, like the image below. The top YAML is typically where you define features that apply to the whole document, like the output format, authors, parameters (more on that later), whether to add a table of contents, etc. The YAML below is what we're using for this website. Note that indenting is very important in YAML. The css: custom_styles.css tells Markdown that I want the styles defined in my css, rather than the default styling in Markdown. This is optional, and is here just to show a variation on the default YAML you get when starting a new .Rmd. If you don't want to use your own custom style sheet, then your YAML would just have the following in one line: `output: html_document`.
+
+```{r yaml, echo=F, out.width = '300px', fig.align = "left", dpi=600}
+#------------------
+# R Markdown I
+#------------------
+knitr::include_graphics("./images/YAML.png")
+```
+
+- other common additions in YAML: headers/footers, table of contents, parameters
+
+</details>
+<br>
+
+<details open><summary class='drop'>Plain text</summary>
+This is what it sounds like- it's just text. You can write anything you want outside of a code chunk, and it will render as if you're writing in a word processor, rather than as code. Although, note that special characters like % and & may need to be escaped with a `/` before the symbol, particularly if you're using LaTeX (more on that later).
+You can format text using Markdown's built in functions, like those shown below. For a more detailed list of these formatting functions, check out the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheatsheet</a>. You can also code HTML directly in R Markdown, which I actually find easier the more I get comfortable with HTML. The section below shows how to use the same common styles with R Markdown and HTML and what the output looks like.
+
+<div class = 'boxBorder'>
+<div class = 'row'>
+<div class = 'column3'>
+The actual text in the .Rmd:
+```{markdown, verbtxt, attr.source="style='display:inline-block;'", collapse=TRUE}
+# First-level header
+
+## Second-level header
+
+...
+
+###### Sixth-level header
+
+*italic* or _italic_
+
+**bold** or __bold__
+
+superscript^2^
+
+endash: --
+
+Example sentence: *Picea rubens* is the dominant species in **Acadia National Park**.
+
+```
+</div>
+<div class = 'column3'>
+The HTML version:
+```{html, verbhtml, attr.source="style='display:inline-block;'", collapse=TRUE}
+<h1>First-level header</h1>
+
+<h2>Second-level header</h2>
+
+...
+
+<h6>Sixth-level header</h6>
+
+<i>italic</i>
+
+<b>bold</b>
+
+superscript<sup>2</sup>
+
+endash: &ndash;
+
+Example sentence: <i>Picea rubens</i> is the dominant species in <b>Acadia National Park</b>.
+
+```
+</div>
+<div class = 'column3'>
+
+The text renders as:
+
+# First-level header <br>
+
+## Second-level header <br>
+
+...
+<p style="padding-bottom:0;padding-top:10px">
+
+###### Sixth-level header <br>
+</p>
+<p style="padding-bottom:0;padding-top:10px">
+*italic* or _italic_ <br>
+</p>
+<p style="padding-bottom:0;padding-top:10px">
+**bold** or __bold__ <br>
+</p>
+<p style="padding-bottom:0;padding-top:4px">
+superscript^2^ <br>
+</p>
+<p style="padding-bottom:0;padding-top:8px">
+endash: -- <br>
+</p>
+<p style="padding-bottom:0;padding-top:6px">
+Example sentence: *Picea rubens* is the dominant species in **Acadia National Park**.<br>
+</p>
+</div>
+<br>
+
+</div></div>
+</details>
+<br>
+
+<details open><summary class='drop'>Code chunks</summary>
+Code chunks are also what they sound like. They're chunks of R code (can be of other coding languages too), which run like they're in an R script. They're contained within back ticks and curly brackets, like below. 
+
+````
+`r ''````{r}
+
+```
+````
+`````
+
+You can customize the behavior and output of a code chunk using options within the `{ }`. Common chunk options are below:
+<ul>
+<li>`echo = TRUE` prints the code chunk to the output. `FALSE` omits the code from output. </li>
+<li>`results = 'hide'` omits results of code chunk from output. `show` is the default. </li>
+<li>`include = FALSE` executes the code, but omits the code and results from the output. </li>
+<li>`eval = FALSE` does not execute the code chunk, but can print the code, if `echo = TRUE`.</li>
+<li>`cache = TRUE` allows you to cache the output associated with that code chunk, and will only rerun that chunk if the code inside the chunk changes. Note that if the objects or data in the code chunk are changed, but the code within the chunk is still the same, the code chunk won't realize that it needs to rerun. You need to be careful about using the cache option.</li>
+<li>`fig.cap = "Caption text"` allows you to add a figure caption. </li>
+<li>`fig.width = 4`; `fig.height = 3` allows you set the figure size in inches. </li>
+<li>`out.width = 4`; `out.height = 3` allows you set the figure or table size as a percentage of the container/page size. </li>
+<li>`message = FALSE, warning = FALSE` prevent messages or warnings from chatty packages from being included in the output. </li>
+</ul>
+<br>
+See the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheatsheet</a> for a complete list of code chunk options.
+<br>
+Another trick to using code chunk options, is that they can be conditional based on the results from another code chunk. For example, I have a QC report that runs 40+ checks on a week's worth of forest data, but the report only includes checks that returned at least 1 value/error. Checks that returned nothing are omitted from the report using conditional eval. I'll show an example of that later.
+
 </details>
 <br>
 <hr>
 
-```{r installmark, eval = F, echo = F}
-install.packages(c("rmarkdown", "knitr"))
-```
-- Text vs code chunk
-- basic yaml code at the top 
-- basic yaml in each code chunk
-- types of output, and requirements for each
-- difference between rmarkdown and knitr 
-- params
-
 #### Output types
-<details open><summary class = 'drop'>Output to HTML</summary>
+<details open><summary class='drop'>Output to HTML</summary>
 Pros
 1. Fewest dependencies and least finicky of the 3 main outputs.
 2. You can code straight HTML and CSS in your markdown document (javascript too), so you're not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R's version of html functions, I just learned HTML and code in HTML when using Markdown.  
@@ -70,6 +223,9 @@ There are dozens of other types of output, including FlexTables/Dashboards, slid
 </details>
 <br>
 
+
+
+
 #### Tables 
 - kable & kableExtra
 - DT (brief)
@@ -95,3 +251,25 @@ There are dozens of other types of output, including FlexTables/Dashboards, slid
 - tabsets
 - html widgets and interactives (plotly?, crosstable?)
 
+#### Resources
+<h3>R Markdown</h3>
+<a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: The Definitive Guide</a>. This is Yihui Xie's book that's available free online and for purchase. Yihui is one of the main developers at RStudio working on R Markdown and related packages (e.g. knitr, pagedown, bookdown). The online book is searchable, and is often the first place I check, when I can't remember how to do something.
+<br>
+<a href="https://r4ds.had.co.nz/">R for Data Science</a>, chapters 27 and 29. The book itself is worth a read cover to cover. The chapters on R Markdown are also very helpful on their own.
+<br>
+<a href="https://rmarkdown.rstudio.com/">RStudio's R Markdown page:</a> Includes several short videos and lots of tutorials, along with a gallery to give an idea of the many things you can do.
+
+<a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheat Sheet</a>.
+
+<h3>HTML/CSS</h3>
+<a href="https://www.w3schools.com/html/default.asp">W3 Schools HTML page:</a> This website includes helpful tutorials on HTML and CSS, includes executable examples for just about every HTML tag you can think of, and shows how different browsers render content.
+<br>
+<a href="https://www.htmlandcssbook.com/">HTML & CSS design and build websites:</a> This book costs about $15 (cheaper if you can find a used copy) and was a very helpful introduction and continual resource, particularly for working with CSS. There's a Javascript & JQuery book by the same author that's equally well-done, but was a much steeper learning curve.
+
+<h3>LaTeX</h3>
+<a href="https://ctan.org/">CTAN.org:</a> This is LaTeX's version of CRAN. 
+<br>
+<a href="https:/www.overleaf.com/learn">Overleaf Online LaTex Editor:</a> Includes a short guide to learn LaTeX, examples for most common uses of LaTeX, and has a built in editor that you can excecute code in.
+
+````
+<hr>
