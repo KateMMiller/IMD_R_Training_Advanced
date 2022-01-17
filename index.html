@@ -226,6 +226,98 @@ library(usethis)</code></pre>
 </div>
 <div id="day-3-r-markdown" class="section level3 tabset">
 <h3 class="tabset">Day 3: R Markdown</h3>
+<div id="intro-to-r-markdown" class="section level4 tabset">
+<h4 class="tabset">Intro to R Markdown</h4>
+<details open>
+<summary class="drop">
+Background
+</summary>
+</details>
+<br>
+<hr>
+<ul>
+<li>Text vs code chunk</li>
+<li>basic yaml code at the top</li>
+<li>basic yaml in each code chunk</li>
+<li>types of output, and requirements for each</li>
+<li>difference between rmarkdown and knitr</li>
+<li>params</li>
+</ul>
+</div>
+<div id="output-types" class="section level4">
+<h4>Output types</h4>
+<details open>
+<summary class="drop">
+Output to HTML
+</summary>
+<p>Pros 1. Fewest dependencies and least finicky of the 3 main outputs. 2. You can code straight HTML and CSS in your markdown document (javascript too), so you’re not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R’s version of html functions, I just learned HTML and code in HTML when using Markdown.<br />
+3. Easy to share, and usually renders well on the most common browsers. 4. Allows you to host your files as GitPages (like this training website). 5. Relatively easy to make 508 Compliant (but don’t ask me how to do it).</p>
+Cons 1. HTML pages are hard to make print friendly. Page breaks aren’t an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won’t look the same as through a browser (or just shows you the HTML). You always have to include these instructions when sharing HTML files.
+</details>
+<p><br></p>
+<details open>
+<summary class="drop">
+Output to PDF
+</summary>
+<p>Rendering to .pdf requires a LaTeX engine that runs under the hood. The easiest engine to install is <code>tinytex</code>, and there are instructions and download files on the “Prep for Training” tab of this site.</p>
+<p>Pros 1. PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint). 2. Easier to enforce pagebreaks than HTML output.</p>
+Cons 1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with (there’s very little love out there for LaTeX). There are decent websites offering help and examples, but it’s nothing like the help community and resources for HTML.<br />
+2. I’m no expert on LaTeX, so perhaps it just me. But I’ve spent hours fine-tuning a header in LaTeX that takes me minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you’re going to need to use at least some LaTeX along the way.<br />
+3. It’s much harder to make .pdfs 508 Compliant using R Markdown. The functionality just isn’t there, as far as I know. At least not like HTML.
+</details>
+<p><br></p>
+<details open>
+&lt;summary class = ’drop&gt;Output to Word
+</summary>
+<p>Pros 1. It’s very easy to import a word document with styles as a template, and then to output your document to Word. 2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word). 3. You can use a Reference Management System for bibliographies (although see bullet 2 in Cons).</p>
+Cons 1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don’t always render all that well, and often need to be tweaked again in Word. It’s possible the <code>officedown</code> package may add functionality, but I haven’t played around with it enough (and the times I checked for a certain function, it didn’t have it). 3. I have yet to get the open source version of a reference management system (Zotero) to work in Markdown, and EndNote isn’t approved software.
+</details>
+<p><br></p>
+<details open>
+&lt;summary class = ’drop&gt;Other outputs
+</summary>
+There are dozens of other types of output, including FlexTables/Dashboards, slide decks for presentations, and posters for scientific meetings. There are also templates for journal articles with certain journals, and even templates for building a CV or resume.
+</details>
+<p><br></p>
+</div>
+<div id="tables" class="section level4">
+<h4>Tables</h4>
+<ul>
+<li>kable &amp; kableExtra</li>
+<li>DT (brief)</li>
+</ul>
+</div>
+<div id="figures" class="section level4">
+<h4>Figures</h4>
+<ul>
+<li>images</li>
+<li>figure captions and numbering</li>
+</ul>
+</div>
+<div id="iterating" class="section level4">
+<h4>Iterating</h4>
+<ul>
+<li>Show example of rendering a bunch of markdown docs (e.g. one for each park)</li>
+</ul>
+</div>
+<div id="examples" class="section level4">
+<h4>Examples</h4>
+<ul>
+<li>QA/QC report and weekly checking (html)</li>
+<li>Regen analysis or invasive analysis (html)</li>
+<li>NPS template and MIDN report (docx)</li>
+<li>Ellen’s COVID reports (pdf)</li>
+</ul>
+</div>
+<div id="bells-and-whistles" class="section level4">
+<h4>Bells and Whistles</h4>
+<ul>
+<li>iterating knitr text into tabs</li>
+<li>conditional eval = obj or include = obj</li>
+<li>tabsets</li>
+<li>html widgets and interactives (plotly?, crosstable?)</li>
+</ul>
+</div>
 </div>
 <div id="day-4-version-control" class="section level3 tabset">
 <h3 class="tabset">Day 4: Version Control</h3>
@@ -718,13 +810,16 @@ Post to GitHub
 Install from GitHub
 </h4>
 <p>The package is is currently only installed on your local machine. The easiest way for others to use your package are for them to install the package using devtools. This will install the package based on the code in the <code>main</code> branch. Packages can also be installed from a branch by adding <code>ref = &#39;branchname&#39;</code> to the function call.</p>
-<p>The other way to install the package is for the user to go through the process of cloning the GitHub repository to their local machine and then using the build tool to build the package on their machine. This is the preferred method only if other users of your package are also interested in contributing to the package. Be sure to use branches to keep the main branch protected, so that <code>install_github()</code> continues to work as you’re developing on your package.</p>
+The other way to install the package is for the user to go through the process of cloning the GitHub repository to their local machine and then using the build tool to build the package on their machine. This is the preferred method only if other users of your package are also interested in contributing to the package. Be sure to use branches to keep the main branch protected, so that <code>install_github()</code> continues to work as you’re developing your package. <br>
+<hr>
 </div>
 <div id="resources" class="section level4">
 <h4>Resources</h4>
 <p><a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples being added frequently. You can’t go wrong when Hadley Wickham and Jenny Bryan team up on a project.</p>
 <p><a href="https://adv-r.hadley.nz/conditions.html">Advanced R</a> is an excellent resource to learn the more advanced skills and concepts with R programming. The book is pretty advanced and assumes you already have a solid foundation in R programming.</p>
 <p><a href="https://bookdown.org/rdpeng/RProgDA/error-handling-and-generation.html">Mastering Software Development in R</a> covers a lot of the same topics as Advanced R that we cover in this training, but is a gentler introduction and doesn’t get quite as advanced.</p>
+<br>
+<hr>
 </div>
 </div>
 <div id="code-printout" class="section level3 tabset">
@@ -737,6 +832,8 @@ install.packages(&#39;devtools&#39;)
 library(devtools)
 library(roxygen2)
 library(usethis)
+knitr::opts_chunk$set(echo = TRUE)
+install.packages(c(&quot;rmarkdown&quot;, &quot;knitr&quot;))
 knitr::opts_chunk$set(echo = TRUE)
 #------------------
 # R Packages I

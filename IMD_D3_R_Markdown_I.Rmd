@@ -1,0 +1,97 @@
+---
+author: "Kate Miller & Ellen Cheng"
+date: "1/10/2022"
+output: html_document
+---
+
+```{r setup2, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Intro to R Markdown {.tabset}
+<details open><summary class = 'drop'> Background </summary>
+</details>
+<br>
+<hr>
+
+```{r installmark, eval = F, echo = F}
+install.packages(c("rmarkdown", "knitr"))
+```
+- Text vs code chunk
+- basic yaml code at the top 
+- basic yaml in each code chunk
+- types of output, and requirements for each
+- difference between rmarkdown and knitr 
+- params
+
+#### Output types
+<details open><summary class = 'drop'>Output to HTML</summary>
+Pros
+1. Fewest dependencies and least finicky of the 3 main outputs.
+2. You can code straight HTML and CSS in your markdown document (javascript too), so you're not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R's version of html functions, I just learned HTML and code in HTML when using Markdown.  
+3. Easy to share, and usually renders well on the most common browsers.
+4. Allows you to host your files as GitPages (like this training website).
+5. Relatively easy to make 508 Compliant (but don't ask me how to do it).
+
+Cons
+1. HTML pages are hard to make print friendly. Page breaks aren't an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 
+2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won't look the same as through a browser (or just shows you the HTML). You always have to include these instructions when sharing HTML files. 
+</details>
+<br>
+
+<details open><summary class = 'drop'>Output to PDF</summary>
+Rendering to .pdf requires a LaTeX engine that runs under the hood. The easiest engine to install is `tinytex`, and there are instructions and download files on the "Prep for Training" tab of this site.
+
+Pros
+1. PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint).
+2. Easier to enforce pagebreaks than HTML output.
+
+Cons
+1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with (there's very little love out there for LaTeX). There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML.  
+2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes me minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you're going to need to use at least some LaTeX along the way.  
+3. It's much harder to make .pdfs 508 Compliant using R Markdown. The functionality just isn't there, as far as I know. At least not like HTML.
+</details>
+<br>
+
+<details open><summary class = 'drop>Output to Word</summary>
+Pros
+1. It's very easy to import a word document with styles as a template, and then to output your document to Word.
+2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).
+3. You can use a Reference Management System for bibliographies (although see bullet 2 in Cons).
+
+Cons
+1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well, and often need to be tweaked again in Word. It's possible the `officedown` package may add functionality, but I haven't played around with it enough (and the times I checked for a certain function, it didn't have it). 
+3. I have yet to get the open source version of a reference management system (Zotero) to work in Markdown, and EndNote isn't approved software.
+</details>
+<br>
+
+<details open><summary class = 'drop>Other outputs</summary>
+There are dozens of other types of output, including FlexTables/Dashboards, slide decks for presentations, and posters for scientific meetings. There are also templates for journal articles with certain journals, and even templates for building a CV or resume. 
+</details>
+<br>
+
+#### Tables 
+- kable & kableExtra
+- DT (brief)
+
+
+#### Figures
+- images 
+- figure captions and numbering
+
+#### Iterating 
+- Show example of rendering a bunch of markdown docs (e.g. one for each park)
+
+#### Examples
+- QA/QC report and weekly checking (html)
+- Regen analysis or invasive analysis (html)
+- NPS template and MIDN report (docx)
+- Ellen's COVID reports (pdf)
+
+
+#### Bells and Whistles
+- iterating knitr text into tabs
+- conditional eval = obj or include = obj
+- tabsets
+- html widgets and interactives (plotly?, crosstable?)
+

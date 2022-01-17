@@ -12,12 +12,16 @@ title: "IMD Advanced R Training"
 
 ```
 
-
 ### Day 1: Data Retrievel {.tabset}
 
 ### Day 2: Functional Programming {.tabset}
 
 ### Day 3: R Markdown {.tabset}
+
+```{r RmarkdownI, child = "IMD_D3_R_Markdown_I.Rmd"}
+
+```
+
 
 ### Day 4: Version Control {.tabset}
 
