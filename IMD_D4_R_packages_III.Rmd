@@ -207,8 +207,9 @@ The package is is currently only installed on your local machine. The easiest wa
 devtools::install_github("KateMMiller/testpackage")
 ```
 
-The other way to install the package is for the user to go through the process of cloning the GitHub repository to their local machine and then using the build tool to build the package on their machine. This is the preferred method only if other users of your package are also interested in contributing to the package. Be sure to use branches to keep the main branch protected, so that `install_github()` continues to work as you're developing on your package. 
-
+The other way to install the package is for the user to go through the process of cloning the GitHub repository to their local machine and then using the build tool to build the package on their machine. This is the preferred method only if other users of your package are also interested in contributing to the package. Be sure to use branches to keep the main branch protected, so that `install_github()` continues to work as you're developing your package. 
+<br>
+<hr>
 
 #### Resources
 <a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples being added frequently. You can't go wrong when Hadley Wickham and Jenny Bryan team up on a project.
@@ -216,3 +217,6 @@ The other way to install the package is for the user to go through the process o
 <a href="https://adv-r.hadley.nz/conditions.html">Advanced R</a> is an excellent resource to learn the more advanced skills and concepts with R programming. The book is pretty advanced and assumes you already have a solid foundation in R programming. 
 
 <a href="https://bookdown.org/rdpeng/RProgDA/error-handling-and-generation.html">Mastering Software Development in R</a> covers a lot of the same topics as Advanced R that we cover in this training, but is a gentler introduction and doesn't get quite as advanced.  
+
+<br>
+<hr>
