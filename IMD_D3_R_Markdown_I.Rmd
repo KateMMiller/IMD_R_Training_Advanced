@@ -154,7 +154,8 @@ Code chunks are also what they sound like. They're chunks of R code (can be of o
 
 ```
 ````
-`````
+<p style="color:white">
+`````</p>
 
 You can customize the behavior and output of a code chunk using options within the `{ }`. Common chunk options are below:
 <ul>
