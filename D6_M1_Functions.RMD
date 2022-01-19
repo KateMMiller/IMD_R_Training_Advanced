@@ -18,26 +18,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ####What is a function?
+A function allows 
 Everything is a function. But what is it really?
 ```{looking at a function, echo = F, eval=T}
+#run these in the console without the () to see what lies underneath
 mean
 
 lm
 
 ```
+So R functions are basically made up of a little bit of code an some more functions....
 
 
-
-####Iterative functions vs iterating a function
-
-#everything is a function
-#a function that iterates (e.g. for, map, apply) vs a function that is iterated (e.g. myfunction(x) )
-
-
-#showing people how to inspect what the function they want to use does.
-#why write a function
+####When do you need a function?
+-When you are recycling the same code and changing variable names or values.
 #effectively it is a force QA/QC filter
 #consistency - garbage in garbage out
+
+
+####What should your function look like
 #readability is not trivial
 
 ##########################
@@ -47,12 +46,6 @@ lm
 #variables
 #Understanding how you may encounter functions being represented in help
 #curly brackets vs no
-
-##########################
-#simple iteration
-##########################
-#use the function we modify to do something
-#example using map or apply family should operate on one dataframe to get started
 
 ##########################
 #more complex functions
@@ -71,6 +64,26 @@ lm
 #this is where getting progress updates is useful - tells you which file/case is breaking your code.
 #setting test cases
 #getting help - setting a minimum reproducible example and stackoverflow.
+
+
+
+
+####Iterative functions vs iterating a function
+A two part system. 
+-You have something you want to do many times. This is your function. 
+-You need some way to do it many times, that is your iterative function. 
+
+Examples
+for() and stuff
+
+
+
+##########################
+#simple iteration
+##########################
+#use the function we modify to do something
+#example using map or apply family should operate on one dataframe to get started
+
 
 ###########################
 #How different iteration tools handle / parse your data and pass it to functions - what is in x and where
@@ -94,6 +107,7 @@ lm
 ###########################
 #system.time()
 #profiling for optimizing a more complex function
+
 
 
 ###########################
