@@ -1,0 +1,66 @@
+---
+author: "Kate Miller"
+date: "1/11/2022"
+output: 
+  html_document:
+    css: custom_styles.css
+---
+<p style="font-size:14px">We are the people who designed and led the training for this week. We hope you found it useful, and that you keep with it! <br>
+
+<div class = 'row'>
+<div class = 'column'>
+<b>Andrew Birch</b> <br>
+WRD/IMD Water Quality Program Lead <br>
+andrew_birch@nps.gov <br>
+<img src="./images/Andrew-Birch-2.jpg" width='200px'>
+<br>
+<br>
+
+<b>Ellen Cheng</b> <br>
+SER Quantitative Ecologist <br>
+ellen_cheng@nps.gov <br>
+<img src="./images/ECheng.png" width='200px'>
+<br>
+<br>
+
+</div>
+<div class = 'column'>
+<b>Kate Miller</b> <br>
+NETN/MIDN Quantitative Ecologist <br>
+kathryn_miller@nps.gov <br>
+<img src="./images/KMiller.jpg" width='200px'> 
+<br>
+<br>
+
+<b>Lauren Pandori</b> <br>
+CABR Marine Biologist - MEDN <br>
+lauren_pandori@nps.gov <br>
+<img src="./images/Pandori_CABR.jpg" width='200px'>
+<br>
+<br>
+
+<b>Thomas Parr</b> <br>
+GLKN Program Manager <br>
+thomas_parr@nps.gov <br>
+<img src="./images/ThomasParr.jpg" width='200px'> 
+<br>
+<br>
+</div>
+
+<div class = 'column'>
+<b>John Paul Schmit</b><br> 
+NCRN Quantitative Ecologist <br>
+john_paul_schmit@nps.gov <br>
+<img src="./images/JPSchmit.jpg" width='200p'>
+<br>
+<br>
+
+<b>Sarah Wright</b> <br> 
+MOJN Data Scientist <br>
+sarah_wright@nps.gov <br>
+<img src="./images/SWright_crop.jpg" width='200px'>
+<br>
+<br>
+</div></div>
+
+</p>

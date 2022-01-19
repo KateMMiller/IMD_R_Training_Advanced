@@ -72,6 +72,12 @@ hr {
   margin:0px 0px 0px 0px;
 }
 
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .tabset{
 color:black;
 font-size: 16px;
@@ -85,3 +91,34 @@ font-size: 16px;
 .title{
   display:none;
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* for 3-cols*/
+.column3 {
+  flex: 25%;
+  padding: 0 10px;
+}
+
+/* for Meet instructors  */
+.column {
+  flex: 30%;
+  padding: 0 4px;
+}
+
+/* for Meet instructors */
+.column img { 
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+/* for box around text */
+.boxBorder {
+ border: 1.5px solid #696969;
+ padding: 10px;
+ /*outline: #696969 solid 5px;*/
+ }

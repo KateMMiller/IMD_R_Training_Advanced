@@ -1,0 +1,60 @@
+---
+title: "Preparing for Training"
+author: "Kate Miller"
+date: "9/25/2020"
+output: html_document
+---
+<h2>Installing required software</h2>
+The only thing you really need to do to prepare for R training is to install the latest version of R and RStudio. We'll talk about the difference between R and RStudio on the first day, but for now, just make sure they're installed. Directions for installing R/RStudio are below. If you run into any problems, check the instructions at R for Data Science <a href="https://r4ds.had.co.nz/introduction.html#prerequisites">Section 1.4.1 and 1.4.2</a>. 
+
+<b style="color:red">NOTE: If you don't have Administrative privileges on your computer, you will have to submit an <a href="https://npshelpdesk.nps.gov/">IT HelpDesk Ticket</a> (need to be on VPN or NPS network to access this link) to install R and RStudio, which could take a while. PLEASE PLAN AHEAD!</b>  
+
+Even if you already have R or RStudio installed, please install the latest versions of both programs. R recently went through a major version change from 3.x to 4.x with some potential code-breaking changes. The latest versions are needed to ensure everyone's code behaves the same way. 
+
+<details open><summary class='drop'>Install the latest version of R (4.1.2 as of January 2022)</summary>
+Assuming you're on a PC, the installer for the latest version of R can be downloaded from <a href="https://cran.r-project.org/bin/windows/base/">The Comprehensive R Archive Network (CRAN)</a>. You'll want to download the R installer by clicking on "Download R 4.0.4 for Windows", or whatever the latest version number happens to be. After it downloads, open and run the installer with default settings. Note that there's no need to pin R to your taskbar or add a shortcut to your desktop. For 99% of your needs, you'll run R within RStudio, and won't ever open R directly.
+</details>
+<br>
+
+<details open><summary class='drop'>Install RStudio</summary>
+The installer for RStudio for PCs can be downloaded <a href="https://rstudio.com/products/rstudio/download/#download">here</a>. You'll need to click on the large blue "DOWNLOAD RSTUDIO FOR WINDOWS" button to download the installer. After it downloads, open and run the installer with default settings. I like having RStudio pinned to my taskbar, so it's easier to find/open, but it's up to you and your preferences.
+</details>
+<br>
+
+```{r orgPrep, echo=F, eval=F, include=F}
+#--------------------
+#       Prep
+#--------------------
+```
+<details open><summary class='drop'>Day 3 Installs: tinytex</summary>
+
+<b style="color:red">If you are attending Day 3: R Markdown</b>, you must have a LaTeX engine installed to output to pdf. The easiest, lightest weight install is tinytex. The <a href="https://yihui.org/tinytex/">tinytex website</a> includes download files and installation instructions.    
+</details>
+<br>
+
+<details open><summary class='drop'>Day 4 Installs: Rtools, devtools, and roxygen2</summary>
+
+<b style="color:red">If you are attending Day 4: R packages and version control</b>, you must also install RTools, and devtools and roxygen2 packages.</b> Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.  
+
+After you install Rtools, you'll want to install the <i>devtools</i> package. The devtools package allows you to install packages from github, and will be the easiest way for others to install your packages in their R environment. Run the code chunk below to make sure everything is installed and running correctly. The devtools package has a lot of dependencies, and you often have to install new packages or update existing packages during the process. If you're asked to update libraries while trying to install devtools, you should update them. The most common reason the devtools install doesn't work is because you have an outdated version of one of its dependencies installed. 
+
+```{r devtools, echo=T, eval=F}
+install.packages('devtools')
+library(devtools)
+```
+
+The <i>roxygen2</i> package is a dependency of devtools, and it should be installed if you successfully installed devtools. However, it's always good to check that it installed properly. The roxygen2 package helps with package documentation. The <i>usethis</i> package is relatively new, and some features that used to live in devtools now live in usethis.  
+
+```{r roxygen, echo=T, eval=F}
+library(roxygen2)
+library(usethis)
+```
+
+Once these packages load without errors, you're all set. If you have any issues making this work, contact Kate Miller or Sarah Wright prior to training, and we'll help you troubleshoot.
+
+
+</details>
+
+
+<hr>
+
