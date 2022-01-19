@@ -7,6 +7,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+####Overview
+
 ###February 8 - Day 6 2022 R Training for IMD Scientists' Meeting
 #Functional Programming
 #Iteration with functions, Vectorization, Best Practices
@@ -18,6 +20,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ####What is a function?
+#JP+Thomas
+
 A function allows 
 Everything is a function. But what is it really?
 ```{looking at a function, echo = F, eval=T}
@@ -30,19 +34,23 @@ lm
 So R functions are basically made up of a little bit of code an some more functions....
 
 
-####When do you need a function?
+####When do you need a function? 
+#Thomas
+
 -When you are recycling the same code and changing variable names or values.
 #effectively it is a force QA/QC filter
 #consistency - garbage in garbage out
 
 
-####What should your function look like
+####Best Practices: What should your function look like
+#1 function for each task vs 1 function to rule them all
 readability is not trivial
 naming a function and conventions
 variable names
 Understanding how you may encounter functions being represented in help - curly brackets vs no
+organization of the function
 
-####Steps for function develops
+####Steps for function development
 #setting test cases
 
 ####Modifying simple function
@@ -57,74 +65,17 @@ Create a plot function see day 4
 #ellipsis
 
 
-#if/else, while switches - case specific operations
-
+####Defining the output of functions
+#depends on how you plan on using the function
 #customizing output
 #summarizing into dataframe
 #getting it to output that you want.
 
-
-
-
-
-####Iterative functions vs iterating a function
-A two part system. 
--You have something you want to do many times. This is your function. 
--You need some way to do it many times, that is your iterative function. 
-
-Examples
-for() and stuff
-
-
-
-
-####Iterative functions
-#How different iteration tools handle / parse your data and pass it to functions - what is in x and where
-#does it come from?
-###########################
-#more in-depth look at iteration options?
-#purr family
-#apply family
-#for
-#if/else, while
-#do.call
-#and more...
-
-
-####Simple Iteration
-#use the function we modify to do something
-#example using map or apply family should operate on one dataframe to get started
-
-
-
-####vectorization
-#...
-
-
-####performance and profiling - when to worry about it and where to look 
-#system.time()
-#profiling for optimizing a more complex function
-
-
-####Coding best practices
-#avoiding loops within loops within... when you can
-
-
-####Debugging
-Link back to D4 debugging tab.
-
-
-
-## JP Section
-
-
-
-
-
-## Thomas Section
-
-
-
+####Best Practices: outputs
+#variable names
+  #keep argument names the same
+#planning ahead - where does it go next?
+#Think about what makes sense so the piping works well?
 
 
 
