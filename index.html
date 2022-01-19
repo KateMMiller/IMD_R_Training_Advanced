@@ -223,6 +223,76 @@ library(usethis)</code></pre>
 </div>
 <div id="day-2-functional-programming" class="section level3 tabset">
 <h3 class="tabset">Day 2: Functional Programming</h3>
+<div id="overview" class="section level4">
+<h4>Overview</h4>
+<p>#Functional Programming #Iteration with functions, Vectorization, Best Practices</p>
+<p>#this day is covering how to get a lot of repetitive tasks done quickly. The approaches below #are intended to get you started, but are not exhaustive. There are many many more ways to accomplish #your goals than what we present below. #testing commits from NPS computer</p>
+</div>
+<div id="what-is-a-function" class="section level4">
+<h4>What is a function?</h4>
+<p>#JP+Thomas</p>
+<p>A function allows Everything is a function. But what is it really?</p>
+<p>So R functions are basically made up of a little bit of code an some more functions….</p>
+</div>
+<div id="when-do-you-need-a-function" class="section level4">
+<h4>When do you need a function?</h4>
+<p>#Thomas</p>
+<p>-When you are recycling the same code and changing variable names or values. #effectively it is a force QA/QC filter #consistency - garbage in garbage out</p>
+</div>
+<div id="best-practices-what-should-your-function-look-like" class="section level4">
+<h4>Best Practices: What should your function look like</h4>
+<p>#1 function for each task vs 1 function to rule them all readability is not trivial naming a function and conventions variable names Understanding how you may encounter functions being represented in help - curly brackets vs no organization of the function</p>
+</div>
+<div id="steps-for-function-development" class="section level4">
+<h4>Steps for function development</h4>
+<p>#setting test cases</p>
+</div>
+<div id="modifying-simple-function" class="section level4">
+<h4>Modifying simple function</h4>
+<p>provide as an example the modification of mean to have na.rm=T</p>
+<p>Create a plot function see day 4</p>
+</div>
+<div id="more-complex-functions" class="section level4">
+<h4>More complex functions</h4>
+<p>#multiple parameters #defaults, overriding defaults #ellipsis</p>
+</div>
+<div id="defining-the-output-of-functions" class="section level4">
+<h4>Defining the output of functions</h4>
+<p>#depends on how you plan on using the function #customizing output #summarizing into dataframe #getting it to output that you want.</p>
+</div>
+<div id="best-practices-outputs" class="section level4">
+<h4>Best Practices: outputs</h4>
+<p>#variable names #keep argument names the same #planning ahead - where does it go next? #Think about what makes sense so the piping works well?</p>
+</div>
+<div id="iterative-functions-vs-iterating-a-function" class="section level4">
+<h4>Iterative functions vs iterating a function</h4>
+<p>A two part system. -You have something you want to do many times. This is your function. -You need some way to do it many times, that is your iterative function.</p>
+<p>Examples for() and stuff</p>
+</div>
+<div id="iterative-functions" class="section level4">
+<h4>Iterative functions</h4>
+<p>#How different iteration tools handle / parse your data and pass it to functions - what is in x and</p>
+<p>#more in-depth look at iteration options? #vectorization #if/else, while #for #apply family #do.call #purr family</p>
+</div>
+<div id="more-on-purrr---jp" class="section level4">
+<h4>More on purrr - JP</h4>
+</div>
+<div id="simple-iteration" class="section level4">
+<h4>Simple Iteration</h4>
+<p>#use the function we modify to do something #example using map family should operate on one dataframe to get started</p>
+</div>
+<div id="best-practicesiteration" class="section level4">
+<h4>Best Practices:Iteration</h4>
+<p>#When to start looking for a different way to iterate? When you are violating some aspect of Dry. lots of times and each time is similar. #avoiding loops within loops within… when you can #clear return statement #commenting #profiling for optimizing a more complex function</p>
+</div>
+<div id="performance-and-profiling---when-to-worry-about-it-and-where-to-look" class="section level4">
+<h4>performance and profiling - when to worry about it and where to look</h4>
+<p>#system.time() #microbenchmark #profiler thing that gives you each step and how long it took?</p>
+</div>
+<div id="debugging" class="section level4">
+<h4>Debugging</h4>
+<p>Link back to D4 debugging tab.</p>
+</div>
 </div>
 <div id="day-3-r-markdown" class="section level3 tabset">
 <h3 class="tabset">Day 3: R Markdown</h3>
@@ -413,13 +483,30 @@ You can customize the behavior and output of a code chunk using options within t
 </div>
 <div id="output-types" class="section level4">
 <h4>Output types</h4>
+<p>For all of the output types, the built-in markdown functions, like ‘#’ for level 1 header, render as you expect. Most output types also have an additional code base that allows more advanced and customized features.</p>
 <details open>
 <summary class="drop">
 Output to HTML
 </summary>
-<p>Pros 1. Fewest dependencies and least finicky of the 3 main outputs. 2. You can code straight HTML and CSS in your markdown document (javascript too), so you’re not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R’s version of html functions, I just learned HTML and code in HTML when using Markdown.<br />
-3. Easy to share, and usually renders well on the most common browsers. 4. Allows you to host your files as GitPages (like this training website). 5. Relatively easy to make 508 Compliant (but don’t ask me how to do it).</p>
-Cons 1. HTML pages are hard to make print friendly. Page breaks aren’t an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won’t look the same as through a browser (or just shows you the HTML). You always have to include these instructions when sharing HTML files.
+<p>The code base for HTML is obviously HTML and cascading style sheets (CSS). HTML is used to structure the content. CSS is used to define the style (eg font type and size for each header level).</p>
+<h3>
+Pros of HTML output
+</h3>
+<ol style="list-style-type: decimal">
+<li>Fewest dependencies and least finicky of the 3 main outputs (i.e., PDF and Word).</li>
+<li>You can code straight HTML and CSS in your markdown document (javascript too), so you’re not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R’s version of html functions, I just learned HTML and code in HTML when using Markdown.<br />
+</li>
+<li>Easy to share, and usually renders well on the most common browsers.</li>
+<li>Allows you to host your files as GitPages (like this training website).</li>
+<li>Relatively easy to make 508 Compliant (but don’t ask me how to do it).</li>
+</ol>
+<h3>
+Cons of HTML output
+</h3>
+<ol style="list-style-type: decimal">
+<li>HTML pages are hard to make print friendly. Page breaks aren’t an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen.</li>
+<li>If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won’t look the same as through a browser (or just shows you the HTML). You always have to include these instructions when sharing HTML files.</li>
+</ol>
 </details>
 <p><br></p>
 <details open>
@@ -427,18 +514,44 @@ Cons 1. HTML pages are hard to make print friendly. Page breaks aren’t an easy
 Output to PDF
 </summary>
 <p>Rendering to .pdf requires a LaTeX engine that runs under the hood. The easiest engine to install is <code>tinytex</code>, and there are instructions and download files on the “Prep for Training” tab of this site.</p>
-<p>Pros 1. PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint). 2. Easier to enforce pagebreaks than HTML output.</p>
-Cons 1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with (there’s very little love out there for LaTeX). There are decent websites offering help and examples, but it’s nothing like the help community and resources for HTML.<br />
-2. I’m no expert on LaTeX, so perhaps it just me. But I’ve spent hours fine-tuning a header in LaTeX that takes me minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you’re going to need to use at least some LaTeX along the way.<br />
-3. It’s much harder to make .pdfs 508 Compliant using R Markdown. The functionality just isn’t there, as far as I know. At least not like HTML.
+<h3>
+Pros of PDF output
+</h3>
+<ol style="list-style-type: decimal">
+<li>PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint).</li>
+<li>Easier to enforce pagebreaks than HTML output.</li>
+</ol>
+<h3>
+Cons of PDF output
+</h3>
+<ol style="list-style-type: decimal">
+<li>LaTeX is a challenging, clunky, and not overly rewarding coding language to work with (there’s very little love out there for LaTeX). There are decent websites offering help and examples, but it’s nothing like the help community and resources for HTML.<br />
+</li>
+<li>I’m no expert on LaTeX, so perhaps it just me. But I’ve spent hours fine-tuning a header in LaTeX that takes me minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you’re going to need to use at least some LaTeX along the way.<br />
+</li>
+<li>It’s much harder to make .pdfs 508 Compliant using R Markdown. The functionality just isn’t there, as far as I know. At least not like HTML.</li>
+</ol>
 </details>
 <p><br></p>
 <details open>
 <summary class="drop">
 Output to Word
 </summary>
-<p>Pros 1. It’s very easy to import a word document with styles as a template, and then to output your document to Word. 2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word). 3. You can use a Reference Management System for bibliographies (although see bullet 2 in Cons).</p>
-Cons 1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don’t always render all that well, and often need to be tweaked again in Word. It’s possible the <code>officedown</code> package may add functionality, but I haven’t played around with it enough (and the times I checked for a certain function, it didn’t have it). 3. I have yet to get the open source version of a reference management system (Zotero) to work in Markdown, and EndNote isn’t approved software.
+<h3>
+Pros of Word output
+</h3>
+<ol style="list-style-type: decimal">
+<li>It’s easy to import a word document with styles as a template, and then to output your document to Word.</li>
+<li>Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).</li>
+<li>You can use a Reference Management System for bibliographies (although see bullet 2 in Cons).</li>
+</ol>
+<h3>
+Cons of Word output
+</h3>
+<ol style="list-style-type: decimal">
+<li>This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don’t always render all that well, and often need to be tweaked again in Word. It’s possible the <code>officedown</code> package may add functionality, but I haven’t played around with it enough (and the times I checked for a certain function, it didn’t have it).</li>
+<li>I have yet to get the open source version of a reference management system (Zotero) to work in Markdown, and EndNote isn’t approved software.</li>
+</ol>
 </details>
 <p><br></p>
 <details open>
@@ -908,7 +1021,7 @@ Additional checks
 </details>
 <hr>
 </div>
-<div id="debugging" class="section level4">
+<div id="debugging-1" class="section level4">
 <h4>Debugging</h4>
 <p>Debugging is another big topic that we only have time to scratch the surface. For further reading, the best resource I’ve found on debugging is <a href="https://adv-r.hadley.nz/debugging.html">Chapter 22 Debugging</a> in the Advanced R book.</p>
 <details open>
@@ -1019,6 +1132,12 @@ install.packages(&#39;devtools&#39;)
 library(devtools)
 library(roxygen2)
 library(usethis)
+knitr::opts_chunk$set(echo = TRUE)
+#run these in the console without the () to see what lies underneath
+mean
+
+lm
+
 knitr::opts_chunk$set(echo = TRUE)
 install.packages(&quot;rmarkdown&quot;) 
 #------------------

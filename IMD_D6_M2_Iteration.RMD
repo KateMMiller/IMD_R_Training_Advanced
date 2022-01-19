@@ -1,0 +1,46 @@
+
+
+####Iterative functions vs iterating a function
+A two part system. 
+-You have something you want to do many times. This is your function. 
+-You need some way to do it many times, that is your iterative function. 
+
+Examples
+for() and stuff
+
+####Iterative functions
+#How different iteration tools handle / parse your data and pass it to functions - what is in x and 
+
+#more in-depth look at iteration options?
+#vectorization
+#if/else, while
+#for
+#apply family
+#do.call
+#purr family
+
+####More on purrr - JP
+
+
+####Simple Iteration
+#use the function we modify to do something
+#example using map family should operate on one dataframe to get started
+
+####Best Practices:Iteration
+#When to start looking for a different way to iterate? 
+  When you are violating some aspect of Dry. 
+  lots of times and each time is similar. 
+#avoiding loops within loops within... when you can
+#clear return statement
+#commenting
+#profiling for optimizing a more complex function
+
+
+####performance and profiling - when to worry about it and where to look 
+#system.time()
+#microbenchmark
+#profiler thing that gives you each step and how long it took?
+
+
+####Debugging
+Link back to D4 debugging tab.
