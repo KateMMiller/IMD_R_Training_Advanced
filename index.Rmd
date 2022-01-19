@@ -33,6 +33,9 @@ title: "IMD Advanced R Training"
 
 
 ### Day 4: Version Control {.tabset}
+```{r VersionControl, child = "IMD_D4_Version_control_I.Rmd"}
+
+```
 
 ### Day 4: R Packages {.tabset}
 
