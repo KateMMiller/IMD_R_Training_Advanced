@@ -16,6 +16,15 @@ title: "IMD Advanced R Training"
 
 ### Day 2: Functional Programming {.tabset}
 
+```{r FunctionsI, child = "D6_M1_Functions.Rmd"}
+
+```
+
+```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd"}
+
+```
+
+
 ### Day 3: R Markdown {.tabset}
 
 ```{r RmarkdownI, child = "IMD_D3_R_Markdown_I.Rmd"}
