@@ -37,33 +37,32 @@ So R functions are basically made up of a little bit of code an some more functi
 
 
 ####What should your function look like
-#readability is not trivial
+readability is not trivial
+naming a function and conventions
+variable names
+Understanding how you may encounter functions being represented in help - curly brackets vs no
 
-##########################
-#Modifying simple function
-##########################
-#naming a function and conventions
-#variables
-#Understanding how you may encounter functions being represented in help
-#curly brackets vs no
+####Steps for function develops
+#setting test cases
 
-##########################
-#more complex functions
-##########################
+####Modifying simple function
+provide as an example the modification of mean to have na.rm=T
+
+Create a plot function see day 4
+
+####More complex functions
+
 #multiple parameters
 #defaults, overriding defaults
 #ellipsis
+
+
 #if/else, while switches - case specific operations
+
 #customizing output
 #summarizing into dataframe
-#getting it to output what you want.
-#bells and whistles - 
-#getting updates on progress
-#custom error codes
-#debugging - figuring out where code is breaking
-#this is where getting progress updates is useful - tells you which file/case is breaking your code.
-#setting test cases
-#getting help - setting a minimum reproducible example and stackoverflow.
+#getting it to output that you want.
+
 
 
 
@@ -78,14 +77,8 @@ for() and stuff
 
 
 
-##########################
-#simple iteration
-##########################
-#use the function we modify to do something
-#example using map or apply family should operate on one dataframe to get started
 
-
-###########################
+####Iterative functions
 #How different iteration tools handle / parse your data and pass it to functions - what is in x and where
 #does it come from?
 ###########################
@@ -97,25 +90,28 @@ for() and stuff
 #do.call
 #and more...
 
-###########################
-#vectorization
-###########################
+
+####Simple Iteration
+#use the function we modify to do something
+#example using map or apply family should operate on one dataframe to get started
+
+
+
+####vectorization
 #...
 
-###########################
-#performance and profiling - when to worry about it and where to look 
-###########################
+
+####performance and profiling - when to worry about it and where to look 
 #system.time()
 #profiling for optimizing a more complex function
 
 
-
-###########################
-#Coding best practices
-###########################
+####Coding best practices
 #avoiding loops within loops within... when you can
 
 
+####Debugging
+Link back to D4 debugging tab.
 
 
 
