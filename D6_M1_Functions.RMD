@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ####What is a function?
 Everything is a function. But what is it really?
-```{looking at a function, echo = F, eval=F}
+```{looking at a function, echo = F, eval=T}
 mean
 
 lm
