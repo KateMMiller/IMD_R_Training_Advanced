@@ -1,29 +1,27 @@
----
-title: "D6_M1_Functions"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+#### Overview
+This module will provide a look at simple and moderately complex approaches 'functions' in R. We will look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. First, the ability to create a function. Second, the ability to use that function to get a lot of repetitive tasks done quickly. You already learned a little bit about this second one on the Day 4 iteration and you saw us using some functions there. Although we are calling this the advanced training, the approaches here are intended to get you started, but are not exhaustive. As you practice these fundamentals you will quickly find better ways to get some of the things you want to do done. 
 
-####Overview
+#### What is a function?
+Thomas - A function is a container for a series of steps that are performed on data. It has some fixed expectations about input and output - another way of saying that is that a function expects a specific pattern(s) for input and for output. A function is also an expression of what another person thinks the right way to do something is. The nice thing is that if you don't like all that, you can write your own function, but be selective about that. 
 
-###February 8 - Day 6 2022 R Training for IMD Scientists' Meeting
-#Functional Programming
-#Iteration with functions, Vectorization, Best Practices
+JP - Functions are a way of taking a large problem and breaking it down into simpler discrete steps. Each function can just focus on one step and makes it easier to do that step in isolation. You can then reuse the functions to help solve new problems in the future. 
 
-#this day is covering how to get a lot of repetitive tasks done quickly. The approaches below
-#are intended to get you started, but are not exhaustive. There are many many more ways to accomplish
-#your goals than what we present below.
-#testing commits from NPS computer
+*Everything is a function. But what is it really?*
+A function has 3 components - the function name, argumetns, and the expressions or source code. 
 
+Let's look at ```mean(x)``` as an example:
 
-####What is a function?
-#JP+Thomas
+The **name** of the function is simply "mean". Function names should be simple and somewhat intuitive (If your function calculates the data mean but you name it "Pat" that doesn't make sense). You should also be careful not to give you function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. R is pretty good about warning you about this. 
 
-A function allows 
-Everything is a function. But what is it really?
+The **arguments** of the function are what you put inside the parentheses. Arguments tell the function what the data are and they tell it how to handle the data. In this case ```mean(x)``` is telling the mean function that the data to operate on are x. 
+
+Almost all functions have more than 1 argument, however most of the time you are only specifying 2 or 3 when you call the function. If you want to know what arguments a function can accept, ```help()``` will take you to a hopefully useful explanation. In there you can see what arguments have defaults, what those defaults are, and when you should think about changing the defaults.
+
+The last bit of a function is the **source code** ("source" for short). This is what the function does. 95% of the time you can safely ignore the source. However, it is useful to look at the source when you want to understand why a function is doing what it is doing, modify a function, see what arguments it can accept, what the defaults are, etc.  
+
+How do you get to the source? These days, for non-base packages a lot of this can be found on github (eventually). The fastes way, is to type the function name without the ```()``` into the console it will return the underlying source code for that function if it is available. 
+
 ```{looking at a function, echo = F, eval=T}
 #run these in the console without the () to see what lies underneath
 mean
@@ -31,51 +29,193 @@ mean
 lm
 
 ```
-So R functions are basically made up of a little bit of code an some more functions....
+Some functions have more information on what they are doing some don't. ```mean``` doesn't have much to show us. That is because it is a compiled function and part of the R source code. If you need to / have the ability to dig down into compiled functions you probably don't need to be in the course. But, see reference [1] if you want to try! 
+
+When you type in ```lm``` you get a lot more information out and you can see there there is a fair amount of code that is being used to execute ```lm```. 
+
+#### When do you need a function? 
+When you are about to do something more than twice or when you see a repeating pattern in the code you are developing. In short: when you are recycling the same code and changing variable names or values. 
+
+Examples:
+-You want to create separate linear models for the relationship between Chloride and specific conductance at 25 sites. You could analyze each site as a separate model or you could write a function that could work through each site.
+-You need to rename 250,000 acoustic recorder files every year. You could resign from your job or you could write a function.
+-*What are your examples?*  
+
+#### Best Practices: What should your function look like?
+There are some rules to keep in mind for your functions before we get into developing them.
+-Avoid choosing names that are not intuitive or are already taken. 
+-Parameter names can (arguably 'should') the same as other parameter or variable names in other functions or the environment.
+-1 function for each task vs 1 function to rule them all? Air on the side of 1 function for each task. But sometimes you do really want a super function. 
+-Make sure your function is interpretable. ```#Comments accomplish this.```
+
+#### Steps for function development
+Below are some of the steps we find ourselves following when we need to develop functions.
++Identify the pattern or patterns in the data your function will need to operate on. 
++Decide what you want the function to output.
++Within the expected pattern set up test cases (test data) that should work and that should not. 
++Do some programming.
++Test the function until you are satisfied.(Debugging, See day 4)
++Apply it to the data.
+
+#### Modifying simple function
+Let's create our first function. 
+```{MyFirstFunction.0, echo=F, eval=T}
+set.seed(12345) #gives everybody the same data
+
+d<-c(floor(runif(100)*100),NA) #generate random data
+
+mean(x=d) #unexpected result
+```
+The response is NA, which is not what we want (maybe). It is easy enough to address this with ```mean(d,na.rm=T)```, but we may not want to do that many times. 
+
+```{MyFirstFunction, echo=F, eval=T}
+mean2<-  #Tell [R] that I want this new function to be named "mean2"
+       function(x){  #the function consists of 1 parameter named x (aka the data) The { begins the function source code / expressions. The { is caleld a closure 
+                   mean(x,na.rm=T) #in the mean function change the default for na.rm=T
+                   } #close function
+```
+Now let's check its behavior.
+
+```{MyFirstFunction.3, echo=F, eval=T}
 
 
-####When do you need a function? 
-#Thomas
+mean2(x=d) #more expected result
 
--When you are recycling the same code and changing variable names or values.
-#effectively it is a force QA/QC filter
-#consistency - garbage in garbage out
+```
+That handled the NA value without giving an error. What if we want to switch that back?
+
+```{MyFirstFunction.4, echo=T, eval=T}
+mean2(x=d, na.rm=F)
+
+```
+That gives us an error and says there is an unused argument... huh? If we set it, how can it be unused? 
+
+When we set up our new function we did not tell it ```na.rm``` is a parameter. We fixed it in the source code. If you want something as a parameter, it must be defined in the parentheses.
+
+```{MyFirstFunction.5, echo=T, eval=T}
+mean3<- function(x,na.rm=T){mean(x=x, na.rm=na.rm)} 
+
+```
+So now we have just made this ```mean``` but with the ```na.rm``` set to true.
+
+```{MyFirstFunction.6, echo=T, eval=T}
+mean4<- function(x,na.rm){#very minor change. I deleted the initial parameter value
+                          mean(x=x, na.rm=na.rm)} 
+
+```
+What do you think is going to happen without the inital parameter value? 
+
+It didn't work... or did it? How you set up your functions is partially about what you really intend for it to do. I would argue that none of these were wrong. How you develop your function depends in part on how you foresee it being use or misused. 
+```mean```  - assumes that you want an NA if data are missingm but might want to change that behaior.
+```mean2``` - assumes you always want to ignore NAs and have no reason to change that behavior
+```mean3``` - assumes you mostly want to ignore NAs but might want to change that behavior
+```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values. 
+
+A few final things on the basics of how functions function. You will see the coding for a function 2 ways:
+```{MyFirstFunction.6, echo=T, eval=T}
+mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
+
+mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one argument
+
+```
+One uses the closures {}, and one does not. My preference is that you should always use the closures even if you don't need to. It is a clarity and readability thing.
+
+#### Creating a useful function.
+Let's do something more useful than modify low level behavior. On day 4 we were creating some functions and I told you to ignore some of that for now. Let's go back and pick those apart a little more. We will focus on that plotting function. I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect. This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output.  
 
 
-####Best Practices: What should your function look like
-#1 function for each task vs 1 function to rule them all
-readability is not trivial
-naming a function and conventions
-variable names
-Understanding how you may encounter functions being represented in help - curly brackets vs no
-organization of the function
+```{r PlottingFunction, echo=TRUE, eval=TRUE}
+library(ggplot2);library(magrittr)
+#get that data
+fNames<-paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/",
+             c("APIS01_20548905_2021_temp.csv",
+               "APIS02_20549198_2021_temp.csv",
+               "APIS03_20557246_2021_temp.csv",
+               "APIS04_20597702_2021_temp.csv",
+               "APIS05_20597703_2021_temp.csv")) 
 
-####Steps for function development
-#setting test cases
+HoboList<-lapply(fNames,read.csv, skip=1, header=T)%>% #read hobo data into a list
+          lapply(.,"[",,1:3)%>% #Grab only first 3 columns. Empty comma is not an error
+          lapply(.,setNames, c("idx","DateTime","T_F"))%>%
+          lapply(., function(x){x$DateTime2=as.POSIXct(x$DateTime, "%m/%d/%y %H:%M:%S", tz="UCT")
+                                return(x)})
 
-####Modifying simple function
-provide as an example the modification of mean to have na.rm=T
+```
+Let's strategize a little. I have two phases to consider. The function and the iteration. 
+**Function considerations**
++I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
+
++A hobo logger that has 3 columns.
+
++Maybe some files have some or all data missing. ggplot handles missing data reasonably well
+
++Time series data. ggplot can plot that just fine.
+
+**Iteration considerations**
++In each file the column locations and data contained are the same. 
+
++Each of the 5 have similar names - could be useful for iteration.
+
++I strongly suspect missing data.
+
+
+function(x){
+                p<-ggplot(x, aes(x=DateTime, y=T_F))+
+                   geom_point()+
+                   ggtitle()
+                ggsave(filename=  ,path=  ,plot=p, device="pdf", width=5,height=5,units="in")
+                            
+                #still some stuff to fix here. filename is not defined in the list. List needs to be named.
+                   }
+          )
+```
+
+
+
+
 
 Create a plot function see day 4
 
-####More complex functions
+
+
+
+
+organization of the function
+#consistency - garbage in garbage out
+
+
+#effectively it is a force QA/QC filter
+
+
+
+
+
+
+
+
+
+
+
+#### More complex functions
 
 #multiple parameters
 #defaults, overriding defaults
 #ellipsis
 
 
-####Defining the output of functions
+#### Defining the output of functions
 #depends on how you plan on using the function
 #customizing output
 #summarizing into dataframe
 #getting it to output that you want.
 
-####Best Practices: outputs
+#### Best Practices: outputs
 #variable names
   #keep argument names the same
 #planning ahead - where does it go next?
 #Think about what makes sense so the piping works well?
 
+#### Useful resources
 
+[1] https://stackoverflow.com/questions/19226816/how-can-i-view-the-source-code-for-a-function
 
