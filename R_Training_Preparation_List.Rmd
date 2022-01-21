@@ -8,7 +8,7 @@ urlcolor: blue
 ## Install required software
 The only thing you really need to do to prepare for the Intro to R training is to install the latest version of R and RStudio. We'll talk about the difference between R and RStudio on the first day, but for now, just make sure they're installed. Directions for installing R/RStudio are below. If you run into any problems, check the instructions at R for Data Science [Section 1.4.1 and 1.4.2](https://r4ds.had.co.nz/introduction.html#prerequisites). 
 
-\textbf{\textcolor{red}{NOTE: If you don't have Administrative privileges on your computer, you will have to submit an} [IT HelpDesk Ticket](https://npshelpdesk.nps.gov/) \textcolor{red}{(need to be on VPN or NPS network to access this link) to install R and RStudio, which could take a while. PLEASE PLAN AHEAD!}}
+\textbf{\textcolor{red}{NOTE: If you don't have Administrative privileges on your computer, you will have to submit an }\href{https://npshelpdesk.nps.gov/}{IT HelpDesk Ticket} \textcolor{red}{(need to be on VPN or NPS network to access this link) to install R and RStudio, which could take a while. PLEASE PLAN AHEAD!}}
 
 Even if you already have R or RStudio installed, please install the latest versions of both programs. R recently went through a major version change from 3.x to 4.x with some potential code-breaking changes. The latest versions are needed to ensure everyone's code behaves the same way. 
 \
