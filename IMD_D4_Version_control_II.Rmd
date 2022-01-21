@@ -1,0 +1,33 @@
+---
+author: "Kate Miller & Sarah Wright"
+date: "1/20/2022"
+output: html_document
+---
+
+#### Getting started with Git
+
+##### Git vs. GitHub
+
+Understandably, lots of people confuse Git and GitHub or use the terms interchangeably. They're two separate (but related) things though. **Git** is the version control software that you install on your computer. It runs on your local hard drive and does all the heavy lifting when it comes to tracking changes to your code.  **GitHub** is an online service for storing and collaborating on code. It has a nice user interface, and it is great for facilitating collaboration and project management. Even if you're working on your own, it's a great place to back up your local code. **Git** can be configured to sync your code to and from **GitHub** when you tell it to.
+
+##### Git vocabulary
+
+There are a few fundamental concepts that you should keep in mind as you are learning Git. It's ok if they don't fully make sense right now - we will keep revisiting them as we practice.
+
+  - **Repository**
+    - You will hear this term a lot. A Git repository is a hidden folder inside of your project that tracks the change history of your project. If you have hidden folders set to visible in File Explorer, it looks like this: ![git folder](images/GitRepoFolder.PNG). Deleting this folder will delete your entire change history, so don't mess with it!
+  - **Stage**
+    - Unlike Track Changes in Word, Git does not automatically add your latest edits to its change history. Creating an entry in Git's change history is a two-step process, and staging is the first step.
+    - Think of staging your changes as composing a snapshot.
+  - **Commit**
+    - Committing is the second and final step of saving an entry to Git's change history.
+    - Think of committing as pressing the shutter button to take a snapshot.
+  - **Branch**
+    - Have you ever made a copy of a file so that you could make your own edits without affecting the main working version? Branching in Git allows you to safely edit and experiment without having to manage multiple copies of the same file(s).
+  - **Merge**
+    - At one point or another, most of us have had to piece multiple people's Powerpoint presentations into a single slide deck. Git does the same thing with code, but it's usually smart enough to do it automatically! No copy-pasting necessary.
+  - **Push**
+    - This is the Git equivalent of copying your work from your local hard drive to a shared folder. For our purposes, we will always be pushing our work to a repository on GitHub.
+  - **Pull**
+    - This is the Git equivalent of copying the latest version of a file from a shared folder to your local hard drive. For our purposes, we will always be pulling from a repository on GitHub.
+    
