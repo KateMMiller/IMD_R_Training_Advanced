@@ -37,8 +37,9 @@ h4 {
 }
 
 h5 {
-  font-family: "Times New Roman",Times,sans-serif;
-  font-size:12px;
+  font-family: "Arial", Arial, sans-serif;
+  font-size:14px;
+  font-weight: bold;
   padding:0px 0px 0px 0px;
   margin:0px 0px 0px 0px;
 }

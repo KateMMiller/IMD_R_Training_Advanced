@@ -17,7 +17,6 @@ R Markdown is a special file format that you can open in RStudio (go to File > N
 The most commonly used outputs are HTML, PDF, and Word. Each output format has pros and cons, and drives which text editing language (e.g., HTML or LaTeX) you need to use for advanced/custom needs. We'll cover these in more detail in a minute.
 </details>
 <br>
-
 <details open><summary class='drop'>Reasons to use R Markdown</summary>
 We're all busy and it's hard to keep up on everything we need to know to do our jobs well. We wouldn't be promoting R Markdown like we are, if we didn't feel that it was a huge contributor to our efficiency and productivity. R Markdown has been described as the Swiss Army knife of Data Science, because there are so many things you can do with it. Below are just a few of the many reasons we use R Markdown.
 <ul>
@@ -28,7 +27,6 @@ We're all busy and it's hard to keep up on everything we need to know to do our 
 </ul>
 </details>
 <br>
-
 <details open><summary class='drop'>Getting Started</summary>
 To get started, you'll need to make sure you have the `rmarkdown` package installed. The `knitr` package, which does a lot of heavy lifting, is a dependency of `rmarkdown`, so both will be installed with the line of code below.
 
@@ -179,57 +177,125 @@ Another trick to using code chunk options, is that they can be conditional based
 <hr>
 
 #### Output types
+For all of the output types, the built-in markdown functions, like '#' for level 1 header, render as you expect. Most output types also have an additional code base that allows more advanced and customized features. 
+
 <details open><summary class='drop'>Output to HTML</summary>
-Pros
-1. Fewest dependencies and least finicky of the 3 main outputs.
-2. You can code straight HTML and CSS in your markdown document (javascript too), so you're not limited by the built-in functions in markdown or knitr that render R code as HTML. In fact, instead of learning R's version of html functions, I just learned HTML and code in HTML when using Markdown.  
+The code base for HTML is obviously HTML and cascading style sheets (CSS). HTML is used to structure the content. CSS is used to define the style (eg font type and size for each header level). 
+
+<h3>Pros of HTML output</h3>
+1. Fewest dependencies and least finicky of the 3 main outputs (i.e., PDF and Word).
+2. You can code straight HTML and CSS in your markdown document (javascript too), so you're not limited by the built-in functions in markdown or knitr that render R code as HTML. 
 3. Easy to share, and usually renders well on the most common browsers.
 4. Allows you to host your files as GitPages (like this training website).
 5. Relatively easy to make 508 Compliant (but don't ask me how to do it).
 
-Cons
-1. HTML pages are hard to make print friendly. Page breaks aren't an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 
-2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won't look the same as through a browser (or just shows you the HTML). You always have to include these instructions when sharing HTML files. 
+<h3>Cons of HTML output</h3>
+1. HTML files are hard to make print friendly. Page breaks aren't an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 
+2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won't look the same as through a browser (or just shows you the raw HTML). This means you always have to include these instructions when sharing HTML files. 
 </details>
 <br>
-
 <details open><summary class='drop'>Output to PDF</summary>
-Rendering to .pdf requires a LaTeX engine that runs under the hood. The easiest engine to install is `tinytex`, and there are instructions and download files on the "Prep for Training" tab of this site.
+Rendering to PDF requires a LaTeX engine that runs under the hood. The easiest engine to install is `tinytex`, and there are instructions and download files on the "Prep for Training" tab of this site.
 
-Pros
+<h3>Pros of PDF output</h3>
 1. PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint).
-2. Easier to enforce pagebreaks than HTML output.
+2. Enforcing page breaks and designing print friendly outputs is much easier than with HTML output.
 
-Cons
-1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with (there's very little love out there for LaTeX). There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML.  
-2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes me minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you're going to need to use at least some LaTeX along the way.  
-3. It's much harder to make .pdfs 508 Compliant using R Markdown. The functionality just isn't there, as far as I know. At least not like HTML.
+<h3>Cons of PDF output</h3>
+1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with. There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML (or R).  
+2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes  minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you'll likely need to use at least some LaTeX along the way.  
+3. It's much harder to make PDFs 508 Compliant using R Markdown. The functionality just isn't there, as far as I know. PDFs have to be modified after they're rendered to be 508 Compliant, which kind of defeats the purpose of automated reporting.
 </details>
 <br>
-
 <details open><summary class='drop'>Output to Word</summary>
-Pros
-1. It's very easy to import a word document with styles as a template, and then to output your document to Word.
-2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).
-3. You can use a Reference Management System for bibliographies (although see bullet 2 in Cons).
+Rendering to Word can be a helpful way to generate a Results section for a report, or even the entire report for the first draft. It saves having to copy/paste figures and tables from R to Word, and makes life easier if you need to rerun your analysis or update a figure. You just update the .Rmd code and render again to Word. Admittedly I rarely use this option because the functionality is much more limited than outputting to PDF or HTML(See first Con below). For more details than we'll go into today, check out RStudio's article: <a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a>.    
 
-Cons
-1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well, and often need to be tweaked again in Word. It's possible the `officedown` package may add functionality, but I haven't played around with it enough (and the times I checked for a certain function, it didn't have it). 
-3. I have yet to get the open source version of a reference management system (Zotero) to work in Markdown, and EndNote isn't approved software.
+<h3>Pros of Word output</h3>
+1. It's easy to import a word document with styles as a template, and then to output your document to Word.
+2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).
+3. You can use a Reference Management System for bibliographies (although see bullet 3 in Cons).
+
+<h3>Cons of Word output</h3>
+1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well, and often need to be tweaked again in Word. Headers and footers don't render either. It's possible the `officedown` package may add functionality, but I haven't played around with it enough (and the times I checked for a certain function, it didn't have it). 
+2. Incorporating track changes back into R Markdown is a messy, manual process. It's not something you'd want to do repeatedly for the same paper.
+3. I have yet to get a reference management system to work in Markdown. While it's possible, it may be hard to implement on government furnished equipment using approved software.
 </details>
 <br>
 
 <details open><summary class='drop'>Other outputs</summary>
-There are dozens of other types of output, including FlexTables/Dashboards, slide decks for presentations, and posters for scientific meetings. There are also templates for journal articles with certain journals, and even templates for building a CV or resume. 
+There are dozens of other types of output, including FlexTables/Dashboards, slide decks for presentations, and posters for scientific meetings. There are also templates for journal articles with certain journals, and even templates for building a CV or resume. RStudio's R Markdown page on <a href="https://rmarkdown.rstudio.com/lesson-9.html">Output Formats</a> includes a list with links to a bunch of other output templates. Others can be easily found and downloaded from online sources. 
 </details>
 <br>
 
-
-
-
 #### Tables 
-- kable & kableExtra
-- DT (brief)
+<details open><summary class='drop'>Tables in R Markdown</summary>
+There are quite a few packages that can help you make publication quality and customized tables. The two tables I see used most frequently are `kable()` in the `knitr` package and `datatables()` in the `DT` package (not to be confused with `data.table()` package for data wrangling in R). The learning curve for kable is pretty shallow, and runs HTML under the hood. The learning curve for DT is a bit steeper, and has javascript under the hood. That means you can customize and add more features using those languages, if you know them. I tend to stick with kable, because I find HTML/CSS easier to code. If I need more bells and whistles, then I use datatables.
+
+First, we'll load a fake wetland dataset on our GitHub repo to make some summary tables using each package. The code below downloads the dataset from the training GitHub repo, and then summarizes the number of invasive and protected species per site. For both examples, the output format is HTML. If I were outputting to PDF, then I'd need to specify the format as 'latex' and use LaTeX code for any custom features not built into kable. 
+```{r importdat, echo = T, results = 'hide', warning = FALSE, message = FALSE}
+library(tidyverse)
+wetdat <- read.csv("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/data/ACAD_wetland_data_clean.csv")
+wetsum <- wetdat %>% group_by(Site_Name, Year) %>% 
+  summarize(num_inv = sum(Invasive), num_prot = sum(Protected), 
+            .groups = 'drop')
+```
+
+</details>
+
+<details open><summary class='drop'>kable and kableExtra</summary>
+The code below creates a simple table that renders in HTML, is only as wide as the records in the table, and has alternating row colors. If you're outputting to PDF, your format will be "latex" instead of "HTML" and you'll need to use LaTeX for any custom formatting/styling that aren't built into kable and kableExtra.
+<br>
+```{r kab1, echo = T, results = 'hide', warning = FALSE, message = FALSE}
+library(kableExtra) # for extra kable features
+library(knitr) # for kable
+wet_kable <- kable(wetsum, format = 'html') %>% # if using pdf, need LaTeX
+             kable_styling(full_width = FALSE, bootstrap_options = 'striped') #kableExtra function
+```
+```{r kab2, echo = F, results = 'show', results = 'asis'}
+wet_kable
+```
+<br>
+Note the use of pipes in the code above. The great thing about kable and kableExtra is that you can pipe functions together to build out a large table with all kinds of formatting, including conditional formatting. You can also make a custom kable function that has all of the formatting options you want, and just specify the dataset to build the table for. You can then pipe more features onto that function. We'll show a couple of these examples below.
+<br>
+```{r kab3, echo = T, results = 'hide'}
+# custom kable function that requires data, column names and caption
+make_kable <- function(data, colnames = NA, caption = NA){
+  kab <- kable(data, format = 'html', col.names = colnames, align = 'c', caption = caption) %>% 
+      kable_styling(fixed_thead = TRUE, 
+                    bootstrap_options = c('condensed', 'bordered', 'striped'), 
+                    full_width = FALSE, 
+                    position = 'left', 
+                    font_size = 12) %>%
+      row_spec(0, extra_css = "border-top: 1px solid #000000; border-bottom: 1px solid #000000;") %>% 
+      collapse_rows(1, valign = 'top') %>% 
+      row_spec(nrow(data), extra_css = 'border-bottom: 1px solid #000000;')}
+
+# use function with wetsum data
+wetkab2 <- make_kable(wetsum, 
+                      colnames = c("Site", "Year", "# Invasive", "# Protected"),
+                      caption = "Table 1. Summary of wetland data")
+```
+```{r kab4, echo = F, results = 'show'}
+wetkab2
+```
+<br>
+Last thing to show with kable is that you can also have conditional formatting based on values in the table, and it's pipeable. Here we add to the `wetkab2` a conditional check on column 3 (wetsum$num_inv) to turn a cell orange if the value is > 0. In the code below, the `ifelse()` that ends in FALSE is just allowing the default color to be printed instead of the conditional color. That allows the alternating row colors to remain.
+```{r kab5, echo = T, results = 'hide'}
+wetkab3 <- wetkab2 %>% column_spec(3, background = ifelse(wetsum$num_inv > 0, "orange", FALSE))
+```
+```{r kab6, echo = F, results = 'show'}
+wetkab3
+```
+</details>
+
+<details open><summary class='drop'>datatables</summary>
+Now to use DT's datatables. Using the same wetsum dataset we created earlier, we'll make a table using datatables() and adding some of the features that kable doesn't have and that usually lead me to choose datatables over kable.
+
+```{r dt1, echo = T, results = 'hide'}
+
+```
+
+</details>
 
 
 #### Figures
@@ -258,9 +324,11 @@ There are dozens of other types of output, including FlexTables/Dashboards, slid
 <br>
 <a href="https://r4ds.had.co.nz/">R for Data Science</a>, chapters 27 and 29. The book itself is worth a read cover to cover. The chapters on R Markdown are also very helpful on their own.
 <br>
-<a href="https://rmarkdown.rstudio.com/">RStudio's R Markdown page:</a> Includes several short videos and lots of tutorials, along with a gallery to give an idea of the many things you can do.
+<a href="https://rmarkdown.rstudio.com/">RStudio's R Markdown page:</a> Includes several short videos and lots of tutorials, articles, and a gallery to give an idea of the many things you can do.
 
 <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheat Sheet</a>.
+
+<a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html">kableExtra vignette:</a> Lots of great examples of the different styling/formats you can use with kables and the kableExtra package.
 
 <h3>HTML/CSS</h3>
 <a href="https://www.w3schools.com/html/default.asp">W3 Schools HTML page:</a> This website includes helpful tutorials on HTML and CSS, includes executable examples for just about every HTML tag you can think of, and shows how different browsers render content.
