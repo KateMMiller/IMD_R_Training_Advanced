@@ -73,15 +73,20 @@ hr {
   margin:0px 0px 0px 0px;
 }
 
-.center {
+.center{
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
-.tabset{
+.tabs{
 color:black;
 font-size: 16px;
+border-top:solid 1px #9D9D9D;
+}
+
+.nav-pills{
+  border-bottom:solid 1px #9D9D9D;
 }
 
 .litcited{
