@@ -32,6 +32,9 @@ title: "IMD Advanced R Training"
 
 ```
 
+```{r RmarkdownII, child = "IMD_D3_R_Markdown_II.Rmd"}
+
+```
 
 ### Day 4: Version Control {.tabset}
 ```{r VersionControl, child = "IMD_D4_Version_control_I.Rmd"}
