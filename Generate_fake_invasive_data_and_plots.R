@@ -37,5 +37,4 @@ invplot_ACAD <- ggplot(invdata %>% filter(park == "ACAD"),
   scale_x_continuous(limits = c(1, 3), breaks = c(1, 2, 3)) +
   geom_smooth(aes(x = cycle, y = inv_cover, group = park),
               formula = y ~ x,
-              method = 'lm', se = FALSE, color = '#7E7E7E')+
-  facet_wrap(~park)
+              method = 'lm', se = FALSE, color = '#7E7E7E')
