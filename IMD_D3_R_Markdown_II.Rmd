@@ -2,9 +2,14 @@
 author: "Kate Miller & Ellen Cheng"
 date: "1/10/2022"
 output: 
-  html_document:
-    css: custom_styles.css
+  bookdown::html_document2:
+    numbered_sections: false
+    fig_caption: true
+
 ---
+```{r setup5, include = F, echo = F}
+knitr::opts_chunk$set(results = 'asis')
+```
 
 #### Tables 
 <details open><summary class='drop'>Tables in R Markdown</summary>
@@ -164,6 +169,7 @@ wetdt3
 
 #### Figures and Images
 
+<details open><summary class='drop'>Inserting images in Markdown</summary>
 There are multiple ways to display a image that's stored on disk. The easiest way to do it is with markdown code in the plain text part of your document, which looks like: 
 ```{markdown, verbtxt2, attr.source="style='display:inline-block;'", collapse=TRUE}
 ![Map of Region-1 IMD parks.](./images/map_of_parks.jpg){width=400px}
@@ -191,9 +197,84 @@ photos <- list.files("./images/photopoints", full.names = TRUE)
 include_graphics(photos)
 
 ```
+</details>
+<br>
+<details open><summary class = 'drop'>Figure settings</summary>
+Code chunk options include several handy options to customize figures. These include:
 
+<ul>
+<li>`fig.align`: defines how the figure will be justified on the page. Options are 'center', 'left', 'right'.</li>
+<li>`fig.cap`: adds a caption to the figure. Must be quoted.</li>
+<li>`fig.height` & `fig.width`: sets the height and width of the figure in inches. Must be numeric and is not quoted.</li>
+<li>`out.height` & `out.width`: sets the height and width of the plot in the opened file. In this case, you set the dimensions as percents, like `out.width = "50%"` to make the figure half the width of the page of the rendered document.</li>
+</ul>
 
-- figure captions and numbering using function and `\@ref(fig:figname)`
+You can also set global options so that all figures default to a certain size or alignment. That way, you'd only need to specify figure options in the code chunk if you want to stray from your default settings. Global options can be set like: 
+
+```{r globopts, eval = F}
+knitr::opts_chunk$set(fig.height=4, fig.width=6, fig.align='left')
+```
+</details>
+
+<br>
+<details open><summary class = 'drop'>Dynamic numbering and cross referencing</summary>
+Dynamic figure and table numbering and cross-referencing is one great feature of Markdown. The easiest way to add dynamic figure numbering and cross-referencing is to output to bookdown's `html_document2`, instead of rmarkdown's `html_document`, which is what I've shown so far. You'll need to add a few lines to the YAML code as well, which we show below. The numbered_sections: false and number_sections: false prevent bookdown from adding numbering to each section. If you like them, you can delete those lines of code. You'll also need to install bookdown (i.e., `install.packages('bookdown')`). 
+
+```{YAML yaml2, eval=F}
+output: 
+  bookdown::html_document2:
+    numbered_sections: false
+    number_sections: false
+    fig_caption: true
+```
+
+To see how all of this works, we need to create a couple of plots. Sourcing the code below will generate a fake dataset and then creates 2 plots. If this doesn't work for some reason, you can copy and paste the code directly from the script named <a href="https://github.com/KateMMiller/IMD_R_Training_Advanced/blob/main/Generate_fake_invasive_data_and_plots.R">Generate_fake_invasive_data_and_plots.R</a> in our <a href="https://github.com/KateMMiller/IMD_R_Training_Advanced">IMD_R_Training_Advanced repository</a>. I'm just trying to save room on the page for code that's not important.
+
+```{r fkinv, echo = T, results = 'hide', message=F, warning=F}
+library(tidyverse)
+devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
+
+```
+
+The code below prints the plots with their respective figure numbers. Note that code chunk names should be alpha-numeric, and can't include spaces or underscores.
+
+````
+`r ''````{r fig-inv-all, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}
+invplot_all
+```
+````
+<p style="color:white">
+`````</p>
+
+```{r fig-inv-all, echo = F, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}
+invplot_all
+```
+
+````
+`r ''````{r fig-inv-acad, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}
+invplot_ACAD
+```
+````
+<p style="color:white">
+`````</p>
+
+```{r fig-inv-acad, echo = F, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}
+invplot_ACAD
+```
+
+Notice that the figures are numbered consecutively in the order that they appear. For cross-referencing, each code chunk needs a unique name and a figure caption must be defined in the chunk options. To cross-reference, you then write `\@ref(fig:code-chunk-name)`. The same works for tables too, but you use "tab" instead of "fig". The following text: 
+
+```{markdown, figref, attr.source="style='display:inline-block;'", collapse=TRUE}
+As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be declining. Whereas, invasive cover appears more stable in other NETN parks (Figure \@ref(fig:fig-inv-all)).
+```
+
+renders as: <br>
+
+As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be declining. Whereas, invasive cover appears more stable in other NETN parks (Figure \@ref(fig:fig-inv-all)).
+
+</details>
+<br>
+<hr>
 
 #### Examples
 - QA/QC report and weekly checking (html)
@@ -212,6 +293,8 @@ include_graphics(photos)
 #### Resources
 <h3>R Markdown</h3>
 <a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: The Definitive Guide</a>. This is Yihui Xie's book that's available free online and for purchase. Yihui is one of the main developers at RStudio working on R Markdown and related packages (e.g. knitr, pagedown, bookdown). The online book is searchable, and is often the first place I check, when I can't remember how to do something.
+<br>
+<a href="https://bookdown.org/yihui/rmarkdown-cookbook/">R Markdown Cookbook</a>. Another great book with Yihui Xie as an author. This book is free online and has a lot of small bite-size tips for customizing R Markdown.
 <br>
 <a href="https://r4ds.had.co.nz/">R for Data Science</a>, chapters 27 and 29. The book itself is worth a read cover to cover. The chapters on R Markdown are also very helpful on their own.
 <br>
