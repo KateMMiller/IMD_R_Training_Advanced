@@ -1,4 +1,5 @@
 # Fake invasive data 
+set.seed(42)
 Plot_Name <- c(rep(paste0(rep("ACAD-", 50), sprintf("%02d", 1:50)), each = 3),
                rep(paste0(rep("MABI-", 12), sprintf("%02d", 1:12)), each = 3),
                rep(paste0(rep("SARA-", 24), sprintf("%02d", 1:24)), each = 3))
