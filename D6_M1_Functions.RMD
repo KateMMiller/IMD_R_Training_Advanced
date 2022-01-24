@@ -1,6 +1,10 @@
+#### Functional Programming
+I will leave you to google this and dive into the rabbit hole that is the definition of functional programming. This isn't about writing code that works, it is a technical thing. In short, a "functional" is a higher order function that takes a function as one of its inputs. For our purposes "functional programming" will focus on iterative functionals (apply family and map) and how to make functions that can be passed to functionals.  
 
-#### Overview
-This module will provide a look at simple and moderately complex approaches 'functions' in R. We will look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. First, the ability to create a function. Second, the ability to use that function to get a lot of repetitive tasks done quickly. You already learned a little bit about this second one on the Day 4 iteration and you saw us using some functions there. Although we are calling this the advanced training, the approaches here are intended to get you started, but are not exhaustive. As you practice these fundamentals you will quickly find better ways to get some of the things you want to do done. 
+#### Overview functions
+This module will provide a look at simple and moderately complex 'functions' in R. We will look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. 1) The ability to create a function. 2) The ability to use that function to get a lot of repetitive tasks done quickly. You already learned a little bit about this second one on the Day 4 iteration and you saw us using some functions there. 
+
+Although we are calling this the advanced training, the approaches here are intended to get you started, but are not exhaustive. As you practice these fundamentals you will quickly find better ways to get some of the things you want to do done. 
 
 #### What is a function?
 Thomas - A function is a container for a series of steps that are performed on data. It has some fixed expectations about input and output - another way of saying that is that a function expects a specific pattern(s) for input and for output. A function is also an expression of what another person thinks the right way to do something is. The nice thing is that if you don't like all that, you can write your own function, but be selective about that. 
@@ -8,11 +12,14 @@ Thomas - A function is a container for a series of steps that are performed on d
 JP - Functions are a way of taking a large problem and breaking it down into simpler discrete steps. Each function can just focus on one step and makes it easier to do that step in isolation. You can then reuse the functions to help solve new problems in the future. 
 
 *Everything is a function. But what is it really?*
-A function has 3 components - the function name, argumetns, and the expressions or source code. 
+A function *usually* has 3 components - the function name, arguments, and the expressions or source code. 
+
+*Hang on, what was that 'usually' jazz?*
+Okay, there are 'named functions' and 'anonymous functions.' The difference is that when you plan on reusing a function, you give it a name (3 components). If you don't plan on using it ever again, you don't give it a name (2 components) and it is called an 'anonymous function.' I am going to show you examples of both, but not get too hung up on the taxonomy.
 
 Let's look at ```mean(x)``` as an example:
 
-The **name** of the function is simply "mean". Function names should be simple and somewhat intuitive (If your function calculates the data mean but you name it "Pat" that doesn't make sense). You should also be careful not to give you function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. R is pretty good about warning you about this. 
+The **name** of the function is simply "mean". Function names should be simple and somewhat intuitive (If your function calculates the data mean, but you name it "Pat" that doesn't make sense). You should also be careful not to give you function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. R is pretty good about warning you about this. 
 
 The **arguments** of the function are what you put inside the parentheses. Arguments tell the function what the data are and they tell it how to handle the data. In this case ```mean(x)``` is telling the mean function that the data to operate on are x. 
 
@@ -20,7 +27,7 @@ Almost all functions have more than 1 argument, however most of the time you are
 
 The last bit of a function is the **source code** ("source" for short). This is what the function does. 95% of the time you can safely ignore the source. However, it is useful to look at the source when you want to understand why a function is doing what it is doing, modify a function, see what arguments it can accept, what the defaults are, etc.  
 
-How do you get to the source? These days, for non-base packages a lot of this can be found on github (eventually). The fastes way, is to type the function name without the ```()``` into the console it will return the underlying source code for that function if it is available. 
+How do you get to the source? These days, for non-base packages a lot of this can be found on github (eventually). The fastest way, is to type the function name without the ```()``` into the console it will return the underlying source code for that function if it is available. 
 
 ```{looking at a function, echo = F, eval=T}
 #run these in the console without the () to see what lies underneath
@@ -29,119 +36,125 @@ mean
 lm
 
 ```
-Some functions have more information on what they are doing some don't. ```mean``` doesn't have much to show us. That is because it is a compiled function and part of the R source code. If you need to / have the ability to dig down into compiled functions you probably don't need to be in the course. But, see reference [1] if you want to try! 
+Some functions have more information on what they are doing some don't. ```mean``` doesn't have much to show us. That is because it is a compiled function and part of the R source code. If you need to or already have the ability to dig down into compiled functions you probably don't need to be in this course. But, see reference [1] if you want to try! 
 
 When you type in ```lm``` you get a lot more information out and you can see there there is a fair amount of code that is being used to execute ```lm```. 
 
-#### When do you need a function? 
-When you are about to do something more than twice or when you see a repeating pattern in the code you are developing. In short: when you are recycling the same code and changing variable names or values. 
+#### When do you need to create a function? 
++ When what is available doesn't do what you want it to do.
++ When you are about to do something more than twice. 
++ When you see a repeating pattern in the code you are writing. 
++ When you are recycling the same code and changing variable names or values. 
 
 Examples:
--You want to create separate linear models for the relationship between Chloride and specific conductance at 25 sites. You could analyze each site as a separate model or you could write a function that could work through each site.
--You need to rename 250,000 acoustic recorder files every year. You could resign from your job or you could write a function.
--*What are your examples?*  
++ You want to create separate linear models for the relationship between Chloride and specific conductance at 25 sites. You could analyze each site as a separate model or you could write a function that could work through each site.
++ You need to rename 250,000 acoustic recorder files every year. You could resign from your job or you could write a function.
++ *What are your examples?*  
 
 #### Best Practices: What should your function look like?
 There are some rules to keep in mind for your functions before we get into developing them.
--Avoid choosing names that are not intuitive or are already taken. 
--Parameter names can (arguably 'should') the same as other parameter or variable names in other functions or the environment.
--1 function for each task vs 1 function to rule them all? Air on the side of 1 function for each task. But sometimes you do really want a super function. 
--Make sure your function is interpretable. ```#Comments accomplish this.```
++ Avoid choosing names that are not intuitive or are already taken. 
++ Argument names can (arguably 'should') be the same as other parameters or variable names in other functions.
++ One function for each task vs one function to rule them all? Air on the side of 1 function for each task. But sometimes you do really want a super function. 
++ Make sure your function is interpretable. ```#Comments accomplish this.```
++ Figure out where to draw the line between the function and the functional (iteration).
 
 #### Steps for function development
 Below are some of the steps we find ourselves following when we need to develop functions.
-+Identify the pattern or patterns in the data your function will need to operate on. 
-+Decide what you want the function to output.
-+Within the expected pattern set up test cases (test data) that should work and that should not. 
-+Do some programming.
-+Test the function until you are satisfied.(Debugging, See day 4)
-+Apply it to the data.
++ Verbalize what you want the function to do and do some googling
++ Identify the pattern or patterns in the data your function will need to operate on. 
++ Decide what you want the function to output.
++ Within the expected pattern, set up test cases (test data). I like a clear positive case and a negative case. 
++ Do some programming.
++ Test the function until you are satisfied.(Debugging, See day 4)
++ Apply it to the data.
 
 #### Modifying simple function
 Let's create our first function. 
-```{MyFirstFunction.0, echo=F, eval=T}
+```{MyFirstFunction.0, echo=T, eval=F}
 set.seed(12345) #gives everybody the same data
 
 d<-c(floor(runif(100)*100),NA) #generate random data
 
 mean(x=d) #unexpected result
 ```
-The response is NA, which is not what we want (maybe). It is easy enough to address this with ```mean(d,na.rm=T)```, but we may not want to do that many times. 
+The response is NA, which is not what we want (maybe). It is easy enough to address this with ```mean(d,na.rm=T)```, but we may not want to do that many times throughout our code. 
 
-```{MyFirstFunction, echo=F, eval=T}
+```{MyFirstFunction, echo=T, eval=F}
 mean2<-  #Tell [R] that I want this new function to be named "mean2"
-       function(x){  #the function consists of 1 parameter named x (aka the data) The { begins the function source code / expressions. The { is caleld a closure 
+       function(x){  #the function consists of 1 parameter named x (aka the data) The { begins the function source code / expressions. 
                    mean(x,na.rm=T) #in the mean function change the default for na.rm=T
                    } #close function
 ```
 Now let's check its behavior.
 
-```{MyFirstFunction.3, echo=F, eval=T}
-
+```{MyFirstFunction.3, echo=T, eval=F}
 
 mean2(x=d) #more expected result
 
 ```
 That handled the NA value without giving an error. What if we want to switch that back?
 
-```{MyFirstFunction.4, echo=T, eval=T}
+```{MyFirstFunction.4, echo=T, eval=F}
 mean2(x=d, na.rm=F)
 
 ```
-That gives us an error and says there is an unused argument... huh? If we set it, how can it be unused? 
+How you create your function affects what it can use as 'arguments'. 
 
-When we set up our new function we did not tell it ```na.rm``` is a parameter. We fixed it in the source code. If you want something as a parameter, it must be defined in the parentheses.
+When we set up our new function we did not tell it ```na.rm``` is an argument. We fixed it in the source code. If you want something as a parameter, it must be listed in the parentheses.
 
-```{MyFirstFunction.5, echo=T, eval=T}
+```{MyFirstFunction.5, echo=T, eval=F}
 mean3<- function(x,na.rm=T){mean(x=x, na.rm=na.rm)} 
 
 ```
 So now we have just made this ```mean``` but with the ```na.rm``` set to true.
 
-```{MyFirstFunction.6, echo=T, eval=T}
+```{MyFirstFunction.6, echo=T, eval=F}
 mean4<- function(x,na.rm){#very minor change. I deleted the initial parameter value
                           mean(x=x, na.rm=na.rm)} 
 
 ```
 What do you think is going to happen without the inital parameter value? 
 
-It didn't work... or did it? How you set up your functions is partially about what you really intend for it to do. I would argue that none of these were wrong. How you develop your function depends in part on how you foresee it being use or misused. 
-```mean```  - assumes that you want an NA if data are missingm but might want to change that behaior.
+It didn't work... or did it? How you set up your functions is partially about what you really intend for it to do. I would argue that none of these are wrong. They each have a different use and set of assumptions in their use.
+```mean```  - assumes that you want an NA if data are missing but might want to change that behavior.
 ```mean2``` - assumes you always want to ignore NAs and have no reason to change that behavior
 ```mean3``` - assumes you mostly want to ignore NAs but might want to change that behavior
 ```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values. 
-
-A few final things on the basics of how functions function. You will see the coding for a function 2 ways:
-```{MyFirstFunction.6, echo=T, eval=T}
+A few final things on the basics of how functions function. You will see the coding for a simple 1 line function expressed 2 ways:
+```{MyFirstFunction.6, echo=T, eval=F}
 mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
 
-mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one argument
+mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
 
 ```
-One uses the closures {}, and one does not. My preference is that you should always use the closures even if you don't need to. It is a clarity and readability thing.
+If a function can be expressed with a single line you do not need curly brackets. If the function is on more than one line you must use curly brackets. My preference is that you should always use the closures even if you don't need to. 
+
 
 #### Creating a useful function.
-Let's do something more useful than modify low level behavior. On day 4 we were creating some functions and I told you to ignore some of that for now. Let's go back and pick those apart a little more. We will focus on that plotting function. I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect. This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output.  
+Let's do something more useful than modify low level behavior. On day 4 we were creating some functions and I told you to ignore some of that for now. Let's go back and pick those apart a little more. We will focus on that plotting function. I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output.  
 
 
-```{r PlottingFunction, echo=TRUE, eval=TRUE}
+```{r PlottingFunction, echo=TRUE, eval=F}
 library(ggplot2);library(magrittr)
 #get that data
-fNames<-paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/",
-             c("APIS01_20548905_2021_temp.csv",
-               "APIS02_20549198_2021_temp.csv",
-               "APIS03_20557246_2021_temp.csv",
-               "APIS04_20597702_2021_temp.csv",
-               "APIS05_20597703_2021_temp.csv")) 
+fNames<-c("APIS01_20548905_2021_temp.csv",
+          "APIS02_20549198_2021_temp.csv",
+          "APIS03_20557246_2021_temp.csv",
+          "APIS04_20597702_2021_temp.csv",
+          "APIS05_20597703_2021_temp.csv")
 
-HoboList<-lapply(fNames,read.csv, skip=1, header=T)%>% #read hobo data into a list
+fPaths<-paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/", fNames) 
+
+HoboList<-lapply(fPaths,read.csv, skip=1, header=T)%>% #read hobo data into a list
           lapply(.,"[",,1:3)%>% #Grab only first 3 columns. Empty comma is not an error
           lapply(.,setNames, c("idx","DateTime","T_F"))%>%
           lapply(., function(x){x$DateTime2=as.POSIXct(x$DateTime, "%m/%d/%y %H:%M:%S", tz="UCT")
                                 return(x)})
-
+names(HoboList)<-fNames
 ```
 Let's strategize a little. I have two phases to consider. The function and the iteration. 
+
 **Function considerations**
 +I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
 
@@ -151,6 +164,8 @@ Let's strategize a little. I have two phases to consider. The function and the i
 
 +Time series data. ggplot can plot that just fine.
 
++I want a plot title, no plot title in file name. I only know plot title relatively.
+
 **Iteration considerations**
 +In each file the column locations and data contained are the same. 
 
@@ -158,64 +173,86 @@ Let's strategize a little. I have two phases to consider. The function and the i
 
 +I strongly suspect missing data.
 
++I want to name the ouput plots using their source filenames. I can name the elements in the data list so I know which is which, but lapply doesn't pass that information along. I can reference a separate vector, but that reduces the felxibility of the code. If I am going to use lapply, this means I need to get a little creative. 
 
-function(x){
-                p<-ggplot(x, aes(x=DateTime, y=T_F))+
-                   geom_point()+
-                   ggtitle()
-                ggsave(filename=  ,path=  ,plot=p, device="pdf", width=5,height=5,units="in")
-                            
-                #still some stuff to fix here. filename is not defined in the list. List needs to be named.
-                   }
-          )
+```{r PlottingFunction, echo=TRUE, eval=F}
+ggplotCustom<-function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in"){
+              p<-ggplot(data = j[[i]], aes(x=DateTime2, y=T_F))+
+                 geom_point()+
+                 ggtitle(names(j)[i])
+              ggsave(filename=gsub(pattern=pattern, replacement = replacement, names(j)[i]),
+                     path=path, plot=p,  device=device, 
+                     height=height, width=width, units=units)
+            }
+
+#do some quick testing
+ggplotCustom(i=1, j=HoboList, path= "C:/Users/tparr/Downloads/Training_Output/") #test to see if function is working for a positive case
+
+ggplotCustom(i=3, j=HoboList, path= "C:/Users/tparr/Downloads/Training_Output/") #test to see how it behaves on a negative case
+
+#now iterate
+lapply(seq_along(HoboList), FUN=ggplotCustom, HoboList, path="C:/Users/tparr/Downloads/Training_Output/")
+
 ```
+Someone's head just exploded with all that so let's pause and upack this because I threw a lot in here. 
+Let's talk about some of the logic in the arguments list. ```function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in")```:
+
++ ```i``` is just a placeholder we could call it ```x```, but ```x``` is going to show up later on in ggplot as a built-in variable and I don't want things to get confusing. ```i``` appears to be safe for now.
+
++ What is ```i```?  in this case, ```i``` is going to be an index that is the number of list elements.
+
++ We defined ```pattern``` and ```replacement``` which are going to help build the filename in gsub.
+
++ Then we defined a bunch of stuff ggsave parameter. Saving is pretty fiddly and depending on how I am going to use the function I may want to change those save arguments without rewriting the entire function. If I am happy with the defaults, I don't need to state them each time.  
+
++ ```choose.dir``` - if you don't know where it is going to go, you get prompted to select a directory for output. My intent is that I will always specify the path, but maybe I will forget or something. But then again I am going to end up specifying on each step of iteration.
+
+Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), FUN=ggplotCustom, HoboList, path="C:/Users/tparr/Downloads/Training_Output/")```:
+
++ ```seq_along``` basically creates a vector from 1 to the number of list elements.
+
++ where is ```i```? The way lapply works, is that it takes the first element of the list and passes it to the first variable of the specified function. In the above call the first element produced by ```seq_along``` is ```1``` and the first variable of ```ggplotCustom``` is ```i```. So it basically says i=1. If we had not used ```seq_along```, this would then take this first element of ```HoboList``` which is a dataframe. This is not an undesirable behavior but in this case, we want to be able to reference back to where that dataframe is so we can extract it's name.    
+
+
+
+
+#maybe Hadley's na.rm example here as that would play well with the original OR use the na.rm example first then show the plot example?
 
 
 
 
 
-Create a plot function see day 4
+#### Parallel processing (using more than 1 core)
+We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single processing core. In other words, for something like lapply (or ```map```, or ```foreach```) it processes each iteration sequentially on a single core. It doesn't need to be that way. Most computers have more than 2 cores.  you could be executing different independent iteration steps on separate cores and recombining the results. This is called 'parallel processing'.
 
+There are versions of this out there for ```lapply``` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the  ```future.apply``` package. 
 
+So let's explore and time a parallelization of lapply. Your code may vary if not on Windows. This will take 1-2 minutes to run depending on your computer.
 
+```{Parallelapply, echo=T, eval=F}
+HoboList2<-c(rep(HoboList,5)) #make the dataset larger 
 
+plan("multisession", workers=parallel::detectCores()-1) #initiate a multicore session, the number of cores to use to 1 fewer than the max detected. Reduces chance of overwhelming the system.
+microbenchmark::microbenchmark(
+"sequential"={lapply(seq_along(HoboList2), FUN=ggplotCustom, HoboList2, path="C:/Users/tparr/Downloads/Training_Output/")},
+"parallel"={future_lapply(seq_along(HoboList2), FUN=ggplotCustom, HoboList2, path="C:/Users/tparr/Downloads/Training_Output/")},
+times=5,
+unit="s"
+)
+plan("sequential") #close the multicore session.
 
-organization of the function
-#consistency - garbage in garbage out
+```
+My run says that parallelization was 23% faster than sequential. Not a huge speed improvement, but something to keep in mind to try if a chunk of code is taking ~30 minutes to execute. Now I kind of want to go and see if this approach can speed up ```file.copy```. 
 
+One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly. Best to test it with small data then scale up.
 
-#effectively it is a force QA/QC filter
-
-
-
-
-
-
-
-
-
-
-
-#### More complex functions
-
-#multiple parameters
-#defaults, overriding defaults
-#ellipsis
-
-
-#### Defining the output of functions
-#depends on how you plan on using the function
-#customizing output
-#summarizing into dataframe
-#getting it to output that you want.
-
-#### Best Practices: outputs
-#variable names
-  #keep argument names the same
-#planning ahead - where does it go next?
-#Think about what makes sense so the piping works well?
 
 #### Useful resources
 
 [1] https://stackoverflow.com/questions/19226816/how-can-i-view-the-source-code-for-a-function
 
+[2] http://rstudio-pubs-static.s3.amazonaws.com/5526_83e42f97a07141e88b75f642dbae8b1b.html
+
+[3] https://stackoverflow.com/questions/45101045/why-use-purrrmap-instead-of-lapply]
+
+[4] https://adv-r.hadley.nz/
