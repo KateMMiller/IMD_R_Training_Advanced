@@ -10,7 +10,10 @@ inv_cover <- c(rnorm(150, 5, 2) + -1.5*cycle[1:150], # adding negative trend
                rnorm(72, 10, 4)) # no trend
 inv_cover <- ifelse(inv_cover < 0, 0, inv_cover)
 
-invdata <- data.frame(Plot_Name, park, cycle, inv_cover)
+canopy_cover <- rnorm(length(inv_cover), 75, 10) + 1.5*inv_cover
+canopy_cover <- ifelse(canopy_cover > 100, 100, canopy_cover)
+
+invdata <- data.frame(Plot_Name, park, cycle, inv_cover, canopy_cover)
 
 invplot_all <- ggplot(invdata, aes(x = cycle, y = inv_cover, group = Plot_Name)) +
   scale_color_manual(values = c("#69A466", "#8BB3CE", "#F5C76C"), name = "Park") +
@@ -35,4 +38,16 @@ invplot_ACAD <- ggplot(invdata %>% filter(park == "ACAD"),
   geom_smooth(aes(x = cycle, y = inv_cover, group = park),
               formula = y ~ x,
               method = 'lm', se = FALSE, color = '#7E7E7E')
-invplot_ACAD
+
+can_vs_inv <- ggplot(invdata %>% filter(cycle == 3), 
+                     aes(x = canopy_cover, y = inv_cover, group = park)) +
+  geom_point()+
+  geom_jitter(aes(color = park), width = 0.1) +
+  geom_smooth(aes(x = canopy_cover, y = inv_cover, group = park), 
+              se = FALSE, formula = y ~ x, method = 'lm') +
+  labs(x = "Canopy % Cover", y = "Invasive % Cover") +
+  theme_bw()+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) +
+  facet_wrap(~park)
+
