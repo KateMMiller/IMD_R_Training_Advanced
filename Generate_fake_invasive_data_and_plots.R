@@ -47,7 +47,8 @@ can_vs_inv <- ggplot(invdata %>% filter(cycle == 3),
   geom_point()+
   geom_jitter(aes(color = park), width = 0.1) +
   geom_smooth(aes(x = canopy_cover, y = inv_cover, group = park), 
-              se = FALSE, formula = y ~ x, method = 'lm') +
+              se = FALSE, formula = y ~ x, method = 'lm',
+              color = '#7E7E7E') +
   labs(x = "Canopy % Cover", y = "Invasive % Cover") +
   theme_bw()+
   theme(panel.grid.major = element_blank(), 
