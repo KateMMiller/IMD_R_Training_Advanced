@@ -14,7 +14,7 @@ Thomas - A function is a container for a series of steps that are performed on d
 JP - Functions are a way of taking a large problem and breaking it down into simpler discrete steps. Each function can just focus on one step and makes it easier to do that step in isolation. You can then reuse the functions to help solve new problems in the future. 
 
 *Everything is a function. But what is it really?*
-A function *usually* has 3 components - the function name, arguments, and the expressions or source code. 
+A function *usually* has 3 components - the function name, arguments, and the body or source code. 
 
 *Hang on, what was that 'usually' jazz?*
 Okay, there are 'named functions' and 'anonymous functions.' The difference is that when you plan on reusing a function, you give it a name (3 components). If you don't plan on using it ever again, you don't give it a name (2 components) and it is called an 'anonymous function.' I am going to show you examples of both, but not get too hung up on the taxonomy.
@@ -279,7 +279,7 @@ Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), F
 #### Parallel processing (using more than 1 core)
 We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single processing core. In other words, for something like lapply (or ```map```, or ```foreach```) it processes each iteration sequentially on a single core. It doesn't need to be that way. Most computers have more than 2 cores.  you could be executing different independent iteration steps on separate cores and recombining the results. This is called 'parallel processing'.
 
-There are versions of this out there for ```lapply``` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the  ```future.apply``` package. 
+There are versions of this out there for ```lapply``` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the ```future.apply``` package. 
 
 So let's explore and time a parallelization of lapply. Your code may vary if not on Windows. This will take 1-2 minutes to run depending on your computer.
 
@@ -299,7 +299,6 @@ plan("sequential") #close the multicore session.
 My run says that parallelization was 23% faster than sequential. Not a huge speed improvement, but something to keep in mind to try if a chunk of code is taking ~30 minutes to execute. Now I kind of want to go and see if this approach can speed up ```file.copy```. 
 
 One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly. Best to test it with small data then scale up.
-
 
 #### Useful resources
 
