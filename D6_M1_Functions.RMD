@@ -1,5 +1,7 @@
 #### Functional Programming
-I will leave you to google this and dive into the rabbit hole that is the definition of functional programming. This isn't about writing code that works, it is a technical thing. In short, a "functional" is a higher order function that takes a function as one of its inputs. For our purposes "functional programming" will focus on iterative functionals (apply family and map) and how to make functions that can be passed to functionals.  
+I will leave you to google this and dive into the rabbit hole that is the definition of functional programming. This isn't about writing code that works, it is a technical thing. In short, a "functional" is a higher order function that takes a function as one of its inputs. For our purposes "functional programming" will focus on iterative functionals (apply family and map) and how to make functions that can be passed to functionals. 
+
+**The goal of functional programming is more stable, transparent, and reliable code.**
 
 #### Overview functions
 This module will provide a look at simple and moderately complex 'functions' in R. We will look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. 1) The ability to create a function. 2) The ability to use that function to get a lot of repetitive tasks done quickly. You already learned a little bit about this second one on the Day 4 iteration and you saw us using some functions there. 
@@ -69,8 +71,8 @@ Below are some of the steps we find ourselves following when we need to develop 
 + Test the function until you are satisfied.(Debugging, See day 4)
 + Apply it to the data.
 
-#### Modifying simple function
-Let's create our first function. 
+#### Modifying a simple function
+Let's create our first function by changing the default behavior of an existing one
 ```{r MyFirstFunction.0, echo=T, eval=F}
 set.seed(12345) #gives everybody the same data
 
@@ -106,13 +108,14 @@ When we set up our new function we did not tell it ```na.rm``` is an argument. W
 ```{r MyFirstFunction.5, echo=T, eval=F}
 mean3<- function(x,na.rm=T){mean(x=x, na.rm=na.rm)} 
 
+mean3(d)
 ```
-So now we have just made this ```mean``` but with the ```na.rm``` set to true.
+So now we have just made ```mean``` with the ```na.rm``` set to true and we can change that if needed.
 
 ```{r MyFirstFunction.6, echo=T, eval=F}
 mean4<- function(x,na.rm){#very minor change. I deleted the initial parameter value
                           mean(x=x, na.rm=na.rm)} 
-
+mean4(d)
 ```
 What do you think is going to happen without the inital parameter value? 
 
@@ -120,7 +123,8 @@ It didn't work... or did it? How you set up your functions is partially about wh
 ```mean```  - assumes that you want an NA if data are missing but might want to change that behavior.
 ```mean2``` - assumes you always want to ignore NAs and have no reason to change that behavior
 ```mean3``` - assumes you mostly want to ignore NAs but might want to change that behavior
-```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values. 
+```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values.
+
 A few final things on the basics of how functions function. You will see the coding for a simple 1 line function expressed 2 ways:
 ```{r MyFirstFunction.6, echo=T, eval=F}
 mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
@@ -128,12 +132,27 @@ mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
 mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
 
 ```
-If a function can be expressed with a single line you do not need curly brackets. If the function is on more than one line you must use curly brackets. My preference is that you should always use the closures even if you don't need to. 
+If a function can be expressed with a single line you do not need curly brackets. If the function is on more than one line you must use curly brackets. There are some other details on this, but that is all you really need to know. My preference is that you should always use the curly brackets even if you don't need to. 
+
+#### Functionals
+I want to come back to what "functionals" are now. For our purposes, a functional is a higher-order function that takes a function and data as their inputs (maybe a few other things as well). The functional iterates that function over the data in a predefined way and returns a certain ouput (.e.g  vector, list, dataframe, etc). This is one of the reasons why functionals are preferred over for loops. Functionals have an expected behavior. With for loops you are defining the behavior. With functionals, that is largely done and you are just picking the one or combination that does what you want.
+
+  *Which of the following is a correct statement?*
+  +The for loop isn't iterating correctly.
+  +The functional isn't iterating correctly.
+
+  *Can you think of any reasons why we would want to sacrifice the flexibility of a for loop for the rigidity of a functional?*
+
+We are going to use two functional families ```apply``` (base R) and ```map``` (purrr) - there are more out there, but these two are the easiest to understand. We will build some general approaches in ```apply``` and then rebuild them in ```map```.  
 
 
-#### Creating a useful function.
-Let's do something more useful than modify low level behavior. On day 4 we were creating some functions and I told you to ignore some of that for now. Let's go back and pick those apart a little more. We will focus on that plotting function. I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output.  
 
+#### Creating a few useful functions
+On day 4 as we learned about iteration and were using functions. I told you to ignore the whole why they were functions thing for now. Let's go back and pick those apart a little more and make some useful functions for that hobo temperature data. We will make a summary function, a plot function, and a modeling function. 
+
+#### Read in data
+
+Let's read in that Hobo data again and take a closer look at the functions and functionals. 
 
 ```{r PlottingFunction, echo=TRUE, eval=F}
 library(ggplot2);library(magrittr)
@@ -146,14 +165,66 @@ fNames<-c("APIS01_20548905_2021_temp.csv",
 
 fPaths<-paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/", fNames) 
 
-HoboList<-lapply(fPaths,read.csv, skip=1, header=T)%>% #read hobo data into a list
-          lapply(.,"[",,1:3)%>% #Grab only first 3 columns. Empty comma is not an error
-          lapply(.,setNames, c("idx","DateTime","T_F"))%>%
-          lapply(., function(x){x$DateTime2=as.POSIXct(x$DateTime, "%m/%d/%y %H:%M:%S", tz="UCT")
-                                return(x)})
-names(HoboList)<-fNames
+HoboList<-lapply(fPaths, FUN=read.csv, skip=1, header=T)%>% #1. read hobo data into a list
+          lapply(., "[",,1:3)%>% #2. Grab only first 3 columns. Empty comma is not an error
+          lapply(., setNames, c("idx","DateTime","T_F"))%>% #3. set col names
+          lapply(., dplyr::mutate, DateTime2=as.POSIXct(DateTime, "%m/%d/%y %H:%M:%S", tz="UCT"))%>%#4. format datetime in new variable. 
+          setNames(., fNames) #5. name each one for tracking
 ```
+This ws actually our first functional programming exercise and we did 4 of them. See numbering in comments above:
+1. Take each element of the vector ```fPaths``` and pass it to the function (FUN) ```read.csv``` one by one and return a list of data frames. Not the arguments that come after the function identification are arguments for the specified function.
+2. You may be surprised to know that the indexing notation ```[]``` is actually a function and can be called using ```"["``` and passing it any row and column information.
+3. Rename the columns.
+4. Create a new variable that formats the data as datetime so it plots correctly.
+
+So, that was the aplication of canned functions in a functional, on to the new functions.
+
+### Summary Statistics for the data
+The way we did summary statitics before was a little clunky. It was only really appropriate if that was the only place we would be doing it that way. Let's assume we will do it that way for a number of different datasets in different workflows.
+
+```{r summaryFun, echo=T, eval=F}
+hobo_summary <- function(x, col=3) {
+   funs <- c(mean, median, sd, mad, IQR) #list of functions
+             unlist(                     #unlist simplifies somewhat ugly output
+             y<-lapply(funs, function(f){f(x[,col], na.rm = TRUE)})%>%
+                setNames(.,c("mean", "median", "sd", "mad", "IQR")) #
+             )
+} #credit to [5] for this general example idea
+
+summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
+                        do.call("rbind", . )%>%
+                        as.data.frame( . ) 
+
+```
+First question, what is lapply passing to hobo_summary? 
+
+
+
+
+
+
+
+
+
+
+
+#### Build a plotting function
+I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output. 
+
+
+
+
+
 Let's strategize a little. I have two phases to consider. The function and the iteration. 
+
+
+
+
+
+
+
+
+
 
 **Function considerations**
 +I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
