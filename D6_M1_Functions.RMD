@@ -182,36 +182,55 @@ So, that was the aplication of canned functions in a functional, on to the new f
 #### Summary Statistics for the data
 The way we did summary statitics before was a little clunky. It was only really appropriate if that was the only place we would be doing it that way. Let's assume we will do it that way for a number of different datasets in different workflows.
 
+Let's strategize a little. I have two phases to consider. The function and the iteration.
+
+**Function considerations**
++Hobo data has 3 columns. Is this just for hobo data? Doesn't have to be. Maybe the column number will change if I decide to analyze light data at some point. I probably want the target column to be an argument so I can change it.
++I want to get the ouput for a bunch of simple statistics.
++All will operate on the same data.
++All have singular outputs.
++```na.rm``` is defaulted to ```FALSE``` in all of then and I would like it ot be true.
++I am inputting a list of data, but I want a dataframe or something easily coerced into one back.
++I want to be sure I am properly tracking names of columns and files in this. 
+
+**Iteration considerations**
++Inputting a list of dataframes but I want a single dataframe in return that summarizes all of them.
++I want to be sure I am properly tracking names of columns and files in this. 
+
+Now that I have put some thought into it, let start coding. 
+Note on code: Primarily intended for demonstration purposes. Can be done more cleanly in purrr::map.
 ```{r summaryFun, echo=T, eval=F}
-hobo_summary <- function(x, col=3) {
+hobo_summary <- function(x, col=3) {   
    funs <- c(mean, median, sd, mad, IQR) #list of functions
              unlist(                     #unlist simplifies somewhat ugly output
              y<-lapply(funs, function(f){f(x[,col], na.rm = TRUE)})%>%
-                setNames(.,c("mean", "median", "sd", "mad", "IQR")) #
+                setNames(.,c("mean", "median", "sd", "mad", "IQR"))
              )
 } #credit to [5] for this general example idea
 
 summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
-                        do.call("rbind", . )%>%
+                        do.call("rbind", . )%>%   
                         as.data.frame( . ) 
-
 ```
-First question, what is lapply passing to hobo_summary? 
-
-
-#more stuff here
-
+Questions:
++How many arguments does hobo_summary take? How many have a default value?
++What is ```funs```?
++What is ```lapply(funs, function(f){f(x[,col], na.rm = TRUE)})``` passing to the anonymous function?
++What is that anonymous function doing?
++What is ```lapply(HoboList, FUN=hobo_summary)``` passing to hobo_summary? 
++What are the benefits and drawbacks of setting the column names in hobo_summary?
++What is unlist doing?
 
 
 #### Build a plotting function
-I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output. 
+I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection.
 
-Let's strategize a little. I have two phases to consider. The function and the iteration. 
+**Strategy time**
 
 **Function considerations**
 +I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
 
-+A hobo logger that has 3 columns.
++Hobo data has 3 columns.
 
 +Maybe some files have some or all data missing. ggplot handles missing data reasonably well
 
@@ -247,16 +266,14 @@ ggplotCustom(i=3, j=HoboList, path= "C:/Users/tparr/Downloads/Training_Output/")
 lapply(seq_along(HoboList), FUN=ggplotCustom, HoboList, path="C:/Users/tparr/Downloads/Training_Output/")
 
 ```
-Someone's head just exploded with all that so let's pause and upack this because I threw a lot in here. 
-Let's talk about some of the logic in the arguments list. ```function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in")```:
+Someone's head just exploded with all that so let's pause and upack this because I threw a lot in here. Let's start by talking about some of the logic in the arguments list. ```function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in")```:
 
-+ ```i``` is just a placeholder we could call it ```x```, but ```x``` is going to show up later on in ggplot as a built-in variable and I don't want things to get confusing. ```i``` appears to be safe for now.
++ What is ```i```?  
+      In this case, ```i``` is going to be an index that is the number of list elements.
 
-+ What is ```i```?  in this case, ```i``` is going to be an index that is the number of list elements.
++ Where are we using ```pattern``` and ```replacement```?
 
-+ We defined ```pattern``` and ```replacement``` which are going to help build the filename in gsub.
-
-+ Then we defined a bunch of stuff ggsave parameter. Saving is pretty fiddly and depending on how I am going to use the function I may want to change those save arguments without rewriting the entire function. If I am happy with the defaults, I don't need to state them each time.  
++ Then we defined a bunch of stuff for ```ggsave```. Saving is pretty fiddly and depending on how I am going to use the function I may want to change those save arguments without rewriting the entire function. If I am happy with the defaults, I don't need to state them each time.  
 
 + ```choose.dir``` - if you don't know where it is going to go, you get prompted to select a directory for output. My intent is that I will always specify the path, but maybe I will forget or something. But then again I am going to end up specifying on each step of iteration.
 
@@ -266,6 +283,9 @@ Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), F
 
 + where is ```i```? The way lapply works, is that it takes the first element of the list and passes it to the first variable of the specified function. In the above call the first element produced by ```seq_along``` is ```1``` and the first variable of ```ggplotCustom``` is ```i```. So it basically says i=1. If we had not used ```seq_along```, this would then take this first element of ```HoboList``` which is a dataframe. This is not an undesirable behavior but in this case, we want to be able to reference back to where that dataframe is so we can extract it's name.    
 
+#### Iterating an Analysis
+
+simple iteration of LM here
 
 
 
@@ -274,16 +294,14 @@ Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), F
 
 
 
-
-
-#### Parallel processing (using more than 1 core)
+#### Parallel processing
 We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single processing core. In other words, for something like lapply (or ```map```, or ```foreach```) it processes each iteration sequentially on a single core. It doesn't need to be that way. Most computers have more than 2 cores.  you could be executing different independent iteration steps on separate cores and recombining the results. This is called 'parallel processing'.
 
 There are versions of this out there for ```lapply``` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the ```future.apply``` package. 
 
 So let's explore and time a parallelization of lapply. Your code may vary if not on Windows. This will take 1-2 minutes to run depending on your computer.
 
-```{Parallelapply, echo=T, eval=F}
+```{r Parallelapply, echo=T, eval=F}
 HoboList2<-c(rep(HoboList,5)) #make the dataset larger 
 
 plan("multisession", workers=parallel::detectCores()-1) #initiate a multicore session, the number of cores to use to 1 fewer than the max detected. Reduces chance of overwhelming the system.
