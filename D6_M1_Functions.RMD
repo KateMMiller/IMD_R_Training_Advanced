@@ -29,7 +29,7 @@ The last bit of a function is the **source code** ("source" for short). This is 
 
 How do you get to the source? These days, for non-base packages a lot of this can be found on github (eventually). The fastest way, is to type the function name without the ```()``` into the console it will return the underlying source code for that function if it is available. 
 
-```{looking at a function, echo = F, eval=T}
+```{r lookingAtAFunction, echo = F, eval=T}
 #run these in the console without the () to see what lies underneath
 mean
 
@@ -71,7 +71,7 @@ Below are some of the steps we find ourselves following when we need to develop 
 
 #### Modifying simple function
 Let's create our first function. 
-```{MyFirstFunction.0, echo=T, eval=F}
+```{r MyFirstFunction.0, echo=T, eval=F}
 set.seed(12345) #gives everybody the same data
 
 d<-c(floor(runif(100)*100),NA) #generate random data
@@ -80,7 +80,7 @@ mean(x=d) #unexpected result
 ```
 The response is NA, which is not what we want (maybe). It is easy enough to address this with ```mean(d,na.rm=T)```, but we may not want to do that many times throughout our code. 
 
-```{MyFirstFunction, echo=T, eval=F}
+```{r MyFirstFunction, echo=T, eval=F}
 mean2<-  #Tell [R] that I want this new function to be named "mean2"
        function(x){  #the function consists of 1 parameter named x (aka the data) The { begins the function source code / expressions. 
                    mean(x,na.rm=T) #in the mean function change the default for na.rm=T
@@ -88,14 +88,14 @@ mean2<-  #Tell [R] that I want this new function to be named "mean2"
 ```
 Now let's check its behavior.
 
-```{MyFirstFunction.3, echo=T, eval=F}
+```{r MyFirstFunction.3, echo=T, eval=F}
 
 mean2(x=d) #more expected result
 
 ```
 That handled the NA value without giving an error. What if we want to switch that back?
 
-```{MyFirstFunction.4, echo=T, eval=F}
+```{r MyFirstFunction.4, echo=T, eval=F}
 mean2(x=d, na.rm=F)
 
 ```
@@ -103,13 +103,13 @@ How you create your function affects what it can use as 'arguments'.
 
 When we set up our new function we did not tell it ```na.rm``` is an argument. We fixed it in the source code. If you want something as a parameter, it must be listed in the parentheses.
 
-```{MyFirstFunction.5, echo=T, eval=F}
+```{r MyFirstFunction.5, echo=T, eval=F}
 mean3<- function(x,na.rm=T){mean(x=x, na.rm=na.rm)} 
 
 ```
 So now we have just made this ```mean``` but with the ```na.rm``` set to true.
 
-```{MyFirstFunction.6, echo=T, eval=F}
+```{r MyFirstFunction.6, echo=T, eval=F}
 mean4<- function(x,na.rm){#very minor change. I deleted the initial parameter value
                           mean(x=x, na.rm=na.rm)} 
 
@@ -122,7 +122,7 @@ It didn't work... or did it? How you set up your functions is partially about wh
 ```mean3``` - assumes you mostly want to ignore NAs but might want to change that behavior
 ```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values. 
 A few final things on the basics of how functions function. You will see the coding for a simple 1 line function expressed 2 ways:
-```{MyFirstFunction.6, echo=T, eval=F}
+```{r MyFirstFunction.6, echo=T, eval=F}
 mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
 
 mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
@@ -217,6 +217,24 @@ Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), F
 
 
 #maybe Hadley's na.rm example here as that would play well with the original OR use the na.rm example first then show the plot example?
+```{r summaryFun, echo=T, eval=F}
+hobo_summary <- function(x, col=3) {
+   funs <- c(mean, median, sd, mad, IQR) #list of functions
+             unlist(                     #unlist simplifies somewhat ugly output
+             lapply(funs, function(f){f(x[,col], na.rm = TRUE)}) 
+             )
+} #credit to [5] for this general example idea
+
+summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
+                        do.call("rbind", . )%>%
+                        as.data.frame( . )%>%
+                        setNames(.,c("mean", "median", "sd", "mad", "IQR")) #dislike that I have repeated that list of names.
+
+```
+First question, what is lapply passing to hobo_summary? 
+
+
+
 
 
 
@@ -256,3 +274,5 @@ One important thing to remember is that initiating a parallel session can slow d
 [3] https://stackoverflow.com/questions/45101045/why-use-purrrmap-instead-of-lapply]
 
 [4] https://adv-r.hadley.nz/
+
+[5] http://adv-r.had.co.nz/Functional-programming.html
