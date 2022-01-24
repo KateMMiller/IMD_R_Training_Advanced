@@ -7,7 +7,7 @@ cycle <- rep(1:3, times = length(Plot_Name)/3)
 inv_cover <- c(rnorm(150, 5, 2) + -1.5*cycle[1:150], # adding negative trend
                rnorm(36, 10, 2), # no trend 
                rnorm(72, 10, 4)) # no trend
-inv_cover <- ifelse(inv_cover < 0, 0)
+inv_cover <- ifelse(inv_cover < 0, 0, inv_cover)
 
 invdata <- data.frame(Plot_Name, park, cycle, inv_cover)
 
