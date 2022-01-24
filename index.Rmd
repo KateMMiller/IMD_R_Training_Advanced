@@ -5,9 +5,9 @@ output:
     numbered_sections: false
     number_sections: false
     fig_caption: true
-title: "IMD Advanced R Training"
+title: "NPS IMD Advanced R Training"
 ---
-<h2>NPS Inventory and Monitoring Division R Training II: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
+<h2>NPS Inventory and Monitoring Division Advanced R Training: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
 --------------------------------------------------
 
 ### Prep for Training {.tabset}
