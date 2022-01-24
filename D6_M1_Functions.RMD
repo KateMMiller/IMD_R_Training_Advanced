@@ -126,7 +126,7 @@ It didn't work... or did it? How you set up your functions is partially about wh
 ```mean4``` - assumes nothing and forces you to explicitly state how you are going to handle NA values.
 
 A few final things on the basics of how functions function. You will see the coding for a simple 1 line function expressed 2 ways:
-```{r MyFirstFunction.6, echo=T, eval=F}
+```{r MyFirstFunction.7, echo=T, eval=F}
 mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
 
 mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
@@ -154,7 +154,7 @@ On day 4 as we learned about iteration and were using functions. I told you to i
 
 Let's read in that Hobo data again and take a closer look at the functions and functionals. 
 
-```{r PlottingFunction, echo=TRUE, eval=F}
+```{r ReadInDataFunctionals, echo=TRUE, eval=F}
 library(ggplot2);library(magrittr)
 #get that data
 fNames<-c("APIS01_20548905_2021_temp.csv",
@@ -179,7 +179,7 @@ This ws actually our first functional programming exercise and we did 4 of them.
 
 So, that was the aplication of canned functions in a functional, on to the new functions.
 
-### Summary Statistics for the data
+#### Summary Statistics for the data
 The way we did summary statitics before was a little clunky. It was only really appropriate if that was the only place we would be doing it that way. Let's assume we will do it that way for a number of different datasets in different workflows.
 
 ```{r summaryFun, echo=T, eval=F}
@@ -199,32 +199,14 @@ summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
 First question, what is lapply passing to hobo_summary? 
 
 
-
-
-
-
-
-
+#more stuff here
 
 
 
 #### Build a plotting function
 I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection. That requires iteration and a function. We will focus on the function and make some different functions that behave differently depending on the data they might encounter and the desired iteration output. 
 
-
-
-
-
 Let's strategize a little. I have two phases to consider. The function and the iteration. 
-
-
-
-
-
-
-
-
-
 
 **Function considerations**
 +I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
@@ -286,23 +268,6 @@ Now let's look at how this was fed into lapply: ```lapply(seq_along(HoboList), F
 
 
 
-
-#maybe Hadley's na.rm example here as that would play well with the original OR use the na.rm example first then show the plot example?
-```{r summaryFun, echo=T, eval=F}
-hobo_summary <- function(x, col=3) {
-   funs <- c(mean, median, sd, mad, IQR) #list of functions
-             unlist(                     #unlist simplifies somewhat ugly output
-             lapply(funs, function(f){f(x[,col], na.rm = TRUE)}) 
-             )
-} #credit to [5] for this general example idea
-
-summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
-                        do.call("rbind", . )%>%
-                        as.data.frame( . )%>%
-                        setNames(.,c("mean", "median", "sd", "mad", "IQR")) #dislike that I have repeated that list of names.
-
-```
-First question, what is lapply passing to hobo_summary? 
 
 
 
