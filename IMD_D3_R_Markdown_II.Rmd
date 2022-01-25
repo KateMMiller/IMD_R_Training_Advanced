@@ -175,6 +175,8 @@ There are multiple ways to display a image that's stored on disk. The easiest wa
 ![Map of Region-1 IMD parks.](./images/map_of_parks.jpg){width=400px}
 ```
 
+Note that inserting a hyperlinked url is very similar. Just omit the ! and put the url in parenthesis instead of the path to the image. Like: `[Link to IMD home page](https://www.nps.gov/im)`
+
 You can also use the HTML <img> tag. The code below will produce the exact same image as the markdown code above. I seem to be able to remember better the <img> tag better than the markdown version, so I tend to use this more often. 
 ```{html, verbtxt3, results = 'asis'}
 <img src="./images/map_of_parks.jpg" alt = "Map of Region-1 IMD parks" width="400px">
@@ -231,7 +233,8 @@ output:
 To see how all of this works, we need to create a couple of plots. Sourcing the code below will generate a fake dataset and then creates 2 plots. If this doesn't work for some reason, you can copy and paste the code directly from the script named <a href="https://github.com/KateMMiller/IMD_R_Training_Advanced/blob/main/Generate_fake_invasive_data_and_plots.R">Generate_fake_invasive_data_and_plots.R</a> in our <a href="https://github.com/KateMMiller/IMD_R_Training_Advanced">IMD_R_Training_Advanced repository</a>. I'm just trying to save room on the page for code that's not important.
 
 ```{r fkinv, echo = T, results = 'hide', message=F, warning=F}
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
 
 ```
@@ -276,12 +279,6 @@ As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be d
 <br>
 <hr>
 
-#### Examples
-- QA/QC report and weekly checking (html)
-- Regen analysis or invasive analysis (html)
-- NPS template and MIDN report (docx)
-- Ellen's COVID reports (pdf)
-
 #### Bells and Whistles
 - parameters
 - iterating knitr text into tabs
@@ -289,6 +286,12 @@ As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be d
 - tabsets
 - html widgets and interactives (plotly?, crosstable?)
 - Show example of rendering a bunch of markdown docs (e.g. one for each park)
+
+#### Gallery of Examples
+- QA/QC report and weekly checking (html)
+- Regen analysis or invasive analysis (html)
+- NPS template and MIDN report (docx)
+- Ellen's COVID reports (pdf)
 
 #### Resources
 <h3>R Markdown</h3>
