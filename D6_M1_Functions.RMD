@@ -161,7 +161,11 @@ On day 4 as we learned about iteration and were using functions. I told you to i
 
 <h4> Read in data</h4>
 
-Let's read in that Hobo data again and take a closer look at the functions and functionals. 
+Let's read in that Hobo air temperature data again and take a closer look at the functions and functionals. As a reminder there will be 4 columns:
++`idx` is a sequential index column of integers inteded to track the original data order as the data are manipulated. 
++`DateTime` is a datetime that is going to read in as a character.
++`T_F` is going to be temperature in Fahrenheit. 
++`Lum` is going to be a measure of light intensity in lux (lumens/ft2). 
 
 ```{r ReadInDataFunctionals}
 library(ggplot2);library(magrittr)
