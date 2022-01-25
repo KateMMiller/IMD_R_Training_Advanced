@@ -310,7 +310,7 @@ lapply(modlist, summary)
 lapply(modlist, plot)
 lapply(modlist, coef)
 ```
-That was nice but it wasn't in the best format for further use and it wasn't what we really needed. Let's drill down to an output we like. 
+That was nice, but it wasn't in the best format for further use and it wasn't what we really needed. Let's drill down to an output we like. 
 
 ```{r PlottingFunction.2}
 lm_stats<-function(mod){ mod_sum<-summary(mod) #may or may not be worthwhile
