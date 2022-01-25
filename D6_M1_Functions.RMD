@@ -301,7 +301,7 @@ As you advance in R or have more complex datasets you will want to iterate your 
 
 ```{r PlottingFunction}
 
-lm_ls<-function(data,x){ifmod<-lm(x, data=data); return(mod)}
+lm_ls<-function(data,x){mod<-lm(x, data=data); return(mod)}
 modlist<-lapply(HoboList[c(2,4,5)], lm_ls, T_F~Lum) #I know some are missing light data
 ```
 We can now extract some stuff and do some diagnostics. A lot of common tools can be used in a functional.
