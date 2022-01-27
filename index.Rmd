@@ -40,9 +40,19 @@ title: "NPS IMD Advanced R Training"
 ```
 
 ### Day 4: Version Control {.tabset}
-```{r VersionControl, child = "IMD_D4_Version_control_I.Rmd"}
+
+```{r VersionControlI, child = "IMD_D4_Version_control_I.Rmd"}
 
 ```
+
+```{r VersionControlII, child = "IMD_D4_Version_control_II.Rmd"}
+
+```
+
+```{r VersionControlIII, child = "IMD_D4_Version_control_III.Rmd"}
+
+```
+
 
 ### Day 4: R Packages {.tabset}
 
