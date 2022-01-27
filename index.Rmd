@@ -21,7 +21,7 @@ title: "NPS IMD Advanced R Training"
 
 ### Day 2: Functional Programming {.tabset}
 
-```{r FunctionsI, child = "D6_M1_Functions.Rmd", error = T}
+```{r FunctionsI, child = "IMD_D6_M1_Functions.Rmd", error = T}
 
 ```
 
