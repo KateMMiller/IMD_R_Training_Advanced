@@ -159,10 +159,10 @@ On day 4 as we learned about iteration and were using functions. I told you to i
 <h4> Read in data</h4>
 
 Let's read in that Hobo air temperature data again and take a closer look at the functions and functionals. As a reminder there will be 4 columns:
-+`idx` is a sequential index column of integers inteded to track the original data order as the data are manipulated. 
-+`DateTime` is a datetime that is going to read in as a character.
-+`T_F` is going to be temperature in Fahrenheit. 
-+`Lum` is going to be a measure of light intensity in lux (lumens/ft2). 
++ `idx` is a sequential index column of integers inteded to track the original data order as the data are manipulated. 
++ `DateTime` is a datetime that is going to read in as a character.
++ `T_F` is going to be temperature in Fahrenheit. 
++ `Lum` is going to be a measure of light intensity in lux (lumens/ft2). 
 
 ```{r ReadInDataFunctionals, eval=F}
 library(ggplot2);library(magrittr)
@@ -195,17 +195,17 @@ The way we did summary statistics before was a little clunky. It was only really
 Let's strategize a little. I have two phases to consider. The function and the iteration.
 
 **Function considerations**
-+Hobo data has 3 columns. Is this just for hobo data? Doesn't have to be. Maybe the column number will change if I decide to analyze light data at some point. I probably want the target column to be an argument so I can change it.
-+I want to get the output for a bunch of simple statistics.
-+All will operate on the same data.
-+All have singular outputs.
-+`na.rm` is defaulted to `FALSE` in all of then and I would like it to be true.
-+I am inputting a list of data, but I want a dataframe or something easily coerced into one back.
-+I want to be sure I am properly tracking names of columns and files in this. 
++ Hobo data has 3 columns. Is this just for hobo data? Doesn't have to be. Maybe the column number will change if I decide to analyze light data at some point. I probably want the target column to be an argument so I can change it.
++ I want to get the output for a bunch of simple statistics.
++ All will operate on the same data.
++ All have singular outputs.
++ `na.rm` is defaulted to `FALSE` in all of then and I would like it to be true.
++ I am inputting a list of data, but I want a dataframe or something easily coerced into one back.
++ I want to be sure I am properly tracking names of columns and files in this. 
 
 **Iteration considerations**
-+Inputting a list of dataframes but I want a single dataframe in return that summarizes all of them.
-+I want to be sure I am properly tracking names of columns and files in this. 
++ Inputting a list of dataframes but I want a single dataframe in return that summarizes all of them.
++ I want to be sure I am properly tracking names of columns and files in this. 
 
 Now that I have put some thought into it, let start coding. 
 Note on code: Primarily intended for demonstration purposes. Can be done more cleanly in purrr::map.
@@ -223,13 +223,13 @@ summarized_data<-lapply(HoboList, FUN=hobo_summary)%>%
                         as.data.frame( . ) 
 ```
 Questions:
-+How many arguments does hobo_summary take? How many have a default value?
-+What is `funs`?
-+What is `lapply(funs, function(f){f(x[,col], na.rm = TRUE)})` passing to the anonymous function?
-+What is that anonymous function doing?
-+What is `lapply(HoboList, FUN=hobo_summary)` passing to hobo_summary? 
-+What are the benefits and drawbacks of setting the column names in hobo_summary?
-+What is unlist doing?
++ How many arguments does hobo_summary take? How many have a default value?
++ What is `funs`?
++ What is `lapply(funs, function(f){f(x[,col], na.rm = TRUE)})` passing to the anonymous function?
++ What is that anonymous function doing?
++ What is `lapply(HoboList, FUN=hobo_summary)` passing to hobo_summary? 
++ What are the benefits and drawbacks of setting the column names in hobo_summary?
++ What is unlist doing?
 
 <h4> Build a plotting function</h4>
 I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection.
@@ -237,24 +237,24 @@ I find that rapidly generating a pile of plots is often useful for some initial 
 **Strategy time**
 
 **Function considerations**
-+I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
++ I need to make a simple plot. Plot would work fine, but find ggplot makes saving the plot to a variety of formats easier because of ggsave.
 
-+Hobo data has 3 columns.
++ Hobo data has 3 columns.
 
-+Maybe some files have some or all data missing. ggplot handles missing data reasonably well
++ Maybe some files have some or all data missing. ggplot handles missing data reasonably well
 
-+Time series data. ggplot can plot that just fine.
++ Time series data. ggplot can plot that just fine.
 
-+I want a plot title, no plot title in file name. I only know plot title relatively.
++ I want a plot title, no plot title in file name. I only know plot title relatively.
 
 **Iteration considerations**
-+In each file the column locations and data contained are the same. 
++ In each file the column locations and data contained are the same. 
 
-+Each of the 5 have similar names - could be useful for iteration.
++ Each of the 5 have similar names - could be useful for iteration.
 
-+I strongly suspect missing data.
++ I strongly suspect missing data.
 
-+I want to name the output plots using their source filenames. I can name the elements in the data list so I know which is which, but lapply doesn't pass that information along. I can reference a separate vector, but that reduces the flexibility of the code. If I am going to use lapply, this means I need to get a little creative. 
++ I want to name the output plots using their source filenames. I can name the elements in the data list so I know which is which, but lapply doesn't pass that information along. I can reference a separate vector, but that reduces the flexibility of the code. If I am going to use lapply, this means I need to get a little creative. 
 
 ```{r PlottingFunction, eval=F}
 ggplotCustom<-function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in"){
@@ -290,7 +290,7 @@ Now let's look at how this was fed into lapply: `lapply(seq_along(HoboList), FUN
 
 + `seq_along` basically creates a vector from 1 to the number of list elements.
 
-+ where is `i`? The way lapply works, is that it takes the first element of the list and passes it to the first variable of the specified function. In the above call the first element produced by `seq_along` is `1` and the first variable of `ggplotCustom` is `i`. So it basically says i=1. If we had not used `seq_along`, this would then take this first element of `HoboList` which is a dataframe. This is not an undesirable behavior but in this case, we want to be able to reference back to where that dataframe is so we can extract it's name.    
++ Where is `i`? The way lapply works, is that it takes the first element of the list and passes it to the first variable of the specified function. In the above call the first element produced by `seq_along` is `1` and the first variable of `ggplotCustom` is `i`. So it basically says i=1. If we had not used `seq_along`, this would then take this first element of `HoboList` which is a dataframe. This is not an undesirable behavior but in this case, we want to be able to reference back to where that dataframe is so we can extract it's name.    
 
 <h4> Iterating an Analysis</h4>
 
@@ -328,10 +328,10 @@ m<-lapply(modlist, lm_stats)%>%
 ```
 
 You know the drill, what are your questions?
-+What makes sense?
-+What doesn't make sense?
-+Why am I using the "::" (if we haven't addressed that already).
-+everyone catch what ";" is doing? 
++ What makes sense?
++ What doesn't make sense?
++ Why am I using the "::" (if we haven't addressed that already).
++ Everyone catch what ";" is doing? 
 
 #### Parallel Processing
 <h4> Parallel Processing</h4>
