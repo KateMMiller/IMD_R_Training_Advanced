@@ -16,7 +16,7 @@ title: "NPS IMD Advanced R Training"
 
 ```
 
-### Day 1: Data Retrievel {.tabset}
+### Day 1: Data Retrieval {.tabset}
 
 ### Day 2: Functional Programming {.tabset}
 
