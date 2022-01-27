@@ -55,9 +55,20 @@ library(usethis)
 ```
 
 Once these packages load without errors, you're all set. If you have any issues making this work, contact Kate Miller or Sarah Wright prior to training, and we'll help you troubleshoot.
+</details>
+<br>
 
+<details open><summary class='drop'>Structure of training</summary>
+The entire training will take place over 4 half days. Each day will run from 10-2 MST via MS Teams. The hour before training, and the hour after training will also be posted by at least one trainer as office hours, in case there are questions that couldn't be handled during training. 
+
+Each training session has three trainers assigned, two of which will be the main instructors. The third trainer will manage the chat. For most of the training, one of the trainers will share their screen to walk through the website and then demo with live coding. It will help a lot if you have 2 monitors, so you can have the screen being shared on one monitor and your own session of RStudio open on the other.   
+
+Half days are barely enough to scratch the surface of the more advanced topics we're covering in R. Our goals with this training are to help you get beyond the initial learning curve, so you're armed with the skills you need to continue learning on your own. The trainers put lot of thought and time into designing this training. We did it because we enjoy coding in R and it has greatly increased efficiency and productivity in our jobs. We hope you have a similar experience as you begin applying and learning more about the tools we're covering this week. As you learn more, please share your skills and code with others to help us build a larger community of R users in IMD who can learn from each other. 
+
+Finally, to help us improve this training for future sessions, please leave feedback in the <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=urWTBhhLe02TQfMvQApUlFh5GkMREZNMjYcWk1MpLQ9UMk9MVFdaVUZQVFRLRVI3WlNBTzE3VlFaTy4u">training feedback form</a>.  
 
 </details>
+<hr>
 
 
 <hr>
