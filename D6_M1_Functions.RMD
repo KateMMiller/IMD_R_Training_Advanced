@@ -1,16 +1,16 @@
 
 #### Introduction
-<h4> Functional Programming</h4>
+<h3> Functional Programming</h3>
 I will leave you to Google this and dive into the rabbit hole that is the definition of functional programming. This isn't about writing code that works, it is a technical thing. In short, a "functional" is a higher order function that takes a function as one of its inputs. For our purposes "functional programming" will focus on iterative functionals (apply family and map) and how to make functions that can be passed to functionals. 
 
 **The goal of functional programming is more stable, transparent, and reliable code.**
 
-<h4> Overview of functions</h4>
+<h3> Overview of functions</h3>
 This module will provide a look at simple and moderately complex 'functions' in R. We will look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. 1) The ability to create a function. 2) The ability to use that function to get a lot of repetitive tasks done quickly. You already learned a little bit about this second one on the Day 4 iteration and you saw us using some functions there. 
 
 Although we are calling this the advanced training, the approaches here are intended to get you started, but are not exhaustive. As you practice these fundamentals you will quickly find better ways to get some of the things you want to do done. 
 
-<h4> What is a function?</h4>
+<h3> What is a function?</h3>
 Thomas - A function is a container for a series of steps that are performed on data. It has some fixed expectations about input and output - another way of saying that is that a function expects a specific pattern(s) for input and for output. A function is also an expression of what another person thinks the right way to do something is. The nice thing is that if you don't like all that, you can write your own function, but be selective about that. 
 
 JP - Functions are a way of taking a large problem and breaking it down into simpler discrete steps. Each function can just focus on one step and makes it easier to do that step in isolation. You can then reuse the functions to help solve new problems in the future. 
@@ -47,7 +47,7 @@ When you type in `lm` you get a lot more information out and you can see there t
 
 #### Creating a Simple Function
 
-<h4> When do you need to create a function? </h4>
+<h3> When do you need to create a function? </h3>
 + When what is available doesn't do what you want it to do.
 + When you are about to do something more than twice. 
 + When you see a repeating pattern in the code you are writing. 
@@ -58,7 +58,7 @@ Examples:
 + You need to rename 250,000 acoustic recorder files every year. You could resign from your job or you could write a function.
 + *What are your examples?*  
 
-<h4> Best Practices: What should your function look like?</h4>
+<h3> Best Practices: What should your function look like?</h3>
 There are some rules to keep in mind for your functions before we get into developing them.
 + Avoid choosing names that are not intuitive or are already taken. 
 + Argument names can (arguably 'should') be the same as other parameters or variable names in other functions.
@@ -66,7 +66,7 @@ There are some rules to keep in mind for your functions before we get into devel
 + Make sure your function is interpretable. `#Comments accomplish this.`
 + Figure out where to draw the line between the function and the functional (iteration).
 
-<h4> Steps for function development</h4>
+<h3> Steps for function development</h3>
 Below are some of the steps we find ourselves following when we need to develop functions.
 + Verbalize what you want the function to do and do some googling
 + Identify the pattern or patterns in the data your function will need to operate on. 
@@ -76,7 +76,7 @@ Below are some of the steps we find ourselves following when we need to develop 
 + Test the function until you are satisfied.(Debugging, See day 4)
 + Apply it to the data.
 
-<h4> Modifying a simple function</h4>
+<h3> Modifying a simple function</h3>
 Let's create our first function by changing the default behavior of an existing one
 ```{r MyFirstFunction.0, eval=F}
 set.seed(12345) #gives everybody the same data
@@ -140,7 +140,7 @@ mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
 If a function can be expressed with a single line you do not need curly brackets. If the function is on more than one line you must use curly brackets. There are some other details on this, but that is all you really need to know. My preference is that you should always use the curly brackets even if you don't need to. 
 
 #### Functionals
-<h4> Functionals</h4>
+<h3> Functionals</h3>
 I want to come back to what "functionals" are now. For our purposes, a functional is a higher-order function that takes a function and data as their inputs (maybe a few other things as well). The functional iterates that function over the data in a predefined way and returns a certain output (.e.g  vector, list, dataframe, etc). This is one of the reasons why functionals are preferred over for loops. Functionals have an expected behavior. With for loops you are defining the behavior. With functionals, that is largely done and you are just picking the one or combination that does what you want.
 
   *Which of the following is a correct statement?*
@@ -153,10 +153,10 @@ We are going to use two functional families `apply` (base R) and `map` (purrr) -
 
 
 #### Useful Iteration
-<h4> Creating a few useful functions</h4>
+<h3> Creating a few useful functions</h3>
 On day 4 as we learned about iteration and were using functions. I told you to ignore the whole why they were functions thing for now. Let's go back and pick those apart a little more and make some useful functions for that hobo temperature data. We will make a summary function, a plot function, and a modeling function. 
 
-<h4> Read in data</h4>
+<h3> Read in data</h3>
 
 Let's read in that Hobo air temperature data again and take a closer look at the functions and functionals. As a reminder there will be 4 columns:
 + `idx` is a sequential index column of integers inteded to track the original data order as the data are manipulated. 
@@ -189,7 +189,7 @@ This was actually our first functional programming exercise and we did 4 of them
 
 So, that was the application of canned functions in a functional, on to the new functions.
 
-<h4> Summary Statistics for the data</h4>
+<h3> Summary Statistics for the data</h3>
 The way we did summary statistics before was a little clunky. It was only really appropriate if that was the only place we would be doing it that way. Let's assume we will do it that way for a number of different datasets in different workflows.
 
 Let's strategize a little. I have two phases to consider. The function and the iteration.
@@ -231,7 +231,7 @@ Questions:
 + What are the benefits and drawbacks of setting the column names in hobo_summary?
 + What is unlist doing?
 
-<h4> Build a plotting function</h4>
+<h3> Build a plotting function</h3>
 I find that rapidly generating a pile of plots is often useful for some initial QA/QC. Do my data look about like I expect? This allows me to quickly generate a few or hundreds of plots and flag some data for closer inspection.
 
 **Strategy time**
@@ -292,7 +292,7 @@ Now let's look at how this was fed into lapply: `lapply(seq_along(HoboList), FUN
 
 + Where is `i`? The way lapply works, is that it takes the first element of the list and passes it to the first variable of the specified function. In the above call the first element produced by `seq_along` is `1` and the first variable of `ggplotCustom` is `i`. So it basically says i=1. If we had not used `seq_along`, this would then take this first element of `HoboList` which is a dataframe. This is not an undesirable behavior but in this case, we want to be able to reference back to where that dataframe is so we can extract it's name.    
 
-<h4> Iterating an Analysis</h4>
+<h3> Iterating an Analysis</h3>
 
 As you advance in R or have more complex datasets you will want to iterate your analyses. We will work through an example for iterating a linear model analysis For the hobo data. The question will be simple: *How does light level affect air temperature?* 
 
@@ -334,7 +334,7 @@ You know the drill, what are your questions?
 + Everyone catch what ";" is doing? 
 
 #### Parallel Processing
-<h4> Parallel Processing</h4>
+<h3> Parallel Processing</h3>
 We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single processing core. In other words, for something like lapply (or `map`, or `foreach`) it processes each iteration sequentially on a single core. It doesn't need to be that way. Most computers have more than 2 cores.  you could be executing different independent iteration steps on separate cores and recombining the results. This is called 'parallel processing'.
 
 There are versions of this out there for `lapply` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the `future.apply` package. 
@@ -359,7 +359,7 @@ My run says that parallelization was 23% faster than sequential. Not a huge spee
 One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly. Best to test it with small data then scale up.
 
 #### Useful Resources
-<h4> Useful Resources </h4>
+<h3> Useful Resources </h3>
 
 [1] https://stackoverflow.com/questions/19226816/how-can-i-view-the-source-code-for-a-function
 
