@@ -1,6 +1,3 @@
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
-```
 
 #### Introduction
 <h4> Functional Programming</h4>
@@ -37,7 +34,7 @@ The last bit of a function is the **source code** ("source" for short). This is 
 
 How do you get to the source? These days, for non-base packages a lot of this can be found on GitHub (eventually). The fastest way, is to type the function name without the `()` into the console it will return the underlying source code for that function if it is available. 
 
-```{r lookingAtAFunction, echo = F, eval=T}
+```{r lookingAtAFunction, eval=F}
 #run these in the console without the () to see what lies underneath
 mean
 
@@ -81,7 +78,7 @@ Below are some of the steps we find ourselves following when we need to develop 
 
 <h4> Modifying a simple function</h4>
 Let's create our first function by changing the default behavior of an existing one
-```{r MyFirstFunction.0, echo=T, eval=F}
+```{r MyFirstFunction.0, eval=F}
 set.seed(12345) #gives everybody the same data
 
 d<-c(floor(runif(100)*100),NA) #generate random data
@@ -90,7 +87,7 @@ mean(x=d) #unexpected result
 ```
 The response is NA, which is not what we want (maybe). It is easy enough to address this with ```mean(d,na.rm=T)```, but we may not want to do that many times throughout our code. 
 
-```{r MyFirstFunction}
+```{r MyFirstFunction, eval=F}
 mean2<-  #Tell [R] that I want this new function to be named "mean2"
        function(x){  #the function consists of 1 parameter named x (aka the data) The { begins the function source code / expressions. 
                    mean(x,na.rm=T) #in the mean function change the default for na.rm=T
@@ -98,14 +95,14 @@ mean2<-  #Tell [R] that I want this new function to be named "mean2"
 ```
 Now let's check its behavior.
 
-```{r MyFirstFunction.3}
+```{r MyFirstFunction.3, eval=F}
 
 mean2(x=d) #more expected result
 
 ```
 That handled the NA value without giving an error. What if we want to switch that back?
 
-```{r MyFirstFunction.4}
+```{r MyFirstFunction.4, eval=F}
 mean2(x=d, na.rm=F)
 
 ```
@@ -113,14 +110,14 @@ How you create your function affects what it can use as 'arguments'.
 
 When we set up our new function we did not tell it `na.rm` is an argument. We fixed it in the source code. If you want something as a parameter, it must be listed in the parentheses.
 
-```{r MyFirstFunction.5}
+```{r MyFirstFunction.5, eval=F}
 mean3<- function(x,na.rm=T){mean(x=x, na.rm=na.rm)} 
 
 mean3(d)
 ```
 So now we have just made `mean` with the `na.rm` set to true and we can change that if needed.
 
-```{r MyFirstFunction.6}
+```{r MyFirstFunction.6, eval=F}
 mean4<- function(x,na.rm){#very minor change. I deleted the initial parameter value
                           mean(x=x, na.rm=na.rm)} 
 mean4(d)
@@ -134,7 +131,7 @@ It didn't work... or did it? How you set up your functions is partially about wh
 `mean4` - assumes nothing and forces you to explicitly state how you are going to handle NA values.
 
 A few final things on the basics of how functions function. You will see the coding for a simple 1 line function expressed 2 ways:
-```{r MyFirstFunction.7}
+```{r MyFirstFunction.7, eval=F}
 mean5<- function(x,na.rm){mean(x=x, na.rm=na.rm)} #always works
 
 mean5<- function(x,na.rm) mean(x=x, na.rm=na.rm) #only works on one line
@@ -167,7 +164,7 @@ Let's read in that Hobo air temperature data again and take a closer look at the
 +`T_F` is going to be temperature in Fahrenheit. 
 +`Lum` is going to be a measure of light intensity in lux (lumens/ft2). 
 
-```{r ReadInDataFunctionals}
+```{r ReadInDataFunctionals, eval=F}
 library(ggplot2);library(magrittr)
 #get that data
 fNames<-c("APIS01_20548905_2021_temp.csv",
@@ -212,7 +209,7 @@ Let's strategize a little. I have two phases to consider. The function and the i
 
 Now that I have put some thought into it, let start coding. 
 Note on code: Primarily intended for demonstration purposes. Can be done more cleanly in purrr::map.
-```{r summaryFun}
+```{r summaryFun, eval=F}
 hobo_summary <- function(x, col=3) {   
    funs <- c(mean, median, sd, mad, IQR) #list of functions
              unlist(                     #unlist simplifies somewhat ugly output
@@ -259,7 +256,7 @@ I find that rapidly generating a pile of plots is often useful for some initial 
 
 +I want to name the output plots using their source filenames. I can name the elements in the data list so I know which is which, but lapply doesn't pass that information along. I can reference a separate vector, but that reduces the flexibility of the code. If I am going to use lapply, this means I need to get a little creative. 
 
-```{r PlottingFunction}
+```{r PlottingFunction, eval=F}
 ggplotCustom<-function(i, j, pattern=".csv", replacement="_plot.pdf", path=choose.dir(), device="pdf", height=5, width=5,units="in"){
               p<-ggplot(data = j[[i]], aes(x=DateTime2, y=T_F))+
                  geom_point()+
@@ -299,20 +296,20 @@ Now let's look at how this was fed into lapply: `lapply(seq_along(HoboList), FUN
 
 As you advance in R or have more complex datasets you will want to iterate your analyses. We will work through an example for iterating a linear model analysis For the hobo data. The question will be simple: *How does light level affect air temperature?* 
 
-```{r PlottingFunction}
+```{r PlottingFunction, eval=F}
 
 lm_ls<-function(data,x){mod<-lm(x, data=data); return(mod)}
 modlist<-lapply(HoboList[c(2,4,5)], lm_ls, T_F~Lum) #I know some are missing light data
 ```
 We can now extract some stuff and do some diagnostics. A lot of common tools can be used in a functional.
-```{r PlottingFunction.1}
+```{r PlottingFunction.1, eval=F}
 lapply(modlist, summary)
 lapply(modlist, plot)
 lapply(modlist, coef)
 ```
 That was nice, but it wasn't in the best format for further use and it wasn't what we really needed. Let's drill down to an output we like. 
 
-```{r PlottingFunction.2}
+```{r PlottingFunction.2, eval=F}
 lm_stats<-function(mod){ mod_sum<-summary(mod) #may or may not be worthwhile
                          out<-data.frame(
                          intercept= coef(mod)[[1]],
@@ -344,7 +341,7 @@ There are versions of this out there for `lapply` but they never seem to work qu
 
 So let's explore and time a parallelization of lapply. Your code may vary if not on Windows. This will take 1-2 minutes to run depending on your computer.
 
-```{r Parallelapply}
+```{r Parallelapply, eval=F}
 HoboList2<-c(rep(HoboList,5)) #make the dataset larger 
 
 plan("multisession", workers=parallel::detectCores()-1) #initiate a multicore session, the number of cores to use to 1 fewer than the max detected. Reduces chance of overwhelming the system.
