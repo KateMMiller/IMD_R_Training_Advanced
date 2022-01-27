@@ -18,16 +18,16 @@ title: "NPS IMD Advanced R Training"
 
 ### Day 1: Data Retrievel {.tabset}
 
+
 ### Day 2: Functional Programming {.tabset}
 
-```{r FunctionsI, child = "D6_M1_Functions.Rmd"}
+```{r FunctionsI, child = "D6_M1_Functions.Rmd", error = T}
 
 ```
 
-```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd"}
+```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd", error = T, eval = F}
 
 ```
-
 
 ### Day 3: R Markdown {.tabset}
 
