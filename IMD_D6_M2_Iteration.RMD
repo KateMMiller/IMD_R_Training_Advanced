@@ -6,54 +6,67 @@ output:
     css: custom_styles.css
 ---
 
-```{r setup2, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-## Saving Time and Effort with Custom Functions ##
+#### More Iteration
 
 Custom functions are the most useful when you have a complicated task that you wish to do many times.
 
-Step 1: Write and test the function
+Step 1: Write and test the function.  
+  
 Step 2: Iterate the function
 
-This section focuses on the many options available for Step 2
 
-### for() Loops ###
+This section focuses on the many options available for Step 2 
 
-```for()``` loops run the same code a certain number of times. 
 
-```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
+We will need the `tidvyerse` library for this Module. 
+```{r libraries_iteration}
+
+library(tidyverse)
+
+```
+
+
+<details open><summary class='drop'> for() Loops</summary>
+
+`for()` loops run the same code a certain number of times. Each time you run through the loop the code is executed. You need to have an index that tells the loop how often to run. This is specified in the `for()` function. 
+
+```{r for_loops}
 ## First statement makes i the "index" variable  it will run once for each i
-x<-NA
-for(i in 1:100){
-  
+x <- NA
+for (i in 1:100) {
+
   ## make 1000 number from Poison distribution with mean i  (changes)
-  Samples<-rpois(10000,i)
-  
+  Samples <- rpois(10000, i)
+
   # get 95% upper qauntile - e.g. the number that is higher than 95% of the other samples
-  Q95<-quantile(Samples, 0.95)
-  
+  Q95 <- quantile(Samples, 0.95)
+
   ## save that to vector "x" using [i] to make sure it goes to the right location
-  x[i]<-Q95
+  x[i] <- Q95
 }
 
-#plot our results
+# plot our results
 
 plot(x)
 
 ```
 
-```for()``` loops are very common in other programming languages
+`for()` loops are very common in other programming languages.
 
 In R they are less popular:
 
-1) The can be very slow - If you grow an object organically (like in the example above), this requires a lot of rewriting of the object which is slow. This can b avoided by declaring the object first. So before the loop we could write ```x<-vector(mode="double", 100)``` to create a vector that is 100 entries long and is numeric. This will speed up the loops.  
-b)  Loops, especially nested loops can be hard to read and debug if you come back to the code after a long time
-c) R has other options that are faster and easier to read
+1) The can be very slow - If you grow an object organically (like in the example above), this requires a lot of rewriting of the object which is slow. This can b avoided by declaring the object first. So before the loop we could write `x<-vector(mode="double", 100)` to create a vector that is 100 entries long and is numeric. This will speed up the loops.  
+  
+2)  Loops, especially nested loops can be hard to read and debug if you come back to the code after a long time.  
+  
+3) R has other options that are faster and easier to read.  
 
-### Vectorization ###
+</details>
+
+<br>
+
+
+<details open><summary class='drop'> Vectorization </summary>
 R has "vectorization" - this means there are some functions that take a vector as an input, perform a calculation or operation on each element and return a vector as output. Some examples:
 
 
@@ -61,93 +74,101 @@ Numeric Vector
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 
 # A vector of numbers
-x<-1:10
+x <- 1:10
 
 # Arithmetic is vectorized
-x+1
+x + 1
 ```
 
 Character Vector
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 # a character vector (letters)
 
-x<-letters[1:10]
+x <- letters[1:10]
 
 # paste is vectorized
 paste("Letter:", x)
 
 ```
+
 Logical Vector
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 # a logical vector
 
-x<-c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE)
+x <- c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE)
 
 # paste is vecotorized
 
 TRUE & x
 
 ```
+
 Date Vector
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 # a date vector
 
 library(lubridate)
 
-x<-mdy("02/07/2022", "02/08/2022","02/09/2022","02/10/2022")
+x <- mdy("02/07/2022", "02/08/2022", "02/09/2022", "02/10/2022")
 x
 ```
 
+
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 ## adding 1 shows you the next day
-x+1
+x + 1
 
 
 ```
 
 Most functions in R are vectorized. This includes:
 
-1) Mathematical functions, including statistical functions 
-2) Logical operators
-3) Functions such as ```rowMeans``` that work on matrices
-4) Text manipulation functions
-
+1) Mathematical functions, including statistical functions.  
+  
+2) Logical operators.  
+  
+3) Functions such as `rowMeans()` that work on matrices.  
+  
+4) Text manipulation functions.  
+  
 Many of these functions are written in C which makes them extremely fast. 
 
-You SHOULD NOT write a function or a ```for``` loop to do iteration when the pre-existing vectorization will do the same thing.
+You SHOULD NOT write a function or a `for()` loop to do iteration when the pre-existing vectorization will do the same thing.
 
 You SHOULD make use of vectorization in your functions to keep them fast and readable.
 
-When you use the ```dplyr``` function ```mutate()``` you are making use of vectorization. 
+When you use the `dplyr` function `mutate()` you are making use of vectorization. 
+
+</details>
 
 
+<details open><summary class='drop'> Iteration using the `purrr` pacakage </summary>
 
-####Iteration using the ```purrr``` package
-
-
-```purrr``` is a package that is part of the ```tidyverse``` that focuses on iterating over lists, such as lists of data.frames or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization
+`purrr` is a package that is part of the `tidyverse` that focuses on iterating over `lists`, such as `lists` of `data.frames` or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization. 
 
 
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
-fNames<-c("APIS01_20548905_2021_temp.csv",
-          "APIS02_20549198_2021_temp.csv",
-          "APIS03_20557246_2021_temp.csv",
-          "APIS04_20597702_2021_temp.csv",
-          "APIS05_20597703_2021_temp.csv")
+fNames <- c(
+  "APIS01_20548905_2021_temp.csv",
+  "APIS02_20549198_2021_temp.csv",
+  "APIS03_20557246_2021_temp.csv",
+  "APIS04_20597702_2021_temp.csv",
+  "APIS05_20597703_2021_temp.csv"
+)
 
 # Use vectorization to paste the path onto the file names
-fPaths<-paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/", fNames) 
+fPaths <- paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/", fNames)
 
 ```
 
 
-First, I will read in all the data.  ```set_names()``` is used to name the ```fPaths``` vector, and those names will be carried forward to the data list. The ```map``` funtcion will take each element of ```fPaths``` and feed them one by one into ```read_csv```. The ```.x``` tells map where to put the data it gets from ```fPaths```. Note that you need to have a ```~``` in front of the file name. The advantage of doing iteratin this way is that it is more conscise than a ```for``` loop, but somewhat easier to read than the ```lapply``` function.
+First, I will read in all the data.  `set_names()` is used to name the `fPaths` vector, and those names will be carried forward to the data list. The `map` function will take each element of `fPaths` and feed them one by one into `read_csv()`. The `.x` tells map where to put the data it gets from `fPaths`. Note that you need to have a `~` in front of the file name. The advantage of doing iteration this way is that it is more concise than a `for()` loop, but somewhat easier to read than the `lapply` function.
 
 
 
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
-intensity_data_raw<-set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04", "APIS05")) %>%
-  map(~read_csv(file=.x,, skip=1))
+intensity_data_raw <- set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04", "APIS05")) %>%
+  map(~ read_csv(file = .x, , skip = 1))
 
 ```
 
@@ -157,84 +178,91 @@ class(intensity_data_raw) # its a list
 
 class(intensity_data_raw[[1]]) # each element is a data.frame (well, tibble actually)
 
-intensity_data_raw %>% map_dbl(~nrow(.x) )
+intensity_data_raw %>% map_dbl(~ nrow(.x))
 
-intensity_data_raw %>% map(~colnames(.x))
+intensity_data_raw %>% map(~ colnames(.x))
 
 ```
-I used ```map_dbl``` instead of ```map``` to look at the number of rows. That funciton is just like ```map``` except it will return a numeric vector rather than a list. In this case it is handy as I already know that ```nrow()``` will return a number, at a vector is a more compact way of showing that. Note that all the lists and the elements of the row number vector are named with the site code. 
+I used `map_dbl()` instead of `map()` to look at the number of rows. That function is just like `map()` except it will return a numeric `vector` rather than a `list`. In this case it is handy as I already know that `nrow()` will return a number, as a `vector` is a more compact way of showing that. Note that all the lists and the elements of the row number vector are named with the site code. 
 
 
 These raw files from the loggers are a Horror!
 
-1) One file has no data
-2) One file is missing the luminosity data
-3) There are a bunch of columns we don't want
-4) The serial number is part of many column names, so those are inconsistent
-5) The column names have lots of spaces, punctuation, a superscript,  and even an degree symbol.
+1) One file has no data.  
+  
+2) One file is missing the luminosity data.  
+  
+3) There are a bunch of columns we don't want.  
+  
+4) The serial number is part of many column names, so those are inconsistent.  
+  
+5) The column names have lots of spaces, punctuation, a superscript,  and even an degree symbol.  
 
 
 I do NOT want to have to fix this one file at a time - particularly if there are a large number of files. 
 
-First I will use ```discard()``` from the ```purrr``` package  to just drop the site with no data. 
+First I will use `discard()` from the `purrr` package  to just drop the site with no data. 
 
-Then, I will make a function that can  take the raw data and correct these issues.  Note the use of ```starts_with()``` to select the columns whose names start the same but have different serial numbers at the end. I added in a Temp_C column and transformed the temperature data. 
+Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. I added in a Temp_C column and transformed the temperature data. 
 
 Then I will use map to get the more consistent data
 
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 
-intensity_data_raw<-intensity_data_raw %>% discard(~nrow(.x)==0)
+intensity_data_raw <- intensity_data_raw %>% discard(~ nrow(.x) == 0)
 
-Fix_Data<-function(data){
-  data %>% 
-    select(starts_with("Date") | starts_with("Temp") | starts_with("Intensity")) %>% 
-    rename("Date"=starts_with("Date"), "Temp_F"=starts_with("Temp"), "Intensity"=starts_with("Intensity")) %>% 
-    mutate(Temp_C=5*(Temp_F-32)/9) 
-
+Fix_Data <- function(data) {
+  data %>%
+    select(starts_with("Date") | starts_with("Temp") | starts_with("Intensity")) %>%
+    rename("Date" = starts_with("Date"), "Temp_F" = starts_with("Temp"), "Intensity" = starts_with("Intensity")) %>%
+    mutate(Temp_C = 5 * (Temp_F - 32) / 9)
 }
 
 
-intensity_data<-intensity_data_raw %>% map(~Fix_Data(.x))
+intensity_data <- intensity_data_raw %>% map(~ Fix_Data(.x))
 
 ```
 
 
 Now all the data is in the same format.
 
-The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the ```group_by()``` and ```across()` to summarize each dataset. This basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing Intensity column in one dataset. 
+The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the `group_by()` and `across()` to summarize each dataset. This basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing Intensity column in one dataset. 
 
 
 ```{r eval = TRUE, include = TRUE, message = FALSE, warning = FALSE}
 
-summary_data<-intensity_data %>% map(~.x %>% group_by(Date) %>% summarise(across(where(is.numeric), mean)))
+summary_data <- intensity_data %>% map(~ .x %>%
+  group_by(Date) %>%
+  summarise(across(where(is.numeric), mean)))
 
 ```
 
 
 
+</details>
 
 
+### Simple Iteration ###
+### use the function we modify to do something ###
+### example using map family should operate on one dataframe to get started ###
 
-####Simple Iteration
-#use the function we modify to do something
-#example using map family should operate on one dataframe to get started
+### Best Practices:Iteration ###
 
-####Best Practices:Iteration
-#When to start looking for a different way to iterate? 
+### When to start looking for a different way to iterate?  ###
   When you are violating some aspect of Dry. 
   lots of times and each time is similar. 
-#avoiding loops within loops within... when you can
-#clear return statement
-#commenting
-#profiling for optimizing a more complex function
+  
+### avoiding loops within loops within... when you can ###
+### clear return statement ###
+### commenting ###
+### profiling for optimizing a more complex function ###
 
 
-####performance and profiling - when to worry about it and where to look 
-#system.time()
-#microbenchmark
-#profiler thing that gives you each step and how long it took?
+### performance and profiling - when to worry about it and where to look  ###
+### system.time() ###
+### microbenchmark ###
+### profiler thing that gives you each step and how long it took? ###
 
 
-####Debugging
+### Debugging ###
 Link back to D4 debugging tab.
