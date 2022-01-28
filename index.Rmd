@@ -22,6 +22,13 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ### Day 1: Data Retrieval {.tabset}
 
+```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
+
+```
+
+```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
+
+```
 
 ### Day 2: Functional Programming {.tabset}
 
