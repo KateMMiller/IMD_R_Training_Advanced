@@ -29,7 +29,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ```
 
-```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd", error = T, eval = F}
+```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd", error = T}
 
 ```
 
