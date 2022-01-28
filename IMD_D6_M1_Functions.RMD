@@ -296,7 +296,7 @@ Now let's look at how this was fed into lapply: `lapply(seq_along(HoboList), FUN
 
 As you advance in R or have more complex datasets you will want to iterate your analyses. We will work through an example for iterating a linear model analysis For the hobo data. The question will be simple: *How does light level affect air temperature?* 
 
-```{r PlottingFunction, eval=F}
+```{r PlottingFunction.0, eval=F}
 
 lm_ls<-function(data,x){mod<-lm(x, data=data); return(mod)}
 modlist<-lapply(HoboList[c(2,4,5)], lm_ls, T_F~Lum) #I know some are missing light data
