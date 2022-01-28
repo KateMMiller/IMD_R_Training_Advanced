@@ -9,6 +9,9 @@ title: "NPS IMD Advanced R Training"
 ---
 <h2>NPS Inventory and Monitoring Division Advanced R Training: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
 --------------------------------------------------
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
 
 ### Prep for Training {.tabset}
 
