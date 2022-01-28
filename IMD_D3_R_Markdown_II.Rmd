@@ -279,40 +279,44 @@ As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be d
 <br>
 <hr>
 
-#### Bells and Whistles
-- parameters
-- iterating knitr text into tabs
+#### Parameters, Iteration
+<details open><summary class = 'drop'>Parameters</summary>
+
+
+
+</details>
+<br>
+
+<details open><summary class = 'drop'>Iterating with `params`</summary>
+
+
+
+</details>
+<br>
+
+<details open><summary class = 'drop'>Iterating tabsets </summary>
+
+
+
+</details>
+<br>
+
+#### Conditional Evaluation
 - conditional eval = obj or include = obj
-- tabsets
+
 - html widgets and interactives (plotly?, crosstable?)
-- Show example of rendering a bunch of markdown docs (e.g. one for each park)
+
 
 #### Gallery of Examples
 - QA/QC report and weekly checking (html)
-- Regen analysis or invasive analysis (html)
+- Regen analysis with iteration (html)
+- Water summary report with plotly (html)
 - NPS template and MIDN report (docx)
 - Ellen's COVID reports (pdf)
 
 #### Resources
-<h3>R Markdown</h3>
-<a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: The Definitive Guide</a>. This is Yihui Xie's book that's available free online and for purchase. Yihui is one of the main developers at RStudio working on R Markdown and related packages (e.g. knitr, pagedown, bookdown). The online book is searchable, and is often the first place I check, when I can't remember how to do something.
-<br>
-<a href="https://bookdown.org/yihui/rmarkdown-cookbook/">R Markdown Cookbook</a>. Another great book with Yihui Xie as an author. This book is free online and has a lot of small bite-size tips for customizing R Markdown.
-<br>
-<a href="https://r4ds.had.co.nz/">R for Data Science</a>, chapters 27 and 29. The book itself is worth a read cover to cover. The chapters on R Markdown are also very helpful on their own.
-<br>
-<a href="https://rmarkdown.rstudio.com/">RStudio's R Markdown page:</a> Includes several short videos and lots of tutorials, articles, and a gallery to give an idea of the many things you can do.
 
-<a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheat Sheet</a>.
+```{r markres, child = "IMD_Resources_D3_R_markdown.Rmd"}
 
-<a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html">kableExtra vignette:</a> Lots of great examples of the different styling/formats you can use with kables and the kableExtra package.
+```
 
-<h3>HTML/CSS</h3>
-<a href="https://www.w3schools.com/html/default.asp">W3 Schools HTML page:</a> This website includes helpful tutorials on HTML and CSS, includes executable examples for just about every HTML tag you can think of, and shows how different browsers render content.
-<br>
-<a href="https://www.htmlandcssbook.com/">HTML & CSS design and build websites:</a> This book costs about $15 (cheaper if you can find a used copy) and was a very helpful introduction and continual resource, particularly for working with CSS. There's a Javascript & JQuery book by the same author that's equally well-done, but was a much steeper learning curve.
-
-<h3>LaTeX</h3>
-<a href="https://ctan.org/">CTAN.org:</a> This is LaTeX's version of CRAN. 
-<br>
-<a href="https:/www.overleaf.com/learn">Overleaf Online LaTex Editor:</a> Includes a short guide to learn LaTeX, examples for most common uses of LaTeX, and has a built in editor that you can excecute code in.

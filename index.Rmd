@@ -7,11 +7,12 @@ output:
     fig_caption: true
 title: "NPS IMD Advanced R Training"
 ---
-<h2>NPS Inventory and Monitoring Division Advanced R Training: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
---------------------------------------------------
 ```{r globaloptions, include = FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
+
+<h2>NPS Inventory and Monitoring Division Advanced R Training: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
+--------------------------------------------------
 
 ### Prep for Training {.tabset}
 
@@ -61,6 +62,25 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ```
 
+### Resources 
+<h3>General Resources</h3>
+<ul>
+<li><a href="https://teams.microsoft.com/l/channel/19%3a278f30e624114373a65d9611498bd4fe%40thread.skype/Community%2520of%2520Practice?groupId=e4a2e021-b4cf-4cf6-acef-d0978b86c1a0&tenantId=0693b5ba-4b18-4d7b-9341-f32f400a5494">NPS_IMD_Data_Science_and_Visualization > Community of Practice</a> is an IMD work group that meets once a month talk about R and Data Science. There are also notes, materials and recordings from previous meetings, a Wiki with helpful tips, and the chat is a great place to post questions or cool tips you've come across. </li>
+<li><a href="https://r4ds.had.co.nz/">R for Data Science</a> First author is Hadley Wickham, the programmer behind the tidyverse. There's a lot of good stuff in here, including a chapter on using R Markdown, which is what we used to generate this training website.</li>
+<li><a href="https://bookdown.org/rdpeng/RProgDA/">Mastering Software Development in R</a> First author is Roger Peng, a Biostatistics professors at John Hopkins, who has taught a lot of undergrad/grad students how to use R. He's also one of the hosts of Not So Standard Deviations podcast. His intro to ggplot is great. He's also got a lot of more advanced topics in this book, like making functions and packages.</li>
+<li><a href="http://adv-r.had.co.nz/">Advanced R</a> Yet another book by Hadley Wickham that helps you understand more about how R works under the hood, how it relates to other programming languages, and how to build packages.</li>
+</ul>
+
+<h3>Resources by Day:</h3>
+<h4>Day 3: Data R Markdown</h4>
+```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
+
+```
+
+<h4>Day 4: R Packages</h4>
+```{r pkgres1, child = "IMD_Resources_D4_R_packages.Rmd"}
+
+```
 
 ### Code printout {.tabset}
 ```{r Code_printout, child = "IMD_Code_Printout.Rmd"}

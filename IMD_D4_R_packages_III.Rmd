@@ -212,11 +212,11 @@ The other way to install the package is for the user to go through the process o
 <hr>
 
 #### Resources
-<a href="https://r-pkgs.org/index.html">R Packages book</a>: The 2nd Edition is currently under development, with lots of updates to package development workflow (e.g. the usethis package!) and improved examples being added frequently. You can't go wrong when Hadley Wickham and Jenny Bryan team up on a project.
 
-<a href="https://adv-r.hadley.nz/conditions.html">Advanced R</a> is an excellent resource to learn the more advanced skills and concepts with R programming. The book is pretty advanced and assumes you already have a solid foundation in R programming. 
+```{r rpkgres, child = "IMD_Resources_D4_R_packages.Rmd", eval = T}
 
-<a href="https://bookdown.org/rdpeng/RProgDA/error-handling-and-generation.html">Mastering Software Development in R</a> covers a lot of the same topics as Advanced R that we cover in this training, but is a gentler introduction and doesn't get quite as advanced.  
+```
+
 
 <br>
 <hr>
