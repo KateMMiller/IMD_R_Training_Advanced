@@ -193,14 +193,14 @@ In our case, we'll enter `n` and step our way through the function, printing the
 <hr>
 
 #### Share Package on GitHub
-<h2>Post to GitHub </h2>
+<h3>Post to GitHub </h3>
 We're finally be ready to post our package to GitHub. You'll want to run the build (Ctrl + Shift + B or "Install and Restart" in Build tab) and check (Ctrl + Shift + E or "Check" in Build tab) one last time. If all checks out, then go to the Git tab in your environment pane. Click on the Commit button, which will open a pane like below. Go ahead and check all but the gitignore files, add a commit message, and then press commit. This will stage the changes. The last step is pushing to GitHub using the green up arrow in the top right. After you push to GitHub, you should see that your GitHub repo in your browser has the new files/changes in the main branch. You might need to refresh the page (F5). 
 
 ```{r gitcom, echo=F, out.width = '650px', fig.align = "center", dpi=600}
 knitr::include_graphics("./images/package_commit.jpg")
 ```
 
-<h2>Install from GitHub</h2>
+<h3>Install from GitHub</h3>
 The package is is currently only installed on your local machine. The easiest way for others to use your package are for them to install the package using devtools. This will install the package based on the code in the `main` branch. Packages can also be installed from a branch by adding `ref = 'branchname'` to the function call.
 
 ```{r instgit, echo = F, eval = F}
