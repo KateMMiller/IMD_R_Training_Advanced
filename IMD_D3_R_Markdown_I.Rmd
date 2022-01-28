@@ -157,6 +157,7 @@ You can customize the behavior and output of a code chunk using options within t
 <li>`results = 'hide'` omits results of code chunk from output. `show` is the default. </li>
 <li>`include = FALSE` executes the code, but omits the code and results from the output. </li>
 <li>`eval = FALSE` does not execute the code chunk, but can print the code, if `echo = TRUE`.</li>
+<li>`error = TRUE` allows a code chunk to fail and for the document to continue to knit.</li>
 <li>`cache = TRUE` allows you to cache the output associated with that code chunk, and will only rerun that chunk if the code inside the chunk changes. Note that if the objects or data in the code chunk are changed, but the code within the chunk is still the same, the code chunk won't realize that it needs to rerun. You need to be careful about using the cache option.</li>
 <li>`fig.cap = "Caption text"` allows you to add a figure caption. </li>
 <li>`fig.width = 4`; `fig.height = 3` allows you set the figure size in inches. </li>
