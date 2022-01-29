@@ -99,6 +99,29 @@ wetkab3 <- make_kable(wetsum,
 ```{r kab6, echo = F, results = 'show'}
 wetkab3
 ```
+
+<div class="alert alert-info">
+<h4>Challenge: Change alignment</h4>
+1. Using the  `wetsum` dataframe, how would you make a table where all but the first column was center aligned, but the first column left aligned?
+2. How would you make the same table be centered on the page instead of left-aligned?
+<br>
+
+<details><summary class = 'drop2'>Answer</summary>
+
+```{r kabans, echo = T, results = 'show'}
+ans_tab <- kable(wetsum, format = 'html',
+                 align = c('l', 'c', 'c', 'c')) %>%  # Answer 1
+           kable_styling(fixed_thead = TRUE, 
+                 full_width = FALSE, 
+                 position = 'left') # Answer 2 
+
+ans_tab
+```
+
+</details> 
+
+</div>
+
 </details>
 
 <details open><summary class='drop'>DT::datatables</summary>
@@ -171,14 +194,14 @@ wetdt3
 
 <details open><summary class='drop'>Inserting images in Markdown</summary>
 There are multiple ways to display a image that's stored on disk. The easiest way to do it is with markdown code in the plain text part of your document, which looks like: 
-```{markdown, verbtxt2, attr.source="style='display:inline-block;'", collapse=TRUE}
+```{markdown, verbtxt4, attr.source="style='display:inline-block;'", collapse=TRUE}
 ![Map of Region-1 IMD parks.](./images/map_of_parks.jpg){width=400px}
 ```
 
 Note that inserting a hyperlinked url is very similar. Just omit the ! and put the url in parenthesis instead of the path to the image. Like: `[Link to IMD home page](https://www.nps.gov/im)`
 
 You can also use the HTML <img> tag. The code below will produce the exact same image as the markdown code above. I seem to be able to remember better the <img> tag better than the markdown version, so I tend to use this more often. 
-```{html, verbtxt3, results = 'asis'}
+```{html, verbtxt5, results = 'asis'}
 <img src="./images/map_of_parks.jpg" alt = "Map of Region-1 IMD parks" width="400px">
 ```
 

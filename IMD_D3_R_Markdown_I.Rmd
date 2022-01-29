@@ -140,6 +140,18 @@ Example sentence: *Picea rubens* is the dominant species in **Acadia National Pa
 </details>
 <br>
 
+<div class="alert alert-info">
+<h4>Challenge: Specifying other headers</h4>
+How would you specify header level 4?
+<br>
+<details><summary class = 'drop2'>Answer</summary>
+```{r d3rm_a1, echo = T}
+#### This is how to specify header level 4, which renders as:
+```
+<h4>Header level 4</h4>
+</details> 
+</div>
+
 <details open><summary class='drop'>Code chunks</summary>
 Code chunks are also what they sound like. They're chunks of R code (can be of other coding languages too), which run like they're in an R script. They're contained within back ticks and curly brackets, like below. 
 
@@ -151,6 +163,7 @@ Code chunks are also what they sound like. They're chunks of R code (can be of o
 <p style="color:white">
 `````</p>
 
+<h4>Code Chunk Options</h4>
 You can customize the behavior and output of a code chunk using options within the `{ }`. Common chunk options are below:
 <ul>
 <li>`echo = TRUE` prints the code chunk to the output. `FALSE` omits the code from output. </li>
@@ -169,7 +182,54 @@ See the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-re
 <br>
 Another trick to using code chunk options, is that they can be conditional based on the results from another code chunk. For example, I have a QC report that runs 40+ checks on a week's worth of forest data, but the report only includes checks that returned at least 1 value/error. Checks that returned nothing are omitted from the report using conditional eval. I'll show an example of that later.
 
+<h4>Inline Code Chunks</h4>
+You can also reference objects in your R session within the plain text using back ticks (i.e., \`). In the example below, I'll first calculate a mean value that I'll pretend is the average number of species on a plot. Then I'll use inline code chunks to print that number in the plain text.
+
+First, we calculate `numspp` with echo = F. Here I'm using the `runif()` function to randomly generate 50 numbers from 0 to 100 using the uniform distribution, just to have some data to summarize. Here, the include = F will run the code chunk, but won't show the code or the results in the markdown document.
+
+````
+`r ''````{r, include = F}
+numspp <- round(mean(runif(50, 0, 100)), 1)
+```
+````
+<p style="color:white">
+`````</p>
+
+```{r, fkchunk, include = F}
+numspp <- round(mean(runif(50, 0, 100)), 1)
+```
+
+To use this in a sentence, the plain text looks like this: 
+```{markdown, verbtxt2, attr.source="style='display:inline-block;'", collapse=TRUE}
+The average number of species found in each plot was `r numspp`.
+```
+
+And renders like this: 
+
+The average number of species found in each plot was `r numspp`.
+
+<div class="alert alert-info">
+<h4>Challenge: Code chunk options</h4>
+1. How would you run a code chunk, but only show the results, not the code?
+2. How would you run a code chunk, but then only include the results in the plain text?
+<br>
+
+<details><summary class = 'drop2'>Answer</summary>
+
+Answer 1. Include in the code chunk options: `echo = F`
+<br>
+Answer 2. Include in the code chunk options: `include = F`, and then use inline coding with 
+<br>
+```{markdown, verbtxt3, attr.source="style='display:inline-block;'", collapse=TRUE}
+`r runif(1)`.
+```
+
+</details> 
+
+</div>
+
 </details>
+
 <br>
 <hr>
 
