@@ -73,81 +73,6 @@ rm(i, Q95, x, Samples)
 <br>
 
 
-<details open><summary class='drop'> Vectorization </summary>
-R has "vectorization" - this means there are some functions that take a vector as an input, perform a calculation or operation on each element and return a vector as output. Some examples:
-
-
-Numeric Vector
-```{r num_vector}
-# A vector of numbers
-x <- 1:10
-
-# Arithmetic is vectorized
-x + 1
-```
-
-Character Vector
-```{r character_vector}
-# a character vector (letters)
-
-x <- letters[1:10]
-
-# paste is vectorized
-paste("Letter:", x)
-
-```
-
-Logical Vector
-```{r logical_vector}
-# a logical vector
-
-x <- c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE)
-
-# paste is vecotorized
-
-TRUE & x
-
-```
-
-Date Vector
-```{r date_vector}
-# a date vector
-
-library(lubridate)
-
-x <- mdy("02/07/2022", "02/08/2022", "02/09/2022", "02/10/2022")
-x
-```
-
-
-```{r date_vector_add}
-## adding 1 shows you the next day
-x + 1
-
-rm(x)
-
-```
-
-Most functions in R are vectorized. This includes:
-
-1) Mathematical functions, including statistical functions.  
-  
-2) Logical operators.  
-  
-3) Functions such as `rowMeans()` that work on matrices.  
-  
-4) Text manipulation functions.  
-  
-Many of these functions are written in C which makes them extremely fast. 
-
-You SHOULD NOT write a function or a `for()` loop to do iteration when the pre-existing vectorization will do the same thing.
-
-You SHOULD make use of vectorization in your functions to keep them fast and readable.
-
-When you use the `dplyr` function `mutate()` you are making use of vectorization. 
-
-</details>
-
 
 <details open><summary class='drop'> Iteration using the `purrr` package - data cleaning </summary>
 
@@ -240,7 +165,7 @@ Fix_Data <- function(data) {
   data %>%
     select(starts_with("Date") | starts_with("Temp") | starts_with("Intensity")) %>%
     rename("Date_Time" = starts_with("Date"), "Temp_F" = starts_with("Temp"), "Intensity" = starts_with("Intensity")) %>%
-    mutate(Temp_C = 5 * (Temp_F - 32) / 9, Date_Time = mdy_hms(Date_Time), Date=date(Date_Time),Hour = hour(Date_Time))
+    mutate(Temp_C = 5 * (Temp_F - 32) / 9, Date_Time = mdy_hms(Date_Time), Date=date(Date_Time)) 
 }
 
 
@@ -258,7 +183,10 @@ The data is measured on an hourly basis - it might be useful to make a summary b
 
 summary_data <- intensity_data %>% map(~ .x %>%
   group_by(Date) %>%
-  summarise(across(where(is.numeric), mean)))
+  summarise(across(where(is.numeric), mean)) %>%
+  {
+    if ("Intensity" %in% colnames(.x)) filter(.x, Intensity != 0) else .x
+  })
 
 ```
 
@@ -325,7 +253,7 @@ Here is what is going on:
 
 `Intensity_Regression()` takes in the data, and the `...` indicates that there may be some other arguments as well. These are other arguments are not specified in advance. The `...` then appears again in the `glm()` function, which indicates that whatever these extra arguments are should go to `glm()`. You can only send the `...` to one place inside your function body, you can't send it to multiple functions. If for some reason  you want to store whatever is in the `...` inside your function you can use ``match.call(expand.dots = FALSE)$ `...` ``. 
   
-When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm`. Now I will do it again with a `gamma` distribution.
+When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm`. Now I will do it again with a `Gamma` distribution.
 
 
 
@@ -333,13 +261,12 @@ When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) dist
 
 Gamma_Reg <- summary_data %>%
   map_if(~ all(c("Intensity", "Temp_C") %in% colnames(.x)),
-    ~ Intensity_Regression(.x, family = Gamma),
+    ~ Intensity_Regression(.x, family = Gamma(link="log")),
     .else = ~NA
   )
 
 ```
 
-This throws an error because the Gamma distribution assumes there are no 0s in your data. We could go then check if 0 is a realistic value for intensity and maybe do some QA/QC for filtering, but for now let's just move on. 
 
 
 Lets make a graph of the data vs. fit for each result. 
