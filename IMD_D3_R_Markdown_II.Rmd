@@ -7,9 +7,6 @@ output:
     fig_caption: true
 
 ---
-```{r setup5, include = F, echo = F}
-knitr::opts_chunk$set(results = 'asis')
-```
 
 #### Tables 
 <details open><summary class='drop'>Tables in R Markdown</summary>
@@ -189,12 +186,14 @@ wetdt3
 
 
 </details>
+<br>
+</hr>
 
 #### Figures and Images
 
 <details open><summary class='drop'>Inserting images in Markdown</summary>
 There are multiple ways to display a image that's stored on disk. The easiest way to do it is with markdown code in the plain text part of your document, which looks like: 
-```{markdown, verbtxt4, attr.source="style='display:inline-block;'", collapse=TRUE}
+```
 ![Map of Region-1 IMD parks.](./images/map_of_parks.jpg){width=400px}
 ```
 
@@ -245,7 +244,7 @@ knitr::opts_chunk$set(fig.height=4, fig.width=6, fig.align='left')
 <details open><summary class = 'drop'>Dynamic numbering and cross referencing</summary>
 Dynamic figure and table numbering and cross-referencing is one great feature of Markdown. The easiest way to add dynamic figure numbering and cross-referencing is to output to bookdown's `html_document2`, instead of rmarkdown's `html_document`, which is what I've shown so far. You'll need to add a few lines to the YAML code as well, which we show below. The numbered_sections: false and number_sections: false prevent bookdown from adding numbering to each section. If you like them, you can delete those lines of code. You'll also need to install bookdown (i.e., `install.packages('bookdown')`). 
 
-```{YAML yaml2, eval=F}
+```
 output: 
   bookdown::html_document2:
     numbered_sections: false
@@ -265,32 +264,28 @@ devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Traini
 The code below prints the plots with their respective figure numbers. Note that code chunk names should be alpha-numeric, and can't include spaces or underscores.
 
 ````
-`r ''````{r fig-inv-all, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}
+```{r fig-inv-all, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}`r ''`
 invplot_all
 ```
 ````
-<p style="color:white">
-`````</p>
 
 ```{r fig-inv-all, echo = F, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}
 invplot_all
 ```
 
 ````
-`r ''````{r fig-inv-acad, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}
+```{r fig-inv-acad, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}`r ''`
 invplot_ACAD
 ```
 ````
-<p style="color:white">
-`````</p>
 
 ```{r fig-inv-acad, echo = F, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}
 invplot_ACAD
 ```
 
-Notice that the figures are numbered consecutively in the order that they appear. For cross-referencing, each code chunk needs a unique name and a figure caption must be defined in the chunk options. To cross-reference, you then write `\@ref(fig:code-chunk-name)`. The same works for tables too, but you use "tab" instead of "fig". The following text: 
+Notice that the figures are numbered consecutively in the order that they appear. For cross-referencing, each code chunk needs a unique name and a figure caption must be defined in the chunk options. To cross-reference, you then write "\@ref(fig:code-chunk-name)". The same works for tables too, but you use "tab" instead of "fig". The following text: 
 
-```{markdown, figref, attr.source="style='display:inline-block;'", collapse=TRUE}
+```
 As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be declining. Whereas, invasive cover appears more stable in other NETN parks (Figure \@ref(fig:fig-inv-all)).
 ```
 
@@ -301,45 +296,4 @@ As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be d
 </details>
 <br>
 <hr>
-
-#### Parameters, Iteration
-<details open><summary class = 'drop'>Parameters</summary>
-
-
-
-</details>
-<br>
-
-<details open><summary class = 'drop'>Iterating with `params`</summary>
-
-
-
-</details>
-<br>
-
-<details open><summary class = 'drop'>Iterating tabsets </summary>
-
-
-
-</details>
-<br>
-
-#### Conditional Evaluation
-- conditional eval = obj or include = obj
-
-- html widgets and interactives (plotly?, crosstable?)
-
-
-#### Gallery of Examples
-- QA/QC report and weekly checking (html)
-- Regen analysis with iteration (html)
-- Water summary report with plotly (html)
-- NPS template and MIDN report (docx)
-- Ellen's COVID reports (pdf)
-
-#### Resources
-
-```{r markres, child = "IMD_Resources_D3_R_markdown.Rmd"}
-
-```
 
