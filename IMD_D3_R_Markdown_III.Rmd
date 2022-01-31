@@ -5,22 +5,30 @@ output:
   bookdown::html_document2:
     numbered_sections: false
     fig_caption: true
-
+    css: custom_styles.css
+params: 
+  park: "ACAD"
+  park_long: "Acadia National Park"
+  cycle: 3
 ---
 #### Parameters & Iteration
 <details open><summary class = 'drop'>Parameters</summary>
 One great feature of R Markdown that really helps with automated reporting is the use of parameters. Parameters are things that you will set in the YAML at the top, and that will be used in the report to do things like filtering data or printing names. For example in the code below, we set park, park_long, and cycle as parameters in the YAML. We then specify them in the next code chunk using ```params$park``` to create a plot for just the park we specified, and printed the ```params$park_long``` in the caption for that figure. Then we made a table of the park and cycle we just specified using ```params$park``` and ```params$cycle```, and again used the ```param$park_long``` in the table caption.
 
-````
----
+The YAML at the top will look like: 
+<pre class="r"><code>---
 output: html_document
 params:
   park: "ACAD"
   park_long: "Acadia National Park"
   cycle: 3
 ---
-````
-````
+</code></pre>
+
+Inside the report, here's some code to pull in data and make some plots. Note where I added #### Use # of params. That's where the parameters are specified in the code.
+
+<pre class="r"><code><p style="color:white;margin-top:-60px;"> 
+````</p>
 ```{r imports, include = FALSE}`r ''`
 # Import data from github
 devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
@@ -43,38 +51,53 @@ invplot_fun <- function(data, park){
 }
 
 # Plot invasives by cycle for specified park
-invplot <- invplot_fun(invdata, park = param$park) # Use 1 of param
+invplot <- invplot_fun(invdata, park = param$park) #### Use 1 of param
 
 # Filter invasive data to only include specified park and cycle
 parkinv <- invdata %>% 
   filter(park == params$park) %>% 
-  filter(cycle == params$cycle) %>% # Use 2 of params
+  filter(cycle == params$cycle) %>% #### Use 2 of params
   select(-park)                    
 
 parktab <- kable(parkinv, format = 'html',
                  col.names = c("Plot", "Park", "% Invasive Cover", "% Canopy Cover"),
-                 caption = paste0("Table of forest plots in ", params$park_long) # Use 3 of param
+                 caption = paste0("Table of forest plots in ", params$park_long) #### Use 3 of param
                  ) %>% 
            kable_styling(full_width = FALSE, position = 'left',
                  bootstrap_options = 'striped') %>% 
            scroll_box(height = "400px")
 ```
+<p style="color:white;margin-bottom:-60px;"> 
+````</p>
+</code></pre>
+Finally, I added some plain text below to show how to specify the parameters as inline code in text:
 
-```
+<pre class = 'noBorder'><code><p style="color:white;margin-top:-60px;"> 
+```</p>
 ### Invasive summary example
-The following data are summarized for  `` `r
-params$park_long` ``: 
-```
-````
-```{r plotinv, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in", params$park_long), out.width = "50%"}`r ''`
+The following data are summarized for `` `r knitr::inline_expr("params$park_long")` ``
+<p style="color:white;margin-bottom:-40px;"> 
+```</p>
+</code></pre>
+<br>
+Then I print the plot and table using code chunks:
+
+<pre class="r"><code><p style="margin-bottom:-40px;"> 
+```{r plotinv, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in", params$park_long), out.width = "50%"}`r ''` 
 invplot
 ```
-````
-````
+<p style="color:white;"> 
+````</p></code></pre><br>
+
+<pre class="r"><code><p style="color:white;"> 
+````</p>
 ```{r parktable, echo = FALSE}`r ''`
 parktab
 ```
-````
+<p style="color:white;margin-top:-10px"> 
+````</p>
+</code></pre>
+
 <br>
 
 The code above will render the outputs below:
