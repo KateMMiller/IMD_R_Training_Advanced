@@ -40,6 +40,11 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ```
 
+
+```{r Iteration2, child = "IMD-D6_M3_Tips_and_Tricks.Rmd"}
+
+```
+
 ### Day 3: R Markdown {.tabset}
 
 ```{r RmarkdownI, child = "IMD_D3_R_Markdown_I.Rmd"}
@@ -49,6 +54,11 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r RmarkdownII, child = "IMD_D3_R_Markdown_II.Rmd"}
 
 ```
+
+```{r RmarkdownIII, child = "IMD_D3_R_Markdown_III.Rmd"}
+
+```
+
 
 ### Day 4: Version Control {.tabset}
 ```{r VersionControl, child = "IMD_D4_Version_control_I.Rmd"}
