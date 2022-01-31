@@ -1,0 +1,60 @@
+---
+output: html_document
+params:
+  park: "ACAD"
+  park_long: "Acadia National Park"
+  cycle: 3
+---
+
+```{r imports, include = FALSE}
+library(ggplot2)
+library(dplyr)
+library(kableExtra)
+
+# Import data from github
+devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
+
+table(invdata$park, invdata$cycle) # Should see 3 parks each with 3 cycles
+
+# Create invplot_fun to plot different params
+invplot_fun <- function(data, park){
+  p <-   
+  ggplot(data %>% filter(park == park), 
+         aes(x = cycle, y = inv_cover))+
+    geom_jitter(color = "#69A466", width = 0.1) +
+    geom_boxplot(aes(group = cycle), width = 0.18, lwd = 0.4, alpha = 0)+
+    theme_bw()+
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    labs(x = 'Cycle', y = "Invasive % Cover") +
+    scale_x_continuous(limits = c(0.9, 3.1), breaks = c(1, 2, 3)) 
+return(p)
+}
+
+# Plot invasives by cycle for specified park
+invplot <- invplot_fun(invdata, park = param$park) # Use 1 of param
+
+# Filter invasive data to only include specified park and cycle
+parkinv <- invdata %>% 
+  filter(park == params$park) %>% 
+  filter(cycle == params$cycle) %>% # Use 2 of param
+  select(-park)                    
+
+
+parktab <- kable(parkinv, format = 'html',
+                 col.names = c("Plot", "Cycle", "% Invasive Cover", "% Canopy Cover"),
+                 caption = paste0("Table of forest plots in ", params$park_long) # Use 3 of param
+                 ) %>% 
+           kable_styling(full_width = FALSE, bootstrap_options = 'striped') %>% 
+           scroll_box(height = "400px")
+```
+
+### Invasive summary example
+The following data are summarized for `r `params$park_long`: 
+```{r plotinv, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in ", params$park_long), out.width = "50%"}
+invplot
+```
+
+```{r parktable, echo = FALSE}
+parktab
+```
