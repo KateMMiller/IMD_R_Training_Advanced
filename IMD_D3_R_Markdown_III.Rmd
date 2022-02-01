@@ -65,32 +65,27 @@ parktab <- kable(parkinv, format = 'html',
                  ) %>% 
            kable_styling(full_width = FALSE, position = 'left',
                  bootstrap_options = 'striped') %>% 
-           scroll_box(height = "400px")
+           scroll_box(height = "400px", width = "420px")
 ```
 <p style="color:white;margin-bottom:-60px;"> 
 ````</p>
 </code></pre>
 Finally, I added some plain text below to show how to specify the parameters as inline code in text:
 
-<pre class = 'noBorder'><code><p style="color:white;margin-top:-60px;"> 
+<pre class = 'txtBorder'><code><p style="color:white;margin-top:-60px;"> 
 ```</p>
 ### Invasive summary example
-The following data are summarized for `` `r knitr::inline_expr("params$park_long")` ``
+The following data are summarized for `r knitr::inline_expr("params$park_long")` 
 <p style="color:white;margin-bottom:-40px;"> 
 ```</p>
 </code></pre>
 <br>
-Then I print the plot and table using code chunks:
+Then I print the plot and table using the following code chunks:
 
-<pre class="r"><code><p style="margin-bottom:-40px;"> 
+<pre class="r"><code><p style="margin-bottom:-70px;margin-top:-15px"> 
 ```{r plotinv, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in", params$park_long), out.width = "50%"}`r ''` 
 invplot
 ```
-<p style="color:white;"> 
-````</p></code></pre><br>
-
-<pre class="r"><code><p style="color:white;"> 
-````</p>
 ```{r parktable, echo = FALSE}`r ''`
 parktab
 ```
@@ -101,6 +96,7 @@ parktab
 <br>
 
 The code above will render the outputs below:
+<hr>
 ```{r checkimport, include = F}
 # load packages
 library(ggplot2)
@@ -140,20 +136,20 @@ parktab <- kable(parkinv, format = 'html',
                  caption = "Table of forest plots in Acadia National Park" 
                  ) %>% 
            kable_styling(full_width = FALSE, bootstrap_options = 'striped') %>% 
-           scroll_box(height = "400px")
+           scroll_box(height = "400px", width = "420px")
 ```
 
 <h3> Invasive summary example </h3>
 The following data are summarized for Acadia National Park:
 
 ```{r plotinvex, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in Acadia National Park"), out.width = "50%"}
-
 invplot
 ```
 
 ```{r kabacad, echo = FALSE}
 parktab
 ```
+<br>
 
 <div class="alert alert-info">
 <h4>Challenge: Change parameters</h4>
@@ -173,11 +169,8 @@ params:
   cycle: 3
 ---
 ````
-
 </details> 
-
 </div>
-
 </details>
 <br>
 
@@ -231,21 +224,21 @@ I'm including several other tricks that have really helped with reports I've dev
 <details open><summary class = 'drop'>Conditional evaluation</summary>
 Not only can you set `eval = TRUE/FALSE` or `include = TRUE/FALSE`, but you can set these conditionally using objects in your global environment. For example, I have an .Rmd report that runs weekly checks on our forest data during the field season, and it's primarily looking for errors, like missing data or values that are out of range. I only want the report to print the results of a check if it finds something. The way I do this is below:
 
-````
+<pre class="r"><code><p style="color:white;margin-top:-60px;"> 
+````</p>
 ```{r QCcheck1, include = FALSE}`r ''`
 
 fake_check1 <- data.frame(results = c(1:5))
 #fake_check1 <- data.frame()
 
 eval_check1 <- ifelse(nrow(fake_check1) > 0, TRUE, FALSE)
-
 ```
-
 ```{r, check1, eval = eval_check1}`r ''`
 print(nrow(fake_check1))
 ```
-
-````
+<p style="color:white;margin-top:-70px"> 
+````</p>
+</code></pre>
 </details>
 
 
