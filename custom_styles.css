@@ -146,3 +146,10 @@ border-top:solid 1px #9D9D9D;
  padding: 10px;
  /*outline: #696969 solid 5px;*/
  }
+ 
+.txtBorder{
+  border: 0.5px solid #BDBDBD;
+  background-color:white;
+  padding:0px;
+  margin:0px;
+}
