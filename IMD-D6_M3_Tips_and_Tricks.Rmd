@@ -19,12 +19,11 @@ Some things to consider:
 
   1) Try to give functions and things created inside of functions names that indicate what they do / are.   
   
-  2) Don't explain every line. If you code is that hard to follow then there is a problem with your code. 
+  2) Don't explain every line. If you code is that hard to follow, then there is a problem with your code. 
 
   3) If you use functions from packages (e.g. `tidyverse` functions), you don't need repeat basic info from the help.
 
-  4) If your function has different sections that do different things - e.g. prepare data and then use data - it can be helpful 
-to use comments to distinguish each section and explain what it does.  
+  4) If your function has different sections that do different things - e.g. prepare data and then use data - it can be helpful to use comments to distinguish each section and explain what it does.  
   
   5) If you need to do something unusual to account for missing data, special cases, bugs in other people's code - add comments to explain what you are doing.  
   
@@ -32,16 +31,15 @@ to use comments to distinguish each section and explain what it does.
     
   7) If you are using what seems to you to be an obscure package - note why you are using it. 
   
-  8) If you have a close bracket or close parenthesis that is many many lines form the where the opening bracket / parenthesis is, it can be 
-  helpful to indicate what it is closing. 
+  8) If you have a close curly brace or close parenthesis that is many many lines form the where the opening brace / parenthesis is, it can be helpful to indicate what it is closing. 
 
 
 </details>
 
 
-<details open><summary class='drop'>Performance</summary>
+<details open><summary class='drop'>Performance - Introduction</summary>
 
-"Performance" here refers to how fast a you code does something.
+"Performance" here refers to how fast your code does something.
 
 Faster is generally better, but it often requires more time to write and can include code that is harder to read.
 
@@ -49,7 +47,7 @@ Most of the time you cna ignore performance. If you run the code and are happy w
 
 Performance can be a consideration when:
 
-  1) You are doing the same analysis many (dozens to hundreds) of times. Think or an analysis of each species at many parks, or each water quality measure at many sites.  
+  1) You are doing the same analysis many (dozens to hundreds) of times. Think of an analysis of each species at many parks, or each water quality measure at many sites.  
     
   2). If you have very large data files that you need to manipulate.  
     
@@ -59,11 +57,10 @@ Performance can be a consideration when:
   
 </details>
 
-  
-  
+<br>
+
 <details open><summary class='drop'> Vectorization </summary>
 R has "vectorization" - this means there are some functions that take a vector as an input, perform a calculation or operation on each element and return a vector as output. Some examples:
-
 
 Numeric Vector
 ```{r num_vector}
@@ -91,7 +88,7 @@ Logical Vector
 
 x <- c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE)
 
-# paste is vecotorized
+# logical operations are vectorized
 
 TRUE & x
 
@@ -137,10 +134,9 @@ When you use the `dplyr` function `mutate()` you are making use of vectorization
 </details>
 
 
+<details open><summary class='drop'>Profiling</summary>
 
-<details open><summary class='drop'> Profiling</summary>
-
-"Profiling" is looking at each part of a function to find out how long it takes. This can allow you to identify bottlenecks where speeding up your code might be helpful. Then tools such as `microbenchmark` can be used to compare options. RStudio has profiling tools built in but to use then you need to install the `profivs` pacakage.
+"Profiling" is looking at each part of a function to find out how long it takes. This can allow you to identify bottlenecks where speeding up your code might be helpful. Then tools such as `microbenchmark` can be used to compare options. RStudio has profiling tools built in but to use then you need to install the `profivs` package.
 
 Once you do this you can access the Profile menu in the top menu bar. You can select some code, and use "Profile Selected Line(s)" to run the profiler.
 
@@ -153,8 +149,6 @@ This will give you a "Flame Graph" which tells you how much time each part of yo
 ![RStudio](images/flame_graph.jpg)
 
 The graph shows time across the bottom. Looking from the bottom to the top you see how long various parts took. You can see that `profvis` (the profile tool) in the bottom row was running the whole time. One row up is `mdy_hms()` from `lubridate` which takes up most of the time. You don't see functions like `select()` or `rename()` as they ran too quickly. So if you wanted to speed up `Fix_Data()` the place to look for improvements is in the date conversion. 
-
-
 </details>
 
 
