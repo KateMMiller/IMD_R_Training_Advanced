@@ -48,7 +48,7 @@ The .Rmd file itself consists of 3 main pieces. There's the YAML (Yet Another Ma
 knitr::include_graphics("./images/YAML.png")
 ```
 
-- other common additions in YAML: headers/footers, table of contents, parameters
+- other common additions in YAML: headers/footers, table of contents, and parameters
 
 </details>
 <br>
@@ -61,7 +61,7 @@ You can format text using Markdown's built in functions, like those shown below.
 <div class = 'row'>
 <div class = 'column3'>
 The actual text in the .Rmd:
-```{markdown, verbtxt, attr.source="style='display:inline-block;'", collapse=TRUE}
+```
 # First-level header
 
 ## Second-level header
@@ -140,6 +140,18 @@ Example sentence: *Picea rubens* is the dominant species in **Acadia National Pa
 </details>
 <br>
 
+<div class="alert alert-info">
+<h4>Challenge: Specifying other headers</h4>
+How would you specify header level 4?
+<br>
+<details><summary class = 'drop2'>Answer</summary>
+```{r d3rm_a1, echo = T}
+#### This is how to specify header level 4, which renders as:
+```
+<h4>Header level 4</h4>
+</details> 
+</div>
+
 <details open><summary class='drop'>Code chunks</summary>
 Code chunks are also what they sound like. They're chunks of R code (can be of other coding languages too), which run like they're in an R script. They're contained within back ticks and curly brackets, like below. 
 
@@ -151,12 +163,14 @@ Code chunks are also what they sound like. They're chunks of R code (can be of o
 <p style="color:white">
 `````</p>
 
+<h4>Code Chunk Options</h4>
 You can customize the behavior and output of a code chunk using options within the `{ }`. Common chunk options are below:
 <ul>
 <li>`echo = TRUE` prints the code chunk to the output. `FALSE` omits the code from output. </li>
 <li>`results = 'hide'` omits results of code chunk from output. `show` is the default. </li>
 <li>`include = FALSE` executes the code, but omits the code and results from the output. </li>
 <li>`eval = FALSE` does not execute the code chunk, but can print the code, if `echo = TRUE`.</li>
+<li>`error = TRUE` allows a code chunk to fail and for the document to continue to knit.</li>
 <li>`cache = TRUE` allows you to cache the output associated with that code chunk, and will only rerun that chunk if the code inside the chunk changes. Note that if the objects or data in the code chunk are changed, but the code within the chunk is still the same, the code chunk won't realize that it needs to rerun. You need to be careful about using the cache option.</li>
 <li>`fig.cap = "Caption text"` allows you to add a figure caption. </li>
 <li>`fig.width = 4`; `fig.height = 3` allows you set the figure size in inches. </li>
@@ -168,7 +182,54 @@ See the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-re
 <br>
 Another trick to using code chunk options, is that they can be conditional based on the results from another code chunk. For example, I have a QC report that runs 40+ checks on a week's worth of forest data, but the report only includes checks that returned at least 1 value/error. Checks that returned nothing are omitted from the report using conditional eval. I'll show an example of that later.
 
+<h4>Inline Code Chunks</h4>
+You can also reference objects in your R session within the plain text using back ticks (i.e., \`). In the example below, I'll first calculate a mean value that I'll pretend is the average number of species on a plot. Then I'll use inline code chunks to print that number in the plain text.
+
+First, we calculate `numspp` with echo = F. Here I'm using the `runif()` function to randomly generate 50 numbers from 0 to 100 using the uniform distribution, just to have some data to summarize. Here, the include = F will run the code chunk, but won't show the code or the results in the markdown document.
+
+````
+`r ''````{r, include = F}
+numspp <- round(mean(runif(50, 0, 100)), 1)
+```
+````
+<p style="color:white">
+`````</p>
+
+```{r, fkchunk, include = F}
+numspp <- round(mean(runif(50, 0, 100)), 1)
+```
+
+To use this in a sentence, the plain text looks like this: 
+```
+The average number of species found in each plot was `r numspp`.
+```
+
+And renders like this: 
+
+The average number of species found in each plot was `r numspp`.
+
+<div class="alert alert-info">
+<h4>Challenge: Code chunk options</h4>
+1. How would you run a code chunk, but only show the results, not the code?
+2. How would you run a code chunk, but then only include the results in the plain text?
+<br>
+
+<details><summary class = 'drop2'>Answer</summary>
+
+Answer 1. Include in the code chunk options: `echo = F`
+<br>
+Answer 2. Include in the code chunk options: `include = F`, and then use inline coding with 
+<br>
+```
+`r runif(1)`.
+```
+
+</details> 
+
+</div>
+
 </details>
+
 <br>
 <hr>
 
@@ -176,43 +237,42 @@ Another trick to using code chunk options, is that they can be conditional based
 For all of the output types, the built-in markdown functions, like '#' for level 1 header, render as you expect. Most output types also have an additional code base that allows more advanced and customized features. 
 
 <details open><summary class='drop'>Output to HTML</summary>
-The code base for HTML is obviously HTML and cascading style sheets (CSS). HTML is used to structure the content. CSS is used to define the style (eg font type and size for each header level). 
+The code base for HTML is obviously HTML and cascading style sheets (CSS). HTML is used to structure the content. CSS is used to define the style (e.g., font type and size for each header level). 
 
 <h3>Pros of HTML output</h3>
-1. Fewest dependencies and least finicky of the 3 main outputs (i.e., PDF and Word).
+1. Has the fewest dependencies and least finicky of the 3 main outputs (i.e., PDF and Word).
 2. You can code straight HTML and CSS in your markdown document (javascript too), so you're not limited by the built-in functions in markdown or knitr that render R code as HTML. 
-3. Easy to share, and usually renders well on the most common browsers.
+3. HTML files are easy to share, and usually renders well on the most common browsers.
 4. Allows you to host your files as GitPages (like this training website).
 5. Relatively easy to make 508 Compliant (but don't ask me how to do it).
 
 <h3>Cons of HTML output</h3>
 1. HTML files are hard to make print friendly. Page breaks aren't an easy thing to add, and headers with a filled background (i.e., NPS banner) are hard to make print as they appear on the screen. 
-2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (i.e., tabs) the view from attachments won't look the same as through a browser (or just shows you the raw HTML). This means you always have to include these instructions when sharing HTML files. 
+2. If you share an HTML with someone, they often have to download it first and then open it in their browser. The version MS Outlook or SharePoint shows when opened within the app has less functionality than a web browser. If you have anything even slightly fancy (e.g., tabs) the view from attachments won't look the same as through a browser (or just shows you the raw HTML, which is even worse!). This means you always have to include these instructions when sharing HTML files. 
 </details>
 <br>
 <details open><summary class='drop'>Output to PDF</summary>
 Rendering to PDF requires a LaTeX engine that runs under the hood. The easiest engine to install is `tinytex`, and there are instructions and download files on the "Prep for Training" tab of this site.
 
 <h3>Pros of PDF output</h3>
-1. PDFs are a more familiar file format and easier to share (i.e., can be viewed directly in MS Outlook/SharePoint).
+1. PDFs are a more familiar file format and easy to share (i.e., can be viewed directly in MS Outlook/SharePoint).
 2. Enforcing page breaks and designing print friendly outputs is much easier than with HTML output.
 
 <h3>Cons of PDF output</h3>
-1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with. There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML (or R).  
-2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes  minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you'll likely need to use at least some LaTeX along the way.  
+1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with. There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML (or R). 2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes  minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you'll likely need to use some (or a lot of) LaTeX along the way.  
 3. It's much harder to make PDFs 508 Compliant using R Markdown. The functionality just isn't there, as far as I know. PDFs have to be modified after they're rendered to be 508 Compliant, which kind of defeats the purpose of automated reporting.
 </details>
 <br>
 <details open><summary class='drop'>Output to Word</summary>
-Rendering to Word can be a helpful way to generate a Results section for a report, or even the entire report for the first draft. It saves having to copy/paste figures and tables from R to Word, and makes life easier if you need to rerun your analysis or update a figure. You just update the .Rmd code and render again to Word. Admittedly I rarely use this option because the functionality is much more limited than outputting to PDF or HTML(See first Con below). For more details than we'll go into today, check out RStudio's article: <a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a>.    
+Rendering to Word can be a helpful way to generate a Results section for a report, or even the entire report for the first draft. It saves having to copy/paste figures and tables from R to Word, and makes life easier if you need to rerun your analysis or update a figure. You just update the .Rmd code and render again to Word. Admittedly I rarely use this option because the functionality is much more limited than outputting to PDF or HTML(See first Con below). See the Resources tab for links to websites and blogs that cover more detail on outputting to Word than we'll cover here.
 
 <h3>Pros of Word output</h3>
 1. It's easy to import a word document with styles as a template, and then to output your document to Word.
-2. Word documents are easy to share, and may be easier to collaborate with than a Markdown file (i.e. track changes in Word).
+2. Word documents are easy to share, and may be easier to collaborate with than an .Rmd file (i.e. track changes in Word).
 3. You can use a Reference Management System for bibliographies (although see bullet 3 in Cons).
 
 <h3>Cons of Word output</h3>
-1. This is the most limited output. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well, and often need to be tweaked again in Word. Headers and footers don't render either. It's possible the `officedown` package may add functionality, but I haven't played around with it enough (and the times I checked for a certain function, it didn't have it). 
+1. This is the most limited output, particularly if you just use R Markdown's built-in ```output: word_document```. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well (or at all), and often need to be tweaked again in Word. Headers and footers don't render either. To do anything beyond applying main styles, you'll likely need to employ packages in the `officeverse`, including `officedown` and `flextable` packages. I've only spent a little time looking over these packages. They seem useful, but require learning another set of packages and conventions. 
 2. Incorporating track changes back into R Markdown is a messy, manual process. It's not something you'd want to do repeatedly for the same paper.
 3. I have yet to get a reference management system to work in Markdown. While it's possible, it may be hard to implement on government furnished equipment using approved software.
 </details>

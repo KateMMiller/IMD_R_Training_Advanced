@@ -5,20 +5,20 @@ body {
 
 h1 {
    font-family: "Arial",Arial,sans-serif;
-   font-size: 20px;
+   font-size: 22px;
    padding-top:5px;
    margin-top:5px;
 }
 
 h2 {
   font-family: "Arial",Arial,sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
 }
 
 h3 {
   font-family: "Arial",Arial,sans-serif;
-  font-size:14px;
+  font-size: 16px;
   font-style: italic;
   font-weight: bold;
   padding:0px 0px 0px 0px;
@@ -31,17 +31,25 @@ h3.title{
 
 h4 {
   font-family: "Times New Roman",Times, sans-serif;
-  font-size:14px;
+  font-size:16px;
   font-style: italic;
   padding-bottom:0px;
 }
 
 h5 {
-  font-family: "Arial", Arial, sans-serif;
-  font-size:14px;
+  font-family: "Arial",Arial,sans-serif;
+  font-size:16px;
+  font-style: italic;
   font-weight: bold;
   padding:0px 0px 0px 0px;
   margin:0px 0px 0px 0px;
+}
+
+
+h6 {
+  font-family: "Arial",Arial,sans-serif;
+  font-size: 14px;
+  font-style: underline;
 }
 
 hr {
@@ -65,6 +73,16 @@ hr {
   padding:0px 0px 0px 0px;
   margin:0px 0px 0px 0px;
 }
+
+.drop2{
+  font-family: "Arial",Arial,sans-serif;
+  font-size:14px;
+  font-style: italic;
+  font-weight: bold;
+  padding:0px 0px 0px 0px;
+  margin:0px 0px 0px 0px;
+}
+
 
 .ques2{
   font-family: "Arial",Arial,sans-serif;
@@ -128,3 +146,10 @@ border-top:solid 1px #9D9D9D;
  padding: 10px;
  /*outline: #696969 solid 5px;*/
  }
+ 
+.txtBorder{
+  border: 0.5px solid #BDBDBD;
+  background-color:white;
+  padding:0px;
+  margin:0px;
+}

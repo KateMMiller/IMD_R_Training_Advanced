@@ -1,0 +1,270 @@
+---
+author: "Kate Miller & Ellen Cheng"
+date: "1/10/2022"
+output: 
+  bookdown::html_document2:
+    numbered_sections: false
+    fig_caption: true
+    css: custom_styles.css
+params: 
+  park: "ACAD"
+  park_long: "Acadia National Park"
+  cycle: 3
+---
+#### Parameters & Iteration
+<details open><summary class = 'drop'>Parameters</summary>
+One great feature of R Markdown that really helps with automated reporting is the use of parameters. Parameters are things that you will set in the YAML at the top, and that will be used in the report to do things like filtering data or printing names. For example in the code below, we set park, park_long, and cycle as parameters in the YAML. We then specify them in the next code chunk using ```params$park``` to create a plot for just the park we specified, and printed the ```params$park_long``` in the caption for that figure. Then we made a table of the park and cycle we just specified using ```params$park``` and ```params$cycle```, and again used the ```param$park_long``` in the table caption.
+
+The YAML at the top will look like: 
+<pre class="r"><code>---
+output: html_document
+params:
+  park: "ACAD"
+  park_long: "Acadia National Park"
+  cycle: 3
+---
+</code></pre>
+
+Inside the report, here's some code to pull in data and make some plots. Note where I added #### Use # of params. That's where the parameters are specified in the code.
+
+<pre class="r"><code><p style="color:white;margin-top:-60px;"> 
+````</p>
+```{r imports, include = FALSE}`r ''`
+# Import data from github
+devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
+
+table(invdata$park, invdata$cycle) # Should see 3 parks each with 3 cycles
+
+# Create invplot_fun to plot different params
+invplot_fun <- function(data, park){
+  p <-   
+  ggplot(data %>% filter(park == park), 
+         aes(x = cycle, y = inv_cover))+
+    geom_jitter(color = "#69A466", width = 0.1) +
+    geom_boxplot(aes(group = cycle), width = 0.18, lwd = 0.4, alpha = 0)+
+    theme_bw()+
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    labs(x = 'Cycle', y = "Invasive % Cover") +
+    scale_x_continuous(limits = c(0.9, 3.1), breaks = c(1, 2, 3)) 
+  return(p)
+}
+
+# Plot invasives by cycle for specified park
+invplot <- invplot_fun(invdata, park = param$park) #### Use 1 of param
+
+# Filter invasive data to only include specified park and cycle
+parkinv <- invdata %>% 
+  filter(park == params$park) %>% 
+  filter(cycle == params$cycle) %>% #### Use 2 of params
+  select(-park)                    
+
+parktab <- kable(parkinv, format = 'html',
+                 col.names = c("Plot", "Park", "% Invasive Cover", "% Canopy Cover"),
+                 caption = paste0("Table of forest plots in ", params$park_long) #### Use 3 of param
+                 ) %>% 
+           kable_styling(full_width = FALSE, position = 'left',
+                 bootstrap_options = 'striped') %>% 
+           scroll_box(height = "400px", width = "420px")
+```
+<p style="color:white;margin-bottom:-60px;"> 
+````</p>
+</code></pre>
+Finally, I added some plain text below to show how to specify the parameters as inline code in text:
+
+<pre class = 'txtBorder'><code><p style="color:white;margin-top:-60px;"> 
+```</p>
+### Invasive summary example
+The following data are summarized for `r knitr::inline_expr("params$park_long")` 
+<p style="color:white;margin-bottom:-40px;"> 
+```</p>
+</code></pre>
+<br>
+Then I print the plot and table using the following code chunks:
+
+<pre class="r"><code><p style="margin-bottom:-70px;margin-top:-15px"> 
+```{r plotinv, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in", params$park_long), out.width = "50%"}`r ''` 
+invplot
+```
+```{r parktable, echo = FALSE}`r ''`
+parktab
+```
+<p style="color:white;margin-top:-10px"> 
+````</p>
+</code></pre>
+
+<br>
+
+The code above will render the outputs below:
+<hr>
+```{r checkimport, include = F}
+# load packages
+library(ggplot2)
+library(dplyr)
+library(kableExtra)
+
+# Import data from github
+devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
+
+table(invdata$park, invdata$cycle) # Should see 3 parks each with 3 cycles
+
+# Create invplot_fun to plot different params
+invplot_fun <- function(data, park){
+  p <-   
+  ggplot(data %>% filter(park == park), 
+         aes(x = cycle, y = inv_cover))+
+    geom_jitter(color = "#69A466", width = 0.1) +
+    geom_boxplot(aes(group = cycle), width = 0.18, lwd = 0.4, alpha = 0)+
+    theme_bw()+
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    labs(x = 'Cycle', y = "Invasive % Cover") +
+    scale_x_continuous(limits = c(0.9, 3.1), breaks = c(1, 2, 3)) 
+return(p)
+}
+
+# Plot invasives by cycle for specified park
+invplot <- invplot_fun(invdata, park = "ACAD") 
+
+# Filter invasive data to only include specified park and cycle
+parkinv <- invdata %>% 
+  filter(park == "ACAD" & cycle == 3) %>% 
+  select(-park)                    
+
+parktab <- kable(parkinv, format = 'html',
+                 col.names = c("Plot", "Cycle", "% Invasive Cover", "% Canopy Cover"),
+                 caption = "Table of forest plots in Acadia National Park" 
+                 ) %>% 
+           kable_styling(full_width = FALSE, bootstrap_options = 'striped') %>% 
+           scroll_box(height = "400px", width = "420px")
+```
+
+<h3> Invasive summary example </h3>
+The following data are summarized for Acadia National Park:
+
+```{r plotinvex, echo = FALSE, fig.cap = paste0("Invasive trends in plant cover in Acadia National Park"), out.width = "50%"}
+invplot
+```
+
+```{r kabacad, echo = FALSE}
+parktab
+```
+<br>
+
+<div class="alert alert-info">
+<h4>Challenge: Change parameters</h4>
+1. How would you change the park to Saratoga National Historical Park (code = SARA)?
+<br>
+
+<details><summary class = 'drop2'>Answer</summary>
+
+Answer 1. Change the YAML to the following:
+
+````
+---
+output: html_document
+params:
+  park: "SARA"
+  park_long: "Saratogal National Historical Park"
+  cycle: 3
+---
+````
+</details> 
+</div>
+</details>
+<br>
+
+<details open><summary class = 'drop'>Iterating with `params`</summary>
+Taking this a step further, you can run a script that iterates through a list (e.g., list of parks), and generates a report for each item on the list. I saved the code above where we created a park-specific figure and table using parameters in the YAML, called example_for_params.Rmd. Now I'll show the code to render an HTML for each park in the dataset (ACAD, MABI, and SARA). The example .Rmd I used for this is 
+
+
+```{r markiter, echo = T, eval = F}
+# load packages
+library(purrr)
+library(rmarkdown)
+
+# Set in and out directories and file to iterate on
+indir <- c("./Markdown_examples/")
+outdir <- c("./Markdown_examples/output/") # Included, to see how to change out dir.
+rmd <- "example_for_params.Rmd"
+
+# Set up parameter lists. Have to repeat 3 times because each park has 3 cycles
+park_list <- rep(c("ACAD", "MABI", "SARA"), each = 3)
+park_long_list <- rep(c("Acadia National Park", 
+                    "Marsh-Billings-Rockefeller NHP", 
+                    "Saratoga National Historical Park"), each = 3)
+cycle_list = rep(c(1, 2, 3), 3)
+
+# Create the render function that we will iterate with
+render_fun <- function(parkcode, parklong, cyclename){
+    render(input = paste0(indir, rmd),
+         params = list(park = parkcode,
+                       park_long = parklong,
+                       cycle = cyclename),
+         output_file = paste0("Example_for_", 
+                              parkcode,
+                              "_cycle_", 
+                              cyclename, 
+                             ".html"),
+         output_dir = outdir)
+}
+
+# Map render_fun() to the lists. 
+# Note that you must have the same # of elements in each list
+pmap(list(park_list, park_long_list, cycle_list), 
+     ~render_fun(..1, ..2, ..3))
+```
+
+</details>
+<br>
+
+#### Bells and Whistles
+I'm including several other tricks that have really helped with reports I've developed. If we don't have time to cover them, they're at least here for you to look over on your own time.
+
+<details open><summary class = 'drop'>Conditional evaluation</summary>
+Not only can you set `eval = TRUE/FALSE` or `include = TRUE/FALSE`, but you can set these conditionally using objects in your global environment. For example, I have an .Rmd report that runs weekly checks on our forest data during the field season, and it's primarily looking for errors, like missing data or values that are out of range. I only want the report to print the results of a check if it finds something. The way I do this is below:
+
+<pre class="r"><code><p style="color:white;margin-top:-60px;"> 
+````</p>
+```{r QCcheck1, include = FALSE}`r ''`
+
+fake_check1 <- data.frame(results = c(1:5))
+#fake_check1 <- data.frame()
+
+eval_check1 <- ifelse(nrow(fake_check1) > 0, TRUE, FALSE)
+```
+```{r, check1, eval = eval_check1}`r ''`
+print(nrow(fake_check1))
+```
+<p style="color:white;margin-top:-70px"> 
+````</p>
+</code></pre>
+</details>
+
+
+<details open><summary class = 'drop'>Iterating tabsets </summary>
+
+
+
+</details>
+<br>
+
+- conditional eval = obj or include = obj
+- Inspecting html/view page source
+
+- html widgets and interactives (plotly?, crosstable?)
+
+
+#### Gallery of Examples
+- QA/QC report and weekly checking (html)
+- Regen analysis with iteration (html)
+- Water summary report with plotly (html)
+- NPS template and MIDN report (docx)
+- Ellen's COVID reports (pdf)
+
+#### Resources
+
+```{r markres, child = "IMD_Resources_D3_R_markdown.Rmd"}
+
+```
+

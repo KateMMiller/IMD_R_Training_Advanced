@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 <details open><summary class = 'drop'> Background </summary>
 Once you've moved on from writing stand alone long R scripts to writing custom functions and iterating workflow, the next logical step is to start building your own custom package to more easily apply, document and share your code. 
 
-<h2>Reasons to build an R package </h2>
+<h3>Reasons to build an R package </h3>
 <ul>
 <li>Organize and document your code</li>
 <li>One place to update your code</li>

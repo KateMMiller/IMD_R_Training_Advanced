@@ -1,0 +1,23 @@
+---
+output: 
+  bookdown::html_document2: 
+    fig_caption: true
+    number_sections: true
+    global_numbering: true
+---
+
+# header 1
+
+Reference example: \@ref(fig:plotcars):
+
+```{r plotcars, fig.cap = "A car plot"}
+plot(cars)
+```
+
+# header 2
+
+Reference example: \@ref(fig:plotcars2):
+
+```{r plotcars2, fig.cap = "A car plot"}
+plot(cars)
+```
