@@ -21,19 +21,32 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ### Day 1: Data Retrieval {.tabset}
 
-#### MS Access & SQL
+```{r dbsql, child = "IMD_D1_Access_SQL.Rmd"}
+
+```
 
 #### Web Services
 
 ```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
 ```
 
-```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
-```
-
 #### Aquarius and NWIS Water Data
 ```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
 ```
+
+```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
+```
+
+#### Resources
+
+```{r rfiares1, child = "IMD_Resources_D1_kmm.Rmd", eval = T}
+
+```
+
+```{r gisres1, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
+
+```
+
 
 ### Day 2: Functional Programming {.tabset}
 
@@ -68,6 +81,16 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r VersionControlIII, child = "IMD_D4_Version_control_III.Rmd"}
 ```
 
+```{r VersionControlIV, child = "IMD_D4_Version_control_IV.Rmd"}
+```
+
+```{r VersionControlV, child = "IMD_D4_Version_control_V.Rmd"}
+```
+
+```{r VersionControlVI, child = "IMD_D4_Version_control_VI.Rmd"}
+```
+
+
 ### Day 4: R Packages {.tabset}
 
 ```{r RpackagesI, child = "IMD_D4_R_packages_I.Rmd"}
@@ -89,6 +112,18 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 </ul>
 
 <h3>Resources by Day:</h3>
+<h4>Day 1: Data Retrieval</h4>
+#### Resources
+
+```{r rfiares, child = "IMD_Resources_D1_kmm.Rmd", eval = T}
+
+```
+
+```{r gisres, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
+
+```
+
+
 <h4>Day 3: Data R Markdown</h4>
 ```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
 ```
