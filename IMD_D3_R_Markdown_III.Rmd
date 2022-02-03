@@ -242,25 +242,134 @@ print(nrow(fake_check1))
 </details>
 
 
-<details open><summary class = 'drop'>Iterating tabsets </summary>
+<details open><summary class = 'drop'>Dynamic Tabsets </summary>
+Another trick that has come in handy (although is not the easiest thing to implement) is to dynamically generate tabsets using lists. For example, we have one water summary .Rmd that takes park as a parameter. Using the park, the code figures out which sites occur at that park, and populates the site tabs specific to the park for that report. Here's a simplified version of that approach below. 
 
+The first code chunk performs the following steps:
+<ol>
+<li>Created a `tabset_data` dataset with 3 parks. Each park has a different numbers of sites, and each site has been sampled 10 times between 2010:2021. </li>
+<li>Used `tabset_data` to generate a unique list of parks (`park_list`), a list of sites (`site_list`). </li>
+<li>Created a ggplot function called `ggplot_fun` to iterate the `site_list` through. </li> 
+<li>Created a list containing ggplot objects called `plot_list` using `purrr::map()`. Note also that `set_names()`.</li>
+</ol>
+
+<pre class = 'r'><code><p style="color:white;margin-top:-60px;"> 
+````</p>
+```{r ts_lists, echo = F, results = 'hide'}`r ''`
+library(purrr)
+library(ggplot2)
+
+# Create dataframe with 10 years of data for each plot and number of species found
+years <- 2010:2021
+numACAD <- 10
+numMABI <- 5
+numSARA <- 7
+tot_rows <- length(years) * (numACAD + numMABI + numSARA)
+tabset_data <- data.frame(
+  site = c(paste0(rep("ACAD-", numACAD * length(years)), 
+                  sprintf("%02d", rep(1:numACAD, each = length(years)))), 
+           paste0(rep("MABI-", numMABI * length(years)), 
+                  sprintf("%02d", rep(1:numMABI, each = length(years)))),
+           paste0(rep("SARA-", numSARA * length(years)), 
+                  sprintf("%02d", rep(1:numSARA, each = length(years))))),
+  year = rep(years, numACAD + numMABI + numSARA),
+  numspp = as.integer(runif(tot_rows, 1, 20))  
+)
+
+tabset_data$park <- substr(tabset_data$site, 1, 4)
+head(tabset_data)
+
+# Create park list for the for loop below
+park_list <- unique(tabset_data$park)
+site_list <- unique(tabset_data$site)
+
+# ggplot function to implement in for loop
+ggplot_fun <- function(site_name){
+  dat <- dplyr::filter(tabset_data, site == site_name)
+  p <- ggplot(dat, aes(x = year, y = numspp))+
+       geom_point() +
+       geom_line() +
+       labs(x = "Year", y = "Species richness") +
+       theme_classic()
+}
+
+# Create list of ggplots
+plot_list <- set_names(map(site_list, ~ggplot_fun(.x)), site_list)
+```
+<p style="color:white;margin-bottom:-50px;"> 
+````</p>
+</code></pre>
+
+Next code chunk pulls the data together and renders the park and site tabs. The steps are described below:
+<ol>
+<li>The `cat("## Dynamic Tab Example {.tabset}", "\n")` sets up tabsets for the next header level (###)</li>
+<li>The first for loop (`for(i in seq_along(park_list))`) sets up the loop for parks. For each park, a tabset with the park code is rendered via `cat("### ", park, "{.tabset}", "\n")`</li>
+<li>Within the park for loop, we create a park-specific list of sites, which we name `park_site_list`. </li>
+<li>We add a second for loop to iterate through `park_site_list`</li>
+<li>Next we have a long `paste0()` of things that build out the rest of the report for each element in the `park_site_list` via `site_template`. 
+  <ol>
+  <li>We create a level 4 tab with the site name via `"#### {{site}} \n\n",`</li>
+  <li>We then print level 5 header within that tab via ` "##### Summary for {{site}}", "\n\n",`</li>
+  <li>Then there's a code chunk starting with ````{r``` and ending with "```\n\n")` that prings the site's element in the plot_list that we set up in the previous chunk.</li>
+</ol>
+  <li>The last 2 steps are using knitr to evaluate, unlist, then print all of the text in the for loop.</li>
+</ol>
+
+Note the liberal use of line breaks via `\n` to make this all work. Tabsets need line breaks between themselves and anything that follows to render as a tab. Also, don't ask me why sometimes I used {{}} and sometimes I used []. It takes trial and error to make this thing work!
+
+
+<pre class = 'r'><code><p style="color:white;margin-top:-60px;"> 
+````</p>
+```{r net_tabs, echo = F, results = 'asis'}`r ''`
+cat("## Dynamic Tab Example {.tabset}", "\n")
+for(i in seq_along(park_list)){
+  park <- park_list[i]
+  cat("### ", park, "{.tabset}", "\n")
+  park_site_list = sort(unique(tabset_data$site[tabset_data$park == park]))
+  
+    for(j in seq_along(park_site_list)){
+    site = park_site_list[j]
+    site_template <- 
+      paste0("#### {{site}} \n\n",
+             "##### Summary for {{site}}", "\n\n",
+             "```{r ", site, "_plot, echo = F, fig.cap = ('Trends in species richness in {{site}}'), out.width = '40%'}\n\n",
+             "print(plot_list[site])",
+             "\n\n",
+             "```\n\n")
+  site_tabs <- knitr::knit_expand(text = site_template)
+  cat(knitr::knit(text = unlist(site_tabs), quiet = TRUE))
+  }
+  }
+```
+<p style="color:white;margin-bottom:-50px;"> 
+````</p>
+</code></pre>
 
 
 </details>
 <br>
 
-- conditional eval = obj or include = obj
-- Inspecting html/view page source
+#### Viewing source code
+<h4>HTML</h4>
+If you're rendering to HTML, you can view the actual HTML and CSS under the hood by right clicking on the document in your browser and either inspecting or viewing source code (actual terms differ across browsers). R Markdown makes a lot of default assumptions about the container and divisions and has a lot of built-in CSS that can sometimes be hard to change. Viewing the source code can help you figure out where things are going wrong. If it's a specific tag or class in a tag, you can redefine those tags or add new classes in your custom CSS. 
 
-- html widgets and interactives (plotly?, crosstable?)
+<h4>LaTeX</h4>
+If you're rendering to PDF or MS Word, you can save the template used to generate the report by adding the code below to the YAML:
+<pre class="r"><code>---
+output: 
+   pdf_document: 
+      keep_tex: yes
+---
+</code></pre>
 
 
 #### Gallery of Examples
-- QA/QC report and weekly checking (html)
-- Regen analysis with iteration (html)
-- Water summary report with plotly (html)
-- NPS template and MIDN report (docx)
-- Ellen's COVID reports (pdf)
+<ul>
+<li><a href = "https://github.com/KateMMiller/forestQAQC">forestQAQC</a>: QA/QC summary report and weekly QC checks for NETN and MIDN forest monitoring. Example reports are also posted to the same repo as HTML files.</li>  
+<li><a href = "https://github.com/KateMMiller/NETN_water_summaries">NETN Water Summaries</a>: Uses the dynamic tab approach to generate site tabs for a given park. The plots are also `ggplot` objects that were turned into `plotly` plots to be interactive.</li>
+<li><a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples">Markdown examples used in training.</a>(docx)</li>
+<li>SER COVID reports </li>
+</ul>
 
 #### Resources
 
