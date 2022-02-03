@@ -21,14 +21,18 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 
 ### Day 1: Data Retrieval {.tabset}
 
-#### Aquarius and NWIS Water Data
-```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
+#### MS Access & SQL
+
+#### Web Services
+
+```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
 ```
 
 ```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
 ```
 
-```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
+#### Aquarius and NWIS Water Data
+```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
 ```
 
 ### Day 2: Functional Programming {.tabset}
