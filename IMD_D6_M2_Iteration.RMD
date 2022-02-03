@@ -26,7 +26,7 @@ library(tidyverse)
 ```
 
 
-<details open><summary class='drop'> for() Loops</summary>
+<details open><summary class='drop'>for() Loops</summary>
 
 `for()` loops run the same code a certain number of times. Each time you run through the loop the code is executed. You need to have an index that tells the loop how often to run. This is specified in the `for()` function. 
 
@@ -35,7 +35,7 @@ library(tidyverse)
 x <- NA
 for (i in 1:100) {
 
-  ## make 1000 number from Poison distribution with mean i  (changes)
+  ## get 10000 random numbers from a Poisson distribution with a mean i  (changes)
   Samples <- rpois(10000, i)
 
   # get 95% upper qauntile - e.g. the number that is higher than 95% of the other samples
@@ -55,7 +55,7 @@ plot(x)
 
 In R they are less popular:
 
-1) The can be very slow - If you grow an object organically (like in the example above), this requires a lot of rewriting of the object which is slow. This can b avoided by declaring the object first. So before the loop we could write `x<-vector(mode="double", 100)` to create a vector that is 100 entries long and is numeric. This will speed up the loops.  
+1) The can be very slow. One error (shown in the example above) is to "grow the object orgnaically". Before I started the loop I assigned the values of `NA` to `x`, so `x` had just one entry. As the loop went along it first overwrote the `NA` and then on every pass after the first one it added a new value. Growing `x` this way requires a lot of rewriting of the `x` which is slow. For this example you don't notice it, but if `x` was a large dataframe or grew to be millions of values you would. This can be avoided by telling R how big the object will be right frome the start. So before the loop O could write `x<-vector(mode="double", 100)` to create a vector that is 100 entries long and is numeric. This will speed up the loop.  
   
 2)  Loops, especially nested loops can be hard to read and debug if you come back to the code after a long time.  
   
@@ -76,13 +76,20 @@ rm(i, Q95, x, Samples)
 
 <details open><summary class='drop'> Iteration using the `purrr` package - data cleaning </summary>
 
-`purrr` is a package that is part of the `tidyverse` that focuses on iterating over `lists`, such as `lists` of `data.frames` or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization. 
+General `purrr` references: 
   
+<a href = "https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf">Cheat sheet</a>
   
-We will walk through an exmaple analysis using `purrr` fucNtions to do iteration. 
+<a href = "https://r4ds.had.co.nz/iteration.html">Iteration Chapter in R for Data Science </a>
+
+`purrr` is a package that is part of the `tidyverse` that focuses on iterating over `lists`, such as `lists` of `data.frames` or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization. If your task basically consists of starting with a lot of datasets (or one dataset divided by site, species, etc. ) and then doing the same thing to all the datasets, `purrr` is a good option to consider. If you are starting out with one `data_frame` and need to make it into a `list` of `data.frames` based on a column, `group_split()` from `dplyr` can do that, but if you want to name the lists you will have to do that afterwards by hand using the `names()` function like: `names(MyList)<-c("NameOne","NameTwo")` 
+  
+We will walk through an exmaple analysis using `purrr` functions to do iteration. 
 
 
 ```{r purr_setup}
+
+#file names
 fNames <- c(
   "APIS01_20548905_2021_temp.csv",
   "APIS02_20549198_2021_temp.csv",
@@ -91,13 +98,13 @@ fNames <- c(
   "APIS05_20597703_2021_temp.csv"
 )
 
-# Use vectorization to paste the path onto the file names
+# Make path to files
 fPaths <- paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/", fNames)
 
 ```
 
 
-First, I will read in all the data. My plan it to make a `list` of `data.frames` and then carry out all the analysis on that list. `set_names()` is used to name the `fPaths` vector, and those names will be carried forward to the data list. The `map` function will take each element of `fPaths` and feed them one by one into `read_csv()`.  The advantage of doing iteration this way is that it is more concise than a `for()` loop, but somewhat easier to read than the `lapply` function.
+First, I will read in all the data. My plan it to make a `list` of `data.frames` and then carry out all the analysis on that list. `set_names()` is used to name the `fPaths` vector, and those names will be carried forward to the data list. The `map` function will take each element of `fPaths` and feed them one by one into `read_csv()`.  The advantage of doing iteration this way is that it is more concise than a `for()` loop, but somewhat easier to read than the `lapply` function. Note taht you need to use the `~` in the `map()` function. 
 
 
 
@@ -107,10 +114,12 @@ intensity_data_raw <- set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04"
 
 ```
 
-`map` takes takes in a `list` or a `vector`. You then specify a function to use with a `~` in front of it. The `.x` tells map where to put the data it gets from `fPaths`.  
+`map()` takes takes in a `list` or a `vector`. You then specify a function to use with a `~` in front of it. The `.x` tells map where to put the data it gets from `fPaths`. 
+
+In this case we have a `list` of datasets
 
 Now we can examine this data:
-```{r urr_examine_raw_data}
+```{r purrr_examine_raw_data}
 class(intensity_data_raw) # its a list
 
 class(intensity_data_raw[[1]]) # each element is a data.frame (well, tibble actually)
@@ -120,17 +129,15 @@ intensity_data_raw %>% map_dbl(~ nrow(.x))
 intensity_data_raw %>% map(~ colnames(.x))
 
 ```
-I used `map_dbl()` instead of `map()` to look at the number of rows. That function is just like `map()` except it will return a numeric `vector` rather than a `list`. In this case it is handy as I already know that `nrow()` will return a number, as a `vector` is a more compact way of showing that. Note that all the lists and the elements of the row number vector are named with the site code. 
+I used `map_dbl()` instead of `map()` to look at the number of rows. That function is just like `map()` except it will return a numeric `vector` rather than a `list`. In this case it is handy as I already know that `nrow()` will return a number, and a `vector` is a more compact way of showing that. Note that all the lists and the elements of the row number vector are named with the site code. 
   
 Other options for `map` are:  
-`mpa_lgl` for a logical vector  
-`map_chr` for a character vector  
-`map_int`  for an integer  
-`map_dfr` for making a `data.frame` by binding rows  
-`map_dfc` for making a `data.frame` by biding columns
-
-
-
+`mpa_lgl()` for a logical vector  
+`map_chr()` for a character vector  
+`map_int()`  for an integer  
+`map_dfr()` for making a `data.frame` by binding rows  
+`map_dfc()` for making a `data.frame` by biding columns
+  
 When we look at the raw files from the loggers we see they are a Horror!
 
 1) One file has no data.  
@@ -148,8 +155,7 @@ I do NOT want to have to fix this one file at a time - particularly if there is 
 
 First I will use `discard()` from the `purrr` package  to just drop the site with no data. (Note `keep()` is the opposite of `discard()`))
 
-Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `contains()`
-, and `where()`. Its not a very big package, so its worth checking to see what it has. 
+Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `contains()`, and `where()`. Its not a very big package, so its worth checking to see what it has. 
 
 I added in a `Temp_C` column and transformed the temperature data. Using some fuctions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
 
@@ -176,7 +182,7 @@ intensity_data <- intensity_data_raw %>% map(~ Fix_Data(.x))
 
 Now all the data is in the same format.  
 
-The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the `group_by()` and `across()` to summarize each dataset. First, the data part The `across()` lets me select many columns without having to know what their names are. In this case it basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing `Intensity` column in one dataset.  
+The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the `group_by()` and `across()` to summarize each dataset. The `across()` function lets me select many columns without having to know what their names are. In this case it basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing `Intensity` column in one dataset. At the end of the datasets are some days where `Intensity` is always 0. I am going treat that as an error and get rid of those rows. 
 
 
 ```{r purrr_data_summary}
@@ -185,19 +191,18 @@ summary_data <- intensity_data %>% map(~ .x %>%
   group_by(Date) %>%
   summarise(across(where(is.numeric), mean)) %>%
   {
-    if ("Intensity" %in% colnames(.x)) filter(.x, Intensity != 0) else .x
+    if ("Intensity" %in% colnames(.)) filter(., Intensity != 0) else .
   })
 
 ```
 
 Note that in this case, I wrote an anonymous function after the `~`. If your function is one line, or one piping chain, then this can be a good option. If your function is more complicated, then you should make a named function. 
 
-
 </details>
 
 <details open><summary class='drop'> `purrr`- Graphing 1  </summary>
 
-Now we will write a function to make a ggplot graph and use `map` to graph all the data. The `where()` from the `tidyselect` package is helpful again. 
+Now we will write a function to make a ggplot graph and use `map()` to graph all the data. The `where()` from the `tidyselect` package is helpful again. 
 
 
 ```{r fist_purrr_graph}
@@ -218,17 +223,16 @@ Graphs1 <- summary_data %>% map(~ Summary_Graph(.x))
 
 ```
 
-Note that in the `Summary_Graph()` function I first created the dataset I wanted using `pivot_longer()` and saved it to `data` and then made the graph. Because I was making 2 things in this fiction I assigned the graph to `Graph` and then used the `return()` function to indicate what should be the output. I could have just made the graph last and by default it would be what the function returns, but as you functions get more complicated it can be good to specify that explicitly. Also, I could have written `return(list(data,Graph))` and returned both objects.
-
+Note that in the `Summary_Graph()` function I first created the dataset I wanted using `pivot_longer()` and saved it to `data` and then made the graph. Because I was making 2 things in this function I assigned the graph to `Graph` and then used the `return()` function to indicate what should be the output. Because I made the graph last, by default it would be what the function returns, but as you functions get more complicated it can be good to specify that explicitly. Also, I could have written `return(list(data,Graph))` and returned both objects.
 
 
 </details>
 
 <details open><summary class='drop'> `purrr`- Doing an analysis and graphing results  </summary>
 
-Now we will use linear regression to examine the relationship between light and temperature. There are a couple of challenges here:  
+Now we will use general linear regression to examine the relationship between light and temperature. There are a couple of challenges here:  
 
-1) One of the data sets does not have the `Intensity` column, so we need to skip it. We could just cut if form the list, but lets assume that you will be getting more datasets in the future and want the function to just handle that kind of error on its own.  To accomplish this, the `map_if` function is used. This function is similar to a normam `if()` fuciton, but can be used in the context of interating over a list.
+1) One of the data sets does not have the `Intensity` column, so we need to skip it. We could just cut if from the list, but lets assume that you will be getting more datasets in the future and want the function to just handle that kind of error on its own.  To accomplish this, the `map_if` function is used. This function is similar to a normal `if()` fucniton, but can be used in the context of iterating over a list.
   
 2) Regression analysis can get kind of complicated and there are lots of potential arguments to your regression function. We want to be able to experiment with different ways to fit the data without having to specify every argument in advance or constantly rewrite the function. To do this, the ellipsis (`...`) is used.
 
@@ -249,12 +253,11 @@ Gauss_Reg <- summary_data %>%
 
 Here is what is going on:  
   
-`map-if()` first checks to make sure that `Intensity` and `Temp_C` are both present in the column names of each `data.frame` If they are it runs the `Intensity_Regression()` fucntion. It they are not present it just returns `NA`. 
+`map_if()` first checks to make sure that `Intensity` and `Temp_C` are both present in the column names of each `data.frame` If they are, it runs the `Intensity_Regression()` function. It they are not present it just returns `NA`. 
 
 `Intensity_Regression()` takes in the data, and the `...` indicates that there may be some other arguments as well. These are other arguments are not specified in advance. The `...` then appears again in the `glm()` function, which indicates that whatever these extra arguments are should go to `glm()`. You can only send the `...` to one place inside your function body, you can't send it to multiple functions. If for some reason  you want to store whatever is in the `...` inside your function you can use ``match.call(expand.dots = FALSE)$ `...` ``. 
   
 When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm`. Now I will do it again with a `Gamma` distribution.
-
 
 
 ```{r gamma_regression, error=TRUE}
@@ -267,9 +270,7 @@ Gamma_Reg <- summary_data %>%
 
 ```
 
-
-
-Lets make a graph of the data vs. fit for each result. 
+Lets make a graph of the data vs. fit for each result of the Gaussian regression. 
 
 First, we will add the predictions of the model to each dataset using the `add_predicitons()` from the `modelr` package.
 
@@ -288,9 +289,9 @@ summary_data <- map2(.x = summary_data, .y = Gauss_Reg, .f = ~ {
 ```
 
 
-The `map_2()` function was used. What this does is take two lists - `.x` and `.y` and then feeds them into a funciton in parallel. So what happens here is that the function takes the first site from `summary_data` and the first regression from `Gauss_Reg`and sees that there is no , `Intensity` data available so it just returns the original `data.frame`. Then it takes the second element from each list, sees that there is `Intensity` data and uses `add_predictions()` to add a new column to the data and return it. This then repeats down the list. If you have 3+ lists to iterate over, use the `pmap()` function instead. 
+The `map2()` function was used. What this does is take two lists - `.x` and `.y` and then feeds them into a function in parallel. So what happens here is that the function takes the first site from `summary_data` and the first regression from `Gauss_Reg`and sees that there is no , `Intensity` data available so it just returns the original `data.frame`. Then it takes the second element from each list, sees that there is `Intensity` data and uses `add_predictions()` to add a new column to the data and return it. This then repeats down the list. If you have 3+ lists to iterate over, use the `pmap()` function instead. 
 
-Now that we have the predictions in the data.frames lets make a graph to compare the model predictions with the data. 
+Now that we have the predictions in the `data.frames`, let's make a graph to compare the model predictions with the data. 
 
 ```{r purrr_graph_predictions}
 
@@ -298,7 +299,7 @@ Pred_Graph_Data<- bind_rows(summary_data, .id="Site") %>% filter(!is.na(Pred))
 
 ggplot(Pred_Graph_Data, aes(x=Date, y=Intensity))+
   geom_point()+
-  geom_line(aes(x=Date, y=Pred))+
+  geom_line(aes(x=Date, y=Pred, color="red"))+
   facet_grid(Site~., scales="free_y")
 
 
