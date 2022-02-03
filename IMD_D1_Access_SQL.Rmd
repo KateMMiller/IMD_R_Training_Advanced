@@ -1,0 +1,84 @@
+---
+title: "Day 1 - Data Retrieval - Pulling from Databases"
+author: "Sarah Wright"
+output:
+  html_document
+---
+
+#### Reading Data from Databases {.tabset}
+
+
+<details open><summary class='drop'>Reading Data from Microsoft Access</summary>
+
+```{r, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
+#----------Connect to Access------------#
+
+db_path <- "path/to/database.mdb"
+conn_string <- paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", db_path)
+
+conn <- DBI::dbConnect(odbc::odbc(), .connection_string = conn_string)
+
+
+#---------------Read the data---------------#
+
+data <- dplyr::tbl(conn, "tbl_MyAccessTable") %>%
+  collect()
+
+# Common tidying operations:
+data <- mutate_if(data, is.character, trimws) %>%
+  mutate_if(is.character, dplyr::na_if, "")
+
+# Close the connection as soon as you no longer need it, otherwise you will get weird errors
+dbDisconnect(conn)
+```
+</details>
+
+<details open><summary class='drop'>Reading Data from a SQL Database</summary>
+
+```{r, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
+library(DBI)
+library(odbc)
+library(readr)
+library(magrittr)
+library(dplyr)
+library(dbplyr)
+
+#----------Option 1: Hard code db connection info (not great)------------#
+
+sql_driver <- "SQL Server Native Client 11.0"
+my_server <- "SERVER\\NAME"
+my_database <- "Database_Name"
+
+conn <- dbConnect(Driver = sql_driver, Server = my_server, Database = my_database, Trusted_Connection = "Yes", drv = odbc::odbc())
+
+
+#----------Option 2: Read db connection info from shared drive------------#
+
+# This is just a csv with columns for Driver, Server, and Database
+params <- readr::read_csv("path/to/csv/on/shared/drive/stlk-database-conn.csv")
+params$Trusted_Connection <- "Yes"
+params$drv <- odbc::odbc()
+
+conn <- do.call(dbConnect, params)
+
+
+#----------Option 3: Create a user DSN (easy to use in R, but has to be configured for each user on each computer)------------#
+
+# Create DSN: https://docs.microsoft.com/en-us/sql/relational-databases/native-client-odbc-how-to/configuring-the-sql-server-odbc-driver-add-a-data-source?view=sql-server-ver15
+dsn_name <- "myDSN"
+conn <- dbConnect(odbc(), dsn_name)
+
+
+#---------------Read the data---------------#
+
+data <- dplyr::tbl(conn, dbplyr::in_schema("analysis", "Chemistry")) %>%  # The first argument to in_schema is the schema name (SQL default is dbo) and the second is the table name.
+  collect()
+
+# Common tidying operations:
+  data <- mutate_if(data, is.character, trimws) %>%
+    mutate_if(is.character, dplyr::na_if, "")
+
+# Close the connection as soon as you no longer need it, otherwise you will get weird errors
+dbDisconnect(conn)
+```
+</details>
