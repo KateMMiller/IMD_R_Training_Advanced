@@ -1,0 +1,64 @@
+```{r ts_lists, echo = F, results = 'hide'}
+library(purrr)
+library(ggplot2)
+
+# Create dataframe with 10 years of data for each plot and number of species found
+years <- 2010:2021
+numACAD <- 10
+numMABI <- 5
+numSARA <- 7
+tot_rows <- length(years) * (numACAD + numMABI + numSARA)
+tabset_data <- data.frame(
+  site = c(paste0(rep("ACAD-", numACAD * length(years)), 
+                  sprintf("%02d", rep(1:numACAD, each = length(years)))), 
+           paste0(rep("MABI-", numMABI * length(years)), 
+                  sprintf("%02d", rep(1:numMABI, each = length(years)))),
+           paste0(rep("SARA-", numSARA * length(years)), 
+                  sprintf("%02d", rep(1:numSARA, each = length(years))))),
+  year = rep(years, numACAD + numMABI + numSARA),
+  numspp = as.integer(runif(tot_rows, 1, 20))  
+)
+
+tabset_data$park <- substr(tabset_data$site, 1, 4)
+head(tabset_data)
+
+# Create park list for the for loop below
+park_list <- unique(tabset_data$park)
+site_list <- unique(tabset_data$site)
+
+# ggplot function to implement in for loop
+ggplot_fun <- function(site_name){
+  dat <- dplyr::filter(tabset_data, site == site_name)
+  p <- ggplot(dat, aes(x = year, y = numspp))+
+       geom_point() +
+       geom_line() +
+       labs(x = "Year", y = "Species richness") +
+       theme_classic()
+}
+
+# Create list of ggplots
+plot_list <- set_names(map(site_list, ~ggplot_fun(.x)), site_list)
+
+```
+```{r net_tabs, echo = F, results = 'asis'}
+cat("## Dyanmic Tab Example {.tabset}", "\n")
+for(i in seq_along(park_list)){
+  park <- park_list[i]
+  cat("### ", park, "{.tabset}", "\n")
+  park_site_list = sort(unique(tabset_data$site[tabset_data$park == park]))
+  
+    for(j in seq_along(park_site_list)){
+    site = park_site_list[j]
+    site_template <- 
+      paste0("#### {{site}} \n\n",
+             "<h3>Summary for {{site}}</h3>", "\n\n",
+             "```{r ", site, "_plot, echo = F, fig.cap = ('Trends in species richness in {{site}}'), out.width = '40%'}\n\n",
+             "print(plot_list[site])",
+             "\n\n",
+             "```\n\n")
+  site_tabs <- knitr::knit_expand(text = site_template)
+  cat(knitr::knit(text = unlist(site_tabs), quiet = TRUE))
+  }
+  }
+
+```
