@@ -1,0 +1,229 @@
+---
+title: "R Training Water"
+author: "Andrew Birch"
+output: 
+  html_document:
+    css: custom_styles.css
+---
+
+The goal of this demonstration will be to retrieve both an NPS Aquarius continuous dataset and a USGS NWIS continuous dataset through R, then combine them to do some basic plotting.
+
+The code required will need to be saved to a directory in your project directory or (more easily) accessed from my github. The source code is Aquatic Informatic's, but I have made some modifications, and added some basic tools to streamline the process. The required code can be accessed via the <a href= "https://github.com/AndrewBirchHydro/albAquariusTools">"AndrewBirchHydro/albAquariusTools" GitHub repository</a>, but should be imported from Github in the first code chunk.
+
+<details open><summary class = 'drop'>Retrieving Water Quality Data from Aquarius</summary>
+
+First, make sure you are connected to the VPN. Then use the chunk below to import the required tools and connect to Aquarius:
+
+```{r, warning=FALSE, message=FALSE}
+
+#the following toolbox can be pulled directly from my github:
+#source("Aquarius basics.R") or....
+source("https://raw.githubusercontent.com/AndrewBirchHydro/albAquariusTools/main/Aquarius%20basics.R")
+timeseries$connect("https://aquarius.nps.gov/aquarius", "aqreadonly", "aqreadonly")
+publishapiurl='https://aquarius.nps.gov/aquarius/Publish/v2'
+
+#we also will need to load a few packages. If you do not have these, you will need to install them in the console.
+library(dataRetrieval)
+library(lubridate)
+library(ggplot2)
+library(jsonlite)
+library(httr)
+```
+After running the chunk above, you should be connected and can now access NPS Aquarius stations and data.
+
+By assigning the variable, "Network" below, you can get a list of sites within a given network:
+
+Lets start by pulling all locations in SCPN:
+```{r, warning=FALSE, message=FALSE, results='hide'}
+#assign the network name of interest
+Network <- "Southern Colorado Plateau Network"
+
+#this function will print the available locations in that network
+Print_Locations(Network = Network)
+
+#if you want a dataframe of the locations, you can assign it to 'Locations_in_network' here:
+Locations_in_Network <- as.data.frame(Print_Locations(Network = Network))
+
+```
+
+Once you have selected the location of interest, you can use the `print_datasets()` function to get information on all of the available time series for a selected location:
+
+For this exercise, we will go with the location Rito de los Frijoles at BAND Visitor Center with the identifier: 'BANDRIT01'
+
+Entering this location identifier into the `Print_datasets()` function (easiest to copy and paste from the table above) will provide a list of datasets available at this location:
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+
+#enter the location of interest tog et a list of datasets:
+Print_datasets(Location = "BANDRIT01")
+
+#you can also print available metadata for a given location based on it's identifier:
+Print_metadata(Location = "BANDRIT01")
+
+```
+In the table above, the available datasets for Rito de los Frijoles at BAND Visitor Center include air temperature, water temperature, and voltage from their respective instruments. Lets take a look at the water temperature record.
+
+Using the `Get_timeseries2()` function, we will retrieve this dataset and assign it to the variable raw_record. We can then use the `TS_simplify()` function to do some basic data wrangling and convert it to a cleaned up dataframe.
+
+Enter the Identifier for the dataset below to retrieve the raw record, then use the function `TS_simplify()` to convert it to a useable dataframe:
+
+```{r, warning=FALSE, message=FALSE}
+#this line will pull the dataset from Aquarius
+raw_record <- Get_timeseries2(record = "Water Temp.AquaticLogger@BANDRIT01")
+
+#this function will "clean it up"
+temp_data <- TS_simplify(data = raw_record)
+```
+
+We should now have a simplified continuous time series of water temperature at Rito de los Frijoles at BAND Visitor Center with columns for water temperature, and the date and time.
+
+Lets take a quick look at the dataset:
+
+```{r message=FALSE, warning=FALSE}
+# some summary information
+head(temp_data)
+summary(temp_data)
+
+# a quick plot
+ggplot(temp_data, aes(x = date_time, y = value)) +
+  geom_path() +
+  theme_bw() +
+  xlab("Time") +
+  ylab("Water Temperature (C)")
+
+```
+</details>
+<br>
+
+<details open><summary class = 'drop'>Retrieving Discharge data from NWIS</summary>
+
+Lets say we want to pair this temperature dataset with discharge for an analysis.
+
+There were no discharge data available in Aquarius for this site, but after looking at a map, there is a nearby NWIS station at RITO DE LOS FRIJOLES In BANDELIER  T MON, NM. The station's ID number is 08313350
+
+We can pull discharge data from NWIS to pair with the temperature record using the `dataRetrieval` package.
+
+
+The package includes a function `readNWISuv()` which we will use to grab the discharge data. It requires variables for the site number, USGS parameter code, and start/ end dates, which we will assign below (the USGS code for discharge is 00060)
+
+```{r, warning=FALSE, message=FALSE}
+#00060- USGS code for discharge
+
+siteNo <- "08313350"
+parameter <- "00060"
+
+#for start and end dates, you can enter basically all of known time to get whatever data is available, or narrow it down to a particular window. In this instance, lets go from 1900 to 2025 to ensure we pull everything available
+start.date <- "1900-01-01"
+end.date <- "2025-01-01"
+
+```
+
+With the required variables defined, we can now use the `readNWISuv()` function to pull our discharge dataset:
+(it may take a few seconds if it is a long record)
+
+```{r, warning=FALSE, message=FALSE}
+
+NWIS_query <- readNWISuv(siteNumbers = siteNo,
+                     parameterCd = parameter,
+                     startDate = start.date,
+                     endDate = end.date)
+
+```
+
+The dataframe will come in with some goofy USGS formatting and column names, which can be reassigned easily to match our Aquarius temperature record:
+
+```{r, warning=FALSE, message=FALSE}
+
+colnames(NWIS_query) <- c("agency", "identifier", "date_time", "Q_cfs", "time_zone")
+
+```
+
+Lets take a quick look at the discharge data:
+
+```{r message=FALSE, warning=FALSE}
+head(NWIS_query)
+summary(NWIS_query)
+
+# we'll plot both the water temperature and discharge records for a quick visual comparison
+ggplot(data = NWIS_query, aes(x = date_time, y = Q_cfs)) +
+  geom_path() +
+  theme_bw() +
+  scale_y_log10() +
+  xlab("Time") +
+  ylab("Discharge (cfs)")
+
+ggplot(temp_data, aes(x = date_time, y = value)) +
+  geom_path() +
+  theme_bw() +
+  xlab("Time") +
+  ylab("Water Temperature (C)")
+
+```
+
+Uh oh! Taking a look at the data above, there is a significant data gap in discharge from this station from around 1997-2013. This is fairly common, and emphasizes the need to always visually inspect data prior to conducting any kind of analysis.
+
+There is some overlap between the two records however, so lets merge them by date_time to get a combined time series where the records overlap.
+
+```{r, warning=FALSE, message=FALSE}
+
+# we will enter FALSE for all.x and all.y, as we only want the period where the records overlap one another:
+combined_record <- merge(x = NWIS_query, y = temp_data, 
+                         by = "date_time", all.x = F, all.y = F)
+
+```
+
+We should now have a record of both water temperature from Aquarius, and discharge from NWIS. Lets take a quick looks at it:
+
+```{r, warning=FALSE, message=FALSE}
+head(combined_record)
+summary(combined_record)
+
+# lets take a basic look at the time series together- not that since they are on different scales, a secondary axis is required
+ggplot(combined_record, aes(x = date_time, y = Q_cfs)) +
+  geom_path(color = "blue") +
+  geom_path(color = "red", aes(x = date_time, y = value * 500)) +
+  theme_bw() +
+  scale_y_continuous(name = "Water Temperature", sec.axis = sec_axis(~ . / 500, name = "Water Temperature (C)"))
+
+# lets plot temperature and discharge against one another to see their relationship:
+ggplot(combined_record, aes(x = Q_cfs, y = value)) +
+  geom_point() +
+  theme_bw() +
+  xlab("Discharge (cfs)") +
+  ylab("Water Temperature (C)") +
+  scale_x_log10()
+```
+
+Not much information here is there? What if we want to see the temperature-discharge relationship by month or year?
+
+Lets assign columns for month and year, and recreate the plot based on those parameters.
+
+```{r, warning=FALSE, message=FALSE}
+# This will require the lubridate package
+library(lubridate)
+
+# this will create a new column with the numeric month derived from the date_time column as a factor
+combined_record$month <- as.factor(month(combined_record$date_time))
+# this will create a new column with the year derived from the date_time column as a factor
+combined_record$year <- as.factor(year(combined_record$date_time))
+
+
+```
+
+Now lets recreate our plot using this new month column for color faceted by year.
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(combined_record, aes(x = Q_cfs, y = value, color = month)) +
+  geom_point() +
+  theme_bw() +
+  xlab("Discharge (cfs)") +
+  ylab("Water Temperature (C)") +
+  scale_x_log10() +
+  ggtitle("2013") +
+  facet_grid(year ~ .)
+```
+
+</details>
+<hr>
+
+
