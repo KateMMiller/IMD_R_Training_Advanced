@@ -1,0 +1,14 @@
+<h6>Using ggplot2</h6>
+<ul>
+<li><a href="https://ggplot2-book.org//">ggplot2: Elegant Graphics for Data Analysis</a> is a great reference on ggplot2 also by Hadley Wickham.</li>
+<li><a href="https://rkabacoff.github.io/datavis/">Data Visualization in R</a> is another online book that has a ton of examples for plotting and customizing plots with ggplot2.</li> 
+</ul>
+<br>
+
+<h6>Visualizing Spatial Data</h6>
+<ul>
+<li><a href="https://geocompr.robinlovelace.net/">Geocomputation in R</a> is an excellent online book on the `sf` and `tmap` packages.</li>
+<li>R Studio's <a href="http://rstudio.github.io/leaflet/">leaflet for R</a> page shows the basics of how to use leaflet.</li>
+<li><a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">R-spatial mapping in ggplot</a> The r-spatial.org site is a blog with lots of interesting topics covered. The blog I linked to helped me figure out how to map shapefiles in ggplot.</li>
+</ul>
+<br>

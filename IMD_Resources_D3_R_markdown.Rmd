@@ -1,0 +1,29 @@
+<h6>R Markdown</h6>
+<ul>
+<li><a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: The Definitive Guide</a>. This is Yihui Xie's book that's available free online and for purchase. Yihui is one of the main developers at RStudio working on R Markdown and related packages (e.g. knitr, pagedown, bookdown). The online book is searchable, and is often the first place I check, when I can't remember how to do something.</li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/">R Markdown Cookbook</a>. Another great book with Yihui Xie as an author. This book is free online and has a lot of small bite-size tips for customizing R Markdown.</li>
+<li><a href="https://r4ds.had.co.nz/">R for Data Science</a>, chapters 27 and 29. The book itself is worth a read cover to cover. The chapters on R Markdown are also very helpful on their own.</li>
+<li><a href="https://rmarkdown.rstudio.com/">RStudio's R Markdown page:</a> Includes several short videos and lots of tutorials, articles, and a gallery to give an idea of the many things you can do.</li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Cheat Sheet</a>.</li>
+<li><a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html">kableExtra vignette:</a> Lots of great examples of the different styling/formats you can use with kables and the kableExtra package.</li>
+<li><a href="https://rmd4sci.njtierney.com/">R Markdown for Scientists</a> is an online book with a lot of helpful tips for people like us.</li>
+</ul>
+
+<h6>HTML/CSS</h6>
+<ul>
+<li><a href="https://www.w3schools.com/html/default.asp">W3 Schools HTML page:</a> This website includes helpful tutorials on HTML and CSS, includes executable examples for just about every HTML tag you can think of, and shows how different browsers render content.</li>
+<li><a href="https://www.htmlandcssbook.com/">HTML & CSS design and build websites:</a> This book costs about $15 (cheaper if you can find a used copy) and was a very helpful introduction and continual resource, particularly for working with CSS. There's a Javascript & JQuery book by the same author that's equally well-done, but was a much steeper learning curve.</li>
+</ul>
+
+<h6>LaTeX</h6>
+<ul>
+<li><a href="https://ctan.org/">CTAN.org:</a> This is LaTeX's version of CRAN. </li>
+<li><a href="https:/www.overleaf.com/learn">Overleaf Online LaTex Editor:</a> Includes a short guide to learn LaTeX, examples for most common uses of LaTeX, and has a built in editor that you can execute code in.</li>
+</ul>
+
+<h6>MS Office</h6>
+<ul>
+<li><a href="https://ardata-fr.github.io/officeverse/index.html">MS `officeverse`</a> covers the main packages that add more functionality for outputting .Rmd to Microsoft products, including Word and Powerpoint. </li>
+<li><a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a> is RStudio's page on outputting to Word. Though happy is a strong word in my experience.</li>
+<li><a href="https://towardsdatascience.com/awesome-r-markdown-word-report-with-programmatically-inserted-headings-outputs-and-19ad0de29a22">Awesome R Markdown Word report</a> blog covers useful tasks like cross-referencing figures and tables.</li>
+</ul>
