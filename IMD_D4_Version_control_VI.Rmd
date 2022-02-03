@@ -1,0 +1,50 @@
+---
+author: "Kate Miller & Sarah Wright"
+date: "1/20/2022"
+output: html_document
+---
+
+#### Troubleshooting
+
+As you learn Git, you will inevitably end up in a tight spot here and there. DO NOT PANIC. It is very hard to permanently lose your work in Git. It is very easy to get confused and think that you did. We'll talk through some common issues and how to fix them, then talk about what to avoid when you're starting out
+
+##### Branch won't push
+
+Chances are it's because there are commits in the remote branch that aren't on your branch. While pulling a branch will do an automatic merge, pushing it will not. You need to pull the remote branch, then push your local branch
+
+##### I don't see my commit in my local commit history
+
+Are you on the right branch? If not, switch branches. If you're on the right branch, it's because you didn't commit. A common mistake is to stage changes and forget to hit the commit button. Remember, staging is like framing a snapshot and committing is pressing the shutter button.
+
+##### I don't see my latest changes in GitHub
+
+Are you looking at the right branch in GitHub? If not, switch branches. If you're on the right branch: did you remember to push? If you remembered to push: you probably have uncommitted changes (see above). Commit them and push again.
+
+##### I can't pull/merge/switch branches
+
+You probably have changes that haven't been committed. When you pull or merge, Git combines your commit history with the commit history of the branch you are pulling or merging (remember, pull is just fetch remote branch + merge it). Then it actually changes your working directory files to reflect the new state of the branch. If all your changes have been committed, that's not a problem. If you have uncommitted changes, they would get overwritten if Git didn't throw an error instead. 
+
+When you switch branches, Git does a similar thing - it changes the contents of your working directory to reflect the current state of that branch. If your changes aren't committed, they would be overwritten.
+
+Just commit anything with a blue *M* next to it and try again.
+Alternately, do git stash, do the pull/merge/switch, then git stash pop. 
+
+##### AAAAAAAA MERGE CONFLICT EVERYTHING IS BROKEN AND NOTHING WORKS
+
+Take a deep breath. This is confusing at first but it's not so bad. Merge conflicts happen when you and another person make different changes to the same line of code. They can usually be avoided by communicating with your collaborators and making sure you're not working on the same thing. They still happen though, and the fix is simple: just edit the offending file to look like it should. Find the markers indicating the conflict, then keep the version you want to keep (or keep both, or make some edits). Then save, stage, and commit. 
+
+##### My push/pull buttons are grayed out in RStudio!
+
+
+##### My code is broken! Ctrl+Z Ctrl+Z Ctrl+Z!
+
+For simple mistakes, just fix it and commit. If a more complex change broke your code and you can't fix it, you can *revert* the offending commit (this is a good reason to be thoughtful about how you organize and comment your commits).
+
+##### Things to avoid
+
+DO NOT DELETE YOUR .git FOLDER
+Don't use `git reset` when collaborating (unless you know what you're doing). This is a good way to create a headache for you and your collaborators.
+
+
+
+

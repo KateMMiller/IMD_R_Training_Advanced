@@ -1,0 +1,31 @@
+---
+author: "Kate Miller & Sarah Wright"
+date: "1/20/2022"
+output: html_document
+---
+
+#### Working by yourself
+
+guidelines: snapshot your work often, push to GitHub often, never knowingly put broken code in main branch
+
+Overview diagram
+
+##### Branching
+
+Make a new branch and switch to it
+
+##### Staging and committing
+
+Make a new file and commit it
+Change something in the file and commit that
+
+##### Pushing to GitHub
+
+Push branch
+
+##### Merging
+
+Merge working branch into main
+Push to GitHub
+
+Rinse and repeat

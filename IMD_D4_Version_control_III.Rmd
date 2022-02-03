@@ -6,7 +6,7 @@ output: html_document
 
 #### Git and RStudio
 
-You can use Git completely independently from RStudio if you want to, but for the purposes of this class we'll use RStudio's built-in Git client. A Git client is just a point-and click user interface for Git. Without one, you have to type Git commands in the terminal. You can download other Git clients that do more than the one in RStudio, but we'll stick with RStudio in this class since it's simple and convenient.
+You can use Git completely independently from RStudio if you want to, but for the purposes of this class we'll use RStudio's built-in Git client. Without it, you have to type Git commands in the terminal. You can download other Git clients that do more than the one in RStudio, but we'll stick with RStudio in this class since it's simple and convenient.
 
 ##### First-time setup
 
@@ -104,3 +104,21 @@ If this is successful, you'll see several lines of feedback in the terminal, end
 ![successful gh initial push](images/GitHubPushed.PNG)
 
 Finally, look at the Git tab. The green and blue arrow buttons should no longer be grayed out and there should be no files listed as changed or added.
+
+##### Other setup scenarios
+
+**Existing project without local Git repo**
+
+If you have an existing project but you didn't check the **Create a git repository** box when you created it, don't despair. Make sure your project is open, then go to the **Terminal** tab, type `git init`, and hit **Enter**. Now you can create and connect a GitHub repository as described above.
+
+**New project from existing GitHub repo**
+
+This is a very common workflow. This what you will do if someone shares a GitHub repository with you and asks you to contribute to it. You can also do this if you want to create a new GitHub repository first, then a new project. In GitHub, copy the repository URL:
+
+![copy repo url](images/GitHubCopyURL.PNG)
+
+Next, open RStudio and go to **File > New Project**. In the popup, select **Version Control**, then **Git**. Under **Repository URL**, paste the URL that you just copied from GitHub. **Project directory name** should default to the repository name. If not, just type it in. For **Create project as subdirectory of:**, select whichever folder you want to store your R projects in. Click **Create Project**. You're done! You now have an R project containing the code from the GitHub repository. It's already set up with a local repository and a connection to the GitHub repository. Make sure the owner of the GitHub repository has set the permissions so that you can push to it.
+
+![project from git](images/CloneGitHubRepo.PNG)
+
+This is known as *cloning* a repository - you are copying the whole GitHub repository to your local hard drive, and setting up your new local repository to sync with the GitHub repository when you ask it to.

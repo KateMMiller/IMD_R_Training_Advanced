@@ -1,0 +1,46 @@
+---
+author: "Kate Miller & Sarah Wright"
+date: "1/20/2022"
+output: html_document
+---
+
+#### Working with others
+
+guidelines: same as working by yourself, plus: communicate with collaborators, don't delete or modify commits once you have pushed them (more on this later)
+
+Overview diagram
+
+##### Branching - same as before.
+
+Both: Make a new branch and switch to it
+
+##### Staging and committing - same as before.
+
+Each: Make a different file
+Each: Stage and commit
+Each: Push branch
+
+##### Pulling part I
+
+Pull = fetch (get changes) + merge (incorporate them with your stuff). When you are on a branch, pulling retrieves the remote (GitHub) version of that branch and merges it into your local version.
+
+Collab 1: Pull main, pull own branch in case collab 2 made any changes
+
+##### Pushing to GitHub - collaborative version
+Don't push main to a shared GitHub repo!
+
+Push your branch + create pull request in GitHub
+
+##### Pull requests
+
+NOTE: pull request != pull. You are asking your collaborator to pull your branch, review it, and then merge it into main if all looks good. Why isn't it called a merge request? Because sometimes you just want feedback on your code and aren't ready to merge it into main
+
+Collab 2: Review pull request, merge into main
+
+##### Pulling part II
+
+Collab 2: Now main has new commits that we don't have locally. Make sure that everything works with our code by merging from main, then push our branch and do a pull request. Collab 1 will review and merge into main.
+
+Rinse and repeat
+
+

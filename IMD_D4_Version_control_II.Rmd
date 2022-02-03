@@ -31,3 +31,7 @@ There are a few fundamental concepts that you should keep in mind as you are lea
   - **Pull**
     - This is the Git equivalent of copying the latest version of a file from a shared folder to your local hard drive. For our purposes, we will always be pulling from a repository on GitHub.
     
+##### The command line
+
+Git was originally developed to be used at the command line. You can still do everything in Git at the command line if you want to, but most people prefer a point-and-click user interface (often referred to as a Git *client*) for most tasks. For the purpose of this class, we'll do a few things at the command line, but we'll focus on using the RStudio Git client when possible. As you get more comfortable with Git, you may find it helpful to practice using Git at the command line in order to understand what's going on under the hood. If not, that's completely fine! If you want nothing to do with the command line, you can install a more fully-featured Git client. Search the list of approved software for "Git" to see which Git client(s) are available.
+
