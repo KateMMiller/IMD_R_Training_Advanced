@@ -17,76 +17,62 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ### Prep for Training {.tabset}
 
 ```{r Install_instructions, child = "IMD_D0_Training_Prep.Rmd"}
-
 ```
 
 ### Day 1: Data Retrieval {.tabset}
 
-```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
+#### Aquarius and NWIS Water Data
+```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd"}
+```
 
+```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
 ```
 
 ```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
-
 ```
 
 ### Day 2: Functional Programming {.tabset}
 
 ```{r FunctionsI, child = "IMD_D6_M1_Functions.Rmd", error = T}
-
 ```
 
 ```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd", error = T}
-
 ```
 
-
 ```{r Iteration2, child = "IMD-D6_M3_Tips_and_Tricks.Rmd"}
-
 ```
 
 ### Day 3: R Markdown {.tabset}
 
 ```{r RmarkdownI, child = "IMD_D3_R_Markdown_I.Rmd"}
-
 ```
 
 ```{r RmarkdownII, child = "IMD_D3_R_Markdown_II.Rmd"}
-
 ```
 
 ```{r RmarkdownIII, child = "IMD_D3_R_Markdown_III.Rmd"}
-
 ```
-
 
 ### Day 4: Version Control {.tabset}
 
 ```{r VersionControlI, child = "IMD_D4_Version_control_I.Rmd"}
-
 ```
 
 ```{r VersionControlII, child = "IMD_D4_Version_control_II.Rmd"}
-
 ```
 
 ```{r VersionControlIII, child = "IMD_D4_Version_control_III.Rmd"}
-
 ```
-
 
 ### Day 4: R Packages {.tabset}
 
 ```{r RpackagesI, child = "IMD_D4_R_packages_I.Rmd"}
-
 ```
 
 ```{r RpackagesII, child = "IMD_D4_R_packages_II.Rmd"}
-
 ```
 
 ```{r RpackagesIII, child = "IMD_D4_R_packages_III.Rmd"}
-
 ```
 
 ### Resources 
@@ -101,20 +87,16 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 <h3>Resources by Day:</h3>
 <h4>Day 3: Data R Markdown</h4>
 ```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
-
 ```
 
 <h4>Day 4: R Packages</h4>
 ```{r pkgres1, child = "IMD_Resources_D4_R_packages.Rmd"}
-
 ```
 
 ### Code printout {.tabset}
 ```{r Code_printout, child = "IMD_Code_Printout.Rmd"}
-
 ```
 
 ### Meet the Instructors
 ```{r about, child = "IMD_Meet_the_Trainers.Rmd"}
-
 ```
