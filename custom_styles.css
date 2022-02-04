@@ -103,6 +103,11 @@ font-size: 16px;
 border-top:solid 1px #9D9D9D;
 }
 
+.tabset{
+color:black;
+font-size: 16px;
+}
+
 .nav-pills{
   border-bottom:solid 1px #9D9D9D;
 }
