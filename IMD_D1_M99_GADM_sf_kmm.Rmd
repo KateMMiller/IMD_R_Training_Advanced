@@ -43,22 +43,23 @@ library(GADMTools)
 gadm_sf_loadCountries("USA", level = 0, basefile = "./data/")
 us_bound <- readRDS("./data/USA_adm0.sf.rds")
 us_bound_utm <- st_transform(st_as_sf(us_bound, crs = 4326), 5070)
-plot(us_bound_utm[1])
 st_write(us_bound_utm, "./data/US_Boundary.shp", append = F)
 
 # Level 1: State/Province
 gadm_sf_loadCountries("USA", level = 1, basefile = "./data/")
 us_states <- readRDS("./data/USA_adm1.sf.rds")
 us_state_utm <- st_transform(st_as_sf(us_states, crs = 4326), 5070)
-plot(us_state_utm[1])
 st_write(us_state_utm, "./data/US_States.shp", append = F)
 
 # Level 2: County/district
 gadm_sf_loadCountries("USA", level = 2, basefile = "./data/")
 us_cnty <- readRDS("./data/USA_adm2.sf.rds")
 us_cnty_utm <- st_transform(st_as_sf(us_cnty, crs = 4326), 5070)
-plot(us_cnty_utm[1])
 st_write(us_cnty_utm, "./data/US_Counties.shp", append = F)
+```
+
+```{r gadmplot, echo = T, results = 'show'}
+plot(us_state_utm[1])
 ```
 
 </details>
@@ -92,7 +93,11 @@ tmap_options(basemaps = c(Map = NPSbasic,
                           Imagery = NPSimagery,
                           Light = NPSlight,
                           Slate = NPSslate))
+```
 
+Now we'll change the mode to make the plot interactive. 
+
+```{r, tmview, echo = T, results = 'show'}
 tmap_mode('view') # set to interactive mode
 us_map
 tmap_mode('plot') # return to static mode
