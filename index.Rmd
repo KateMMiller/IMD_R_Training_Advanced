@@ -58,7 +58,7 @@ Coming soon...
 ```{r Iteration1, child = "IMD_D2_M2_Iteration.Rmd", error = T}
 ```
 
-```{r Iteration2, child = "IMD-D2_M3_Tips_and_Tricks.Rmd"}
+```{r Iteration2, child = "IMD_D2_M3_Tips_and_Tricks.Rmd"}
 ```
 
 ### Day 3: R Markdown {.tabset}
