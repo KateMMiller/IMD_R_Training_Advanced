@@ -69,7 +69,7 @@ Before we do anything else, let's make our first commit. Remember, think of a co
 
 ![initial commit](images/InitialCommit.PNG)
 
-There's not much to see here yet. Note the **Staged** column in the file list. In order to stage a file for commit, click the checkbox next to it. Go ahead and stage both files. Note the green A next to each file: this means that you've told Git to include the contents of the file in the next commit. A common misconception is that checking the Staged box actually creates a new commit. That's not the case, though! You've framed your snapshot, but you haven't pressed the shutter button.
+There's not much to see here yet. Note the **Staged** column in the file list. In order to stage a file for commit, click the checkbox next to it. Go ahead and stage both files. Note the green A next to each file: this means that you've told Git to include the contents of the file in the next commit. A common misconception is that checking the Staged box actually creates a new commit. That's not the case, though! You've composed your snapshot, but you haven't pressed the shutter button.
 
 To actually commit the staged files, enter something brief but descriptive in the **Commit message** box ("Initial commit" is typically used for the first commit). Then click on the **Commit** button. Now you've taken your snapshot! Git will give you some feedback, letting you know that your commit includes 17 new lines of code in two files, and two new files were created: .gitignore and git-practice.Rproj.
 
