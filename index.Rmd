@@ -55,13 +55,16 @@ Coming soon...
 ```{r Overview, child = "IMD_D2_M0_Functions.Rmd", error = T}
 ```
 
-```{r FunctionsI, child = "IMD_D6_M1_Functions.Rmd", error = T}
+```{r FunctionsI, child = "IMD_D2_M1_Functions.Rmd", error = T}
 ```
 
 ```{r Iteration1, child = "IMD_D2_M2_Iteration.Rmd", error = T}
 ```
 
 ```{r Iteration2, child = "IMD_D2_M3_Tips_and_Tricks.Rmd"}
+```
+
+```{r Iteration2, child = "IMD_D2_M4_Resources.Rmd"}
 ```
 
 ### Day 3: R Markdown {.tabset}
