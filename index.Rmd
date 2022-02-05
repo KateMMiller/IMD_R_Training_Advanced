@@ -52,6 +52,9 @@ Coming soon...
 
 ### Day 2: Functional Programming {.tabset}
 
+```{r Overview, child = "IMD_D2_M0_Functions.Rmd", error = T}
+```
+
 ```{r FunctionsI, child = "IMD_D6_M1_Functions.Rmd", error = T}
 ```
 

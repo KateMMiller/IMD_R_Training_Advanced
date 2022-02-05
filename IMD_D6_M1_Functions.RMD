@@ -1,3 +1,10 @@
+---
+author: "Thomas Parr & John Paul Schmit"
+date: "2/05/2022"
+output: 
+  html_document:
+    css: custom_styles.css
+---
 
 #### Introduction
 <h3> Functional Programming</h3>
