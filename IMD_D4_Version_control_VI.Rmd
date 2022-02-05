@@ -36,7 +36,7 @@ Take a deep breath. This is confusing at first but it's not so bad. Merge confli
 ##### My push/pull buttons are grayed out in RStudio!
 
 
-##### My code is broken! Ctrl+Z Ctrl+Z Ctrl+Z!
+##### My code is broken!
 
 For simple mistakes, just fix it and commit. If a more complex change broke your code and you can't fix it, you can *revert* the offending commit (this is a good reason to be thoughtful about how you organize and comment your commits).
 

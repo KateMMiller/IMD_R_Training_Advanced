@@ -16,7 +16,7 @@ Open RStudio. If you have a project open, close it out by going to **File > Clos
 
 Go to **Tools > Global Options**. In the list on the left, select **Git/SVN**. Make sure that the **Enable version control interface for RStudio projects** box is checked and verify that everything looks like the screenshot below (your git.exe path may differ, that's ok).
 
-![git options](images/RStudioGitSettings.PNG)
+![git options](images/RStudioGitSettings.PNG){width=500px}
 
 Click **Apply**, then **OK**. Now RStudio should be set up to use Git.
 
@@ -33,11 +33,11 @@ usethis::create_github_token()
 
 Once you are logged into GitHub, you should see a page that looks like this:
 
-![github pat creation](images/GitHubPAT.PNG)
+![github pat creation](images/GitHubPAT.PNG){width=800px}
 
 Put something descriptive in the **Note** field, like "RStudio". Next, look at the **Expiration** dropdown. By default, tokens are set to expire after 30 days, at which point you will have to repeat this process. You have the option to set the expiration date to later or never. Use your best judgment. You can leave the scope settings as-is. Scroll to the bottom and click **Generate token**. The only time that GitHub will show you your personal access token is when you create it. So make sure you copy it to your clipboard so that you can finish connecting to GitHub from RStudio!
 
-![github pat](images/GitHubPAT_II.PNG)
+![github pat](images/GitHubPAT_II.PNG){width=700px}
 
 **Step two: insert your personal access token in the Git credential store**
 
@@ -101,7 +101,7 @@ If you don't see a terminal tab next to your console tab, go to **Tools > Termin
 
 If this is successful, you'll see several lines of feedback in the terminal, ending in "Branch 'main' set up to track remote branch 'main' from 'origin'." Verify that everything worked correctly by refreshing the webpage for your GitHub repository. 
 
-![successful gh initial push](images/GitHubPushed.PNG)
+![successful gh initial push](images/GitHubPushed.PNG){width=800px}
 
 Finally, look at the Git tab. The green and blue arrow buttons should no longer be grayed out and there should be no files listed as changed or added.
 
