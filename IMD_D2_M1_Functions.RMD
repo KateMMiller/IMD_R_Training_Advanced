@@ -1,3 +1,10 @@
+---
+author: "Thomas Parr & John Paul Schmit"
+date: "2/05/2022"
+output: 
+  html_document:
+    css: custom_styles.css
+---
 
 #### Introduction
 <h3> Functional Programming</h3>
@@ -358,15 +365,4 @@ My run says that parallelization was 23% faster than sequential. Not a huge spee
 
 One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly. Best to test it with small data then scale up.
 
-#### Useful Resources
-<h3> Useful Resources </h3>
 
-[1] https://stackoverflow.com/questions/19226816/how-can-i-view-the-source-code-for-a-function
-
-[2] http://rstudio-pubs-static.s3.amazonaws.com/5526_83e42f97a07141e88b75f642dbae8b1b.html
-
-[3] https://stackoverflow.com/questions/45101045/why-use-purrrmap-instead-of-lapply]
-
-[4] https://adv-r.hadley.nz/
-
-[5] http://adv-r.had.co.nz/Functional-programming.html

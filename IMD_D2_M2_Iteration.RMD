@@ -6,7 +6,7 @@ output:
     css: custom_styles.css
 ---
 
-#### More Iteration
+#### Iteration with purrr
 
 Custom functions are the most useful when you have a complicated task that you wish to do many times.
 
@@ -18,10 +18,13 @@ Step 2: Iterate the function
 This section focuses on the many options available for Step 2 
 
 
-We will need the `tidvyerse` library for this Module. 
+We will need the `tidvyerse` , `lubridate` and `modelr` libraries
 ```{r libraries_iteration}
 
 library(tidyverse)
+library(lubridate)
+library(modelr)
+
 
 ```
 
@@ -82,9 +85,11 @@ General `purrr` references:
   
 <a href = "https://r4ds.had.co.nz/iteration.html">Iteration Chapter in R for Data Science </a>
 
-`purrr` is a package that is part of the `tidyverse` that focuses on iterating over `lists`, such as `lists` of `data.frames` or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization. If your task basically consists of starting with a lot of datasets (or one dataset divided by site, species, etc. ) and then doing the same thing to all the datasets, `purrr` is a good option to consider. If you are starting out with one `data_frame` and need to make it into a `list` of `data.frames` based on a column, `group_split()` from `dplyr` can do that, but if you want to name the lists you will have to do that afterwards by hand using the `names()` function like: `names(MyList)<-c("NameOne","NameTwo")` 
+`purrr` is a package that is part of the `tidyverse` that focuses on iterating over `lists`, such as `lists` of `data.frames` or model results. Combining custom functions and this package can be extremely useful in quickly doing repetitive data manipulation, analysis and visualization. If your task basically consists of starting with a lot of datasets (or one dataset that you then divide by site, species, etc. ) and then doing the same thing to all the datasets, `purrr` is a good option to consider. 
+
+If you are starting out with one `data.frame` and need to make it into a `list` of `data.frames` based on a column, you can use`data %>% split(f=as.factor(data$column))`. You can also use `dplyr` functions like so : `data %>% group_by %>% group_split()` from `dplyr` can do that, but if you want to name the lists you will have to do that afterwards by hand using the `names()` function like: `names(MyList)<-c("NameOne","NameTwo")` which can be annoying. 
   
-We will walk through an exmaple analysis using `purrr` functions to do iteration. 
+We will walk through an example analysis using `purrr` functions to do iteration. 
 
 
 ```{r purr_setup}
@@ -104,23 +109,28 @@ fPaths <- paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_I
 ```
 
 
-First, I will read in all the data. My plan it to make a `list` of `data.frames` and then carry out all the analysis on that list. `set_names()` is used to name the `fPaths` vector, and those names will be carried forward to the data list. The `map` function will take each element of `fPaths` and feed them one by one into `read_csv()`.  The advantage of doing iteration this way is that it is more concise than a `for()` loop, but somewhat easier to read than the `lapply` function. Note taht you need to use the `~` in the `map()` function. 
-
+First, I will read in all the data. My plan it to make a `list` of `data.frames` and then carry out all the analysis on that list. `set_names()` is used to name the `fPaths` vector, and those names will be carried forward to the data list. The `map` function will take each element of `fPaths` and feed them one by one into `read_csv()`.  The advantage of doing iteration this way is that it is more concise than a `for()` loop, but somewhat easier to read than the `lapply` function. `map()` takes takes in a `list` or a `vector`. You then specify a function to use with a `~` in front of it. The `.x` tells map where to put the data it gets from `fPaths`. 
 
 
 ```{r purrr_import_data}
-intensity_data_raw <- set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04", "APIS05")) %>%
-  map(~ read_csv(file = .x, , skip = 1))
+fPaths<- set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04", "APIS05"))
+fPaths  # This thing is now a vector where each element has a name
+
+## import the site data into a list where each element comes from a different file
+intensity_data_raw <- fPaths %>% map( ~ read_csv(file = .x,  skip = 1))
 
 ```
 
-`map()` takes takes in a `list` or a `vector`. You then specify a function to use with a `~` in front of it. The `.x` tells map where to put the data it gets from `fPaths`. 
+
 
 In this case we have a `list` of datasets
 
 Now we can examine this data:
+
 ```{r purrr_examine_raw_data}
 class(intensity_data_raw) # its a list
+
+length(intensity_data_raw) # 5 elements
 
 class(intensity_data_raw[[1]]) # each element is a data.frame (well, tibble actually)
 
@@ -132,11 +142,12 @@ intensity_data_raw %>% map(~ colnames(.x))
 I used `map_dbl()` instead of `map()` to look at the number of rows. That function is just like `map()` except it will return a numeric `vector` rather than a `list`. In this case it is handy as I already know that `nrow()` will return a number, and a `vector` is a more compact way of showing that. Note that all the lists and the elements of the row number vector are named with the site code. 
   
 Other options for `map` are:  
-`mpa_lgl()` for a logical vector  
+`map_lgl()` for a logical vector  
 `map_chr()` for a character vector  
 `map_int()`  for an integer  
 `map_dfr()` for making a `data.frame` by binding rows  
 `map_dfc()` for making a `data.frame` by biding columns
+  
   
 When we look at the raw files from the loggers we see they are a Horror!
 
@@ -151,11 +162,11 @@ When we look at the raw files from the loggers we see they are a Horror!
 5) The column names have lots of spaces, punctuation, a superscript,  and even an degree symbol.  
 
 
-I do NOT want to have to fix this one file at a time - particularly if there is a large number of files. 
+I do NOT want to have to fix this one file at a time - particularly if there is a large number of files.  I want to get the Date, Temp and Intensity data and not the rest of the columns.
 
-First I will use `discard()` from the `purrr` package  to just drop the site with no data. (Note `keep()` is the opposite of `discard()`))
+First I will use `discard()` from the `purrr` package  to just drop the site with no data. (Note `keep()` is the opposite of `discard()`).
 
-Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `contains()`, and `where()`. Its not a very big package, so its worth checking to see what it has. 
+Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `all_of()`,  `contains()`, and `where()`. Its not a very big package, so its worth checking to see what it has. 
 
 I added in a `Temp_C` column and transformed the temperature data. Using some fuctions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
 
@@ -171,7 +182,7 @@ Fix_Data <- function(data) {
   data %>%
     select(starts_with("Date") | starts_with("Temp") | starts_with("Intensity")) %>%
     rename("Date_Time" = starts_with("Date"), "Temp_F" = starts_with("Temp"), "Intensity" = starts_with("Intensity")) %>%
-    mutate(Temp_C = 5 * (Temp_F - 32) / 9, Date_Time = mdy_hms(Date_Time), Date=date(Date_Time)) 
+    mutate(Temp_C = 5 * (Temp_F - 32) / 9, Date_Time = mdy_hms(Date_Time), Date = date(Date_Time))
 }
 
 
@@ -182,21 +193,33 @@ intensity_data <- intensity_data_raw %>% map(~ Fix_Data(.x))
 
 Now all the data is in the same format.  
 
-The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the `group_by()` and `across()` to summarize each dataset. The `across()` function lets me select many columns without having to know what their names are. In this case it basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing `Intensity` column in one dataset. At the end of the datasets are some days where `Intensity` is always 0. I am going treat that as an error and get rid of those rows. 
+The data is measured on an hourly basis - it might be useful to make a summary by day. I will use the `group_by()` and `across()` to summarize each dataset. The `across()` function lets me select many columns and perform a function on them, without having to know what their names are. This is used for functions like `mutate()` and `filter()`.  
 
-
+The `where()` tells `across()` which columns to work with. The `mean()` is indicating what will happen to the selected columns. In this case it basically indicates that any column that is numeric should be summarized by its daily mean. By not having to name each column, I don't need to write special code to account for the missing `Intensity` column in one dataset. 
+ 
 ```{r purrr_data_summary}
 
-summary_data <- intensity_data %>% map(~ .x %>%
-  group_by(Date) %>%
-  summarise(across(where(is.numeric), mean)) %>%
-  {
-    if ("Intensity" %in% colnames(.)) filter(., Intensity != 0) else .
-  })
+Summarise_Data <- function(data) {
+  data %>%
+    group_by(Date) %>%
+    summarise(across(where(is.numeric), mean)) 
+}
 
+summary_data <- intensity_data %>% map(~ Summarise_Data(.x))
 ```
 
-Note that in this case, I wrote an anonymous function after the `~`. If your function is one line, or one piping chain, then this can be a good option. If your function is more complicated, then you should make a named function. 
+At the end of the datasets are some days where `Intensity` is always 0. I am going treat that as an error and get rid of those rows. Again `across()` is the way to accomplish this. The first park of the function indicates which columns to use. The `any_of()` tells the filter to only work on the `Intensity` column, if there is one.  The `~.x != 0` is saying that 0 should be filtered out of any column that meets the requirements (i.e. any column called "Intensity").
+
+```{r bad intensity}
+### Oops - some of the intensity data is 0, fix this for later use in gamma glm().
+
+Zero_Intensity_Fix <- function(data) {
+  data %>%
+    filter(across(any_of("Intensity"), ~ .x != 0))
+}
+
+summary_data <- summary_data %>% map(~ Zero_Intensity_Fix(.x))
+```
 
 </details>
 
@@ -209,13 +232,13 @@ Now we will write a function to make a ggplot graph and use `map()` to graph all
 
 Summary_Graph <- function(data) {
   data <- data %>%
-    pivot_longer(where(is.numeric), names_to = "Measure", values_to = "Value") %>%
+    pivot_longer(cols = where(is.numeric), names_to = "Measure", values_to = "Value") %>%
     filter(Measure != "Temp_F")
 
-  Graph<-ggplot(data, aes(x = Date, y = Value, group = Measure, color = Measure)) +
+  Graph <- ggplot(data, aes(x = Date, y = Value, group = Measure, color = Measure)) +
     geom_point() +
     facet_grid(Measure ~ ., scales = "free_y")
-  
+
   return(Graph)
 }
 
@@ -232,7 +255,7 @@ Note that in the `Summary_Graph()` function I first created the dataset I wanted
 
 Now we will use general linear regression to examine the relationship between light and temperature. There are a couple of challenges here:  
 
-1) One of the data sets does not have the `Intensity` column, so we need to skip it. We could just cut if from the list, but lets assume that you will be getting more datasets in the future and want the function to just handle that kind of error on its own.  To accomplish this, the `map_if` function is used. This function is similar to a normal `if()` fucniton, but can be used in the context of iterating over a list.
+1) One of the data sets does not have the `Intensity` column, so we need to skip it. We could just cut if from the list, but lets assume that you will be getting more datasets in the future and want the function to just handle that kind of error on its own.  To accomplish this, the `map_if()` function is used. This function is similar to a normal `if()` function, but can be used in the context of iterating over a list.
   
 2) Regression analysis can get kind of complicated and there are lots of potential arguments to your regression function. We want to be able to experiment with different ways to fit the data without having to specify every argument in advance or constantly rewrite the function. To do this, the ellipsis (`...`) is used.
 
@@ -246,7 +269,7 @@ Intensity_Regression <- function(data, ...) {
 Gauss_Reg <- summary_data %>%
   map_if(~ all(c("Intensity", "Temp_C") %in% colnames(.x)),
     ~ Intensity_Regression(.x, family = gaussian),
-    .else = ~NA
+    .else = ~ NA
   )
 
 ```
@@ -257,7 +280,7 @@ Here is what is going on:
 
 `Intensity_Regression()` takes in the data, and the `...` indicates that there may be some other arguments as well. These are other arguments are not specified in advance. The `...` then appears again in the `glm()` function, which indicates that whatever these extra arguments are should go to `glm()`. You can only send the `...` to one place inside your function body, you can't send it to multiple functions. If for some reason  you want to store whatever is in the `...` inside your function you can use ``match.call(expand.dots = FALSE)$ `...` ``. 
   
-When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm`. Now I will do it again with a `Gamma` distribution.
+When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm()`. Now I will do it again with a `Gamma` distribution.
 
 
 ```{r gamma_regression, error=TRUE}

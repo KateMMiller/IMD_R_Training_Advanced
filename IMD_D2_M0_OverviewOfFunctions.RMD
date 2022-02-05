@@ -1,0 +1,104 @@
+---
+author: "Thomas Parr & John Paul Schmit"
+date: "2/05/2022"
+output: 
+  html_document:
+    css: custom_styles.css
+---
+#### Functions Used Today
+We want to provide you with a summary of functions and operators that we will be using in this section. We suggest using R help to read up on them before class. You don't have to master them, but be generally aware of them. You can use these help functions to look up the functions and operators below:
+<ul>
+  `help()` - searches help files for packages loaded into namespace<br>
+  `?` - searches help files for packages loaded into namespace<br>
+  `??` - searches all help files regardless of wether or not they are loaded<br>
+</ul>
+
+Base operators and things that look like them. When looking these up, they must be wrapped in `' '`
+  `=`
+  `<-`
+  `==`
+  `!`
+  `!=`
+  `>`
+  `>=`
+  `<`
+  `<=`
+  `%in%`
+  `|`
+  `&`
+  
+
+base (and packages in base)
+  `library()`
+  `[]`
+  `rm`
+  `function(){}`
+  `data.frame`
+  `for(){}`
+  `apply()`
+  `tapply()`
+  `sapply()`
+  `lapply()`
+  `do.call()`
+  `rbind()`
+  `names()`, `setNames()`, `colNames()`
+  `nrow()`
+  `rpois()`
+  `quantile()`
+  `plot()`
+  `vector()`
+  `read.csv()`
+  `class()`
+  `is.numeric()`
+  `is.na()`
+  `mean`
+  `if(){}else{}`
+  `return()`
+  `glm()`
+  `all()`
+  `map_if()`
+  
+dplyr
+  `%>%` and `.`
+  `filter()`
+  `mutate()`
+  `case_when`
+  `bind_rows()`
+  `select()`
+  `starts_with()`
+  `rename()`
+  `date()`
+  `group_by()`
+  `across()`
+  `summarize()`
+  `pivot_longer()`
+  
+tidyselect
+  `where`
+  
+tidyr
+  `unite`
+  `pivot_longer`
+  
+microbenchmark
+  `microbenchmark()`
+  
+ggplot2
+  `ggplot()`
+  `geom_point()`
+  `geom_line()`
+  `facet_grid()`
+  `ggsave()`
+  
+purrr
+  `map`
+  `map2`
+  `map_dbl`
+  `discard()`
+  
+lubridate
+  `mdy()`
+  `mdy_hms()`
+
+modelr
+  `add_predictions()`
