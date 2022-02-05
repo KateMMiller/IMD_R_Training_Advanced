@@ -377,3 +377,7 @@ output:
 
 ```
 
+```{r, include = F}
+rm(list = ls())
+```
+

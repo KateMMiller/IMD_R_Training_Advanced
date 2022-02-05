@@ -114,7 +114,3 @@ mn_map
 tmap_mode('plot') # return to static mode
 ```
 
-```{r, include = F}
-rm(list = ls())
-```
-
