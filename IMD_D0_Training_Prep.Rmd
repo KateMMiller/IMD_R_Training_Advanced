@@ -129,7 +129,7 @@ If you have any issues making this work, contact one of the trainers prior to tr
 <b>If you are attending Day 4: R Packages and Version Control, you need to install Git for Windows, RTools, and a number of packages prior to training. You'll also need a GitHub account and to connect RStudio and GitHub prior to training for the best experience. More details to prepare for this session are below: </b>
 
 <ol>
-<li>Download the latest <a href = "https://git-scm.com/download/win">64-bit Git for Windows</a> by clicking on the "Click here to download" link at the top, and installing the file. Once installed, RStudio typically can find it. Note that Git for Windows is on the approved software list, and typically Admin privileges are needed to install it.</li>  
+<li>Download the latest <a href = "https://git-scm.com/download/win">64-bit Git for Windows</a> by clicking on the "Click here to download" link at the top, and installing the file. Once installed, RStudio typically can find it. Note that Git for Windows is on the approved software list. You may or may not require Admin privileges to install. To spare your IT folks unnecessary work, try installing Git for Windows to see if you can install it on your own first.</li>  
 
 <li>Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.</li>
 
