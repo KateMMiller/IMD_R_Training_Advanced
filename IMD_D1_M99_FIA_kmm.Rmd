@@ -96,5 +96,7 @@ plotFIA(tpa_ri, y = TPA, plot.title = "Trees per acre")
 ```
 </details>
 
-
+```{r, include = F}
+rm(list = ls())
+```
 
