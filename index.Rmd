@@ -22,25 +22,27 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ### Day 1: Data Retrieval {.tabset}
 
 ```{r dbsql, child = "IMD_D1_Access_SQL.Rmd"}
-
 ```
-
-#### Web Services
 
 ```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
 ```
 
-#### Aquarius and NWIS Water Data
-```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
-```
+#### Web Services
+
+Coming soon...
 
 ```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
 ```
 
+#### Aquarius and NWIS Water Data
+
+```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
+```
+
+
 #### Resources
 
 ```{r rfiares1, child = "IMD_Resources_D1_kmm.Rmd", eval = T}
-
 ```
 
 ```{r gisres1, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
@@ -53,10 +55,10 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r FunctionsI, child = "IMD_D6_M1_Functions.Rmd", error = T}
 ```
 
-```{r Iteration1, child = "IMD_D6_M2_Iteration.Rmd", error = T}
+```{r Iteration1, child = "IMD_D2_M2_Iteration.Rmd", error = T}
 ```
 
-```{r Iteration2, child = "IMD-D6_M3_Tips_and_Tricks.Rmd"}
+```{r Iteration2, child = "IMD_D2_M3_Tips_and_Tricks.Rmd"}
 ```
 
 ### Day 3: R Markdown {.tabset}

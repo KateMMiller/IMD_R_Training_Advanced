@@ -10,6 +10,7 @@ The only thing you really need to do to prepare for R training is to install the
 <b style="color:red">NOTE: If you don't have Administrative privileges on your computer, you will have to submit an <a href="https://npshelpdesk.nps.gov/">IT HelpDesk Ticket</a> (need to be on VPN or NPS network to access this link) to install R and RStudio, which could take a while. PLEASE PLAN AHEAD!</b>  
 
 Even if you already have R or RStudio installed, please install the latest versions of both programs. R recently went through a major version change from 3.x to 4.x with some potential code-breaking changes. The latest versions are needed to ensure everyone's code behaves the same way. 
+<br>
 
 <details open><summary class='drop'>Install the latest version of R (4.1.2 as of January 2022)</summary>
 Assuming you're on a PC, the installer for the latest version of R can be downloaded from <a href="https://cran.r-project.org/bin/windows/base/">The Comprehensive R Archive Network (CRAN)</a>. You'll want to download the R installer by clicking on "Download R 4.0.4 for Windows", or whatever the latest version number happens to be. After it downloads, open and run the installer with default settings. Note that there's no need to pin R to your taskbar or add a shortcut to your desktop. For 99% of your needs, you'll run R within RStudio, and won't ever open R directly.
@@ -26,35 +27,138 @@ The installer for RStudio for PCs can be downloaded <a href="https://rstudio.com
 #       Prep
 #--------------------
 ```
+<details open><summary class='drop'>Day 1 Requirements:</summary>
+The following packages will be used in Day 1's session on data retrieval. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
+
+```{r d1req, echo = T, results = 'hide', eval = F}
+packages <- c("tidyverse", "DBI", "odbc", "readr", "dbplyr", # Reading Databases
+              "GADMTools", "sf", "tmap", # GIS in R
+              "dataRetrieval", "lubridate", "jsonlite", "httr", # Aquarius
+              "rFIA" # for USFS FIA data
+              )
+
+install.packages(setdiff(packages, rownames(installed.packages())))  
+```
+
+If folks are having trouble installing `tmap` due to an issue with one of its dependencies, `terra`, try running the following code, and then reinstall `tmap`.
+
+```{r terrafix, echo = T, results = 'hide', eval = F}
+install.packages('terra', repos='https://rspatial.r-universe.dev')
+install.packages('tmap')
+```
+
+After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
+```{r d1check, echo=T, results = 'hide', eval = F}
+packages <- c("tidyverse", "DBI", "odbc", "readr", "dbplyr", "GADMTools", "sf", "tmap", 
+              "dataRetrieval", "lubridate", "jsonlite", "httr", "rFIA")
+
+installed_packages <- packages %in% installed.packages() # check which packages are installed
+if (length(packages[!installed_packages]) > 0){
+  install.packages(packages[!installed_packages], dep = TRUE)} # if some are missing, install them
+
+lapply(packages, library, character.only = TRUE) 
+```
+If you have any issues making this work, contact one of the trainers prior to training, and we'll help you troubleshoot.
+
+</details>
+<br>
+
+<details open><summary class='drop'>Day 2 Requirements:</summary>
+The following packages will be used in Day 2's session on functional programming. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
+
+```{r d2req, echo = T, results = 'hide', eval = F}
+packages <- c("tidyverse", "parallel", "microbenchmark")
+
+install.packages(setdiff(packages, rownames(installed.packages())))  
+
+```
+
+After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
+```{r d2check, echo=T, results = 'hide', eval = F}
+packages <- c("tidyverse", "parallel", "microbenchmark")
+
+installed_packages <- packages %in% installed.packages() # check which packages are installed
+if (length(packages[!installed_packages]) > 0){
+  install.packages(packages[!installed_packages], dep = TRUE)} # if some are missing, install them
+
+lapply(packages, library, character.only = TRUE) 
+```
+If you have any issues making this work, contact one of the trainers prior to training, and we'll help you troubleshoot.
+
+</details>
+<br>
+
 <details open><summary class='drop'>Day 3 Installs: tinytex</summary>
 
-<b style="color:red">If you are attending Day 3: R Markdown</b>, you must have a LaTeX engine installed to output to pdf. The easiest, lightest weight install is tinytex. The <a href="https://yihui.org/tinytex/">tinytex website</a> includes download files and installation instructions.    
+If you are attending Day 3: R Markdown, you must have a LaTeX engine installed to output to PDF. The easiest, lightest weight install is `tinytex`. The <a href="https://yihui.org/tinytex/">tinytex website</a> includes download files and installation instructions.    
+
+The following packages will also used in Day 3's session on R Markdown. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
+
+```{r d3req, echo = T, results = 'hide', eval = F}
+packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT")
+
+install.packages(setdiff(packages, rownames(installed.packages())))  
+
+```
+
+After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
+
+```{r d3check, echo=T, results = 'hide', eval=F}
+packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT")
+
+installed_packages <- packages %in% installed.packages() # check which packages are installed
+if (length(packages[!installed_packages]) > 0){
+  install.packages(packages[!installed_packages], dep = TRUE)} # if some are missing, install them
+
+lapply(packages, library, character.only = TRUE) 
+```
+
+If you want to be able to collapse rows in a `kable()`, you'll need the development version of `kableExtra`, which can be installed from GitHub. However, to install from GitHub, you need the `devtools` package. See Day 4 below for instructions on installing `devtools` and `RTools` (required for `devtools`). After installing `devtools` and `RTools`, you can install the development version of `kableExtra` with the following code:
+
+```{r kedev, echo = T, results = 'hide', eval = F}
+devtools::install_github("haozhu233/kableExtra")
+```
+
+If you have any issues making this work, contact one of the trainers prior to training, and we'll help you troubleshoot.
+
 </details>
 <br>
 
 <details open><summary class='drop'>Day 4 Installs: Git for Windows, Rtools, devtools, and roxygen2</summary>
 
-<b style="color:red">If you are attending Day 4: R packages and version control</b>, you will need to install Git for Windows, RTools, and devtools and roxygen2 packages.</b> 
+<b>If you are attending Day 4: R Packages and Version Control, you need to install Git for Windows, RTools, and a number of packages prior to training. You'll also need a GitHub account and to connect RStudio and GitHub prior to training for the best experience. More details to prepare for this session are below: </b>
 
-Download the latest <a href = "https://git-scm.com/download/win">64-bit Git for Windows</a> by clicking on the "Click here to download" link at the top, and installing the file. Once installed, RStudio typically can find it.  
+<ol>
+<li>Download the latest <a href = "https://git-scm.com/download/win">64-bit Git for Windows</a> by clicking on the "Click here to download" link at the top, and installing the file. Once installed, RStudio typically can find it. Note that Git for Windows is on the approved software list, and typically Admin privileges are needed to install it.</li>  
 
-Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.  
+<li>Download files and instructions for Rtools installation are available on <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">CRAN's RTools page</a>. It's a large file and may require admin privileges to install, so be sure to install prior to training. You must also be using R 4.0 or higher for this training, and be sure to download Rtools4.</li>
 
-After you install Rtools, you'll want to install the <i>devtools</i> package. The devtools package allows you to install packages from github, and will be the easiest way for others to install your packages in their R environment. Run the code chunk below to make sure everything is installed and running correctly. The devtools package has a lot of dependencies, and you often have to install new packages or update existing packages during the process. If you're asked to update libraries while trying to install devtools, you should update them. The most common reason the devtools install doesn't work is because you have an outdated version of one of its dependencies installed. 
+<li>After you install Rtools, install packages listed in the code chunk below. Note that the `devtools` package allows you to install packages from GitHub, and will be the easiest way for others to install your packages in their R environment. The `devtools` package has a lot of dependencies, and you often have to install new packages or update existing packages during the process. If you're asked to update libraries while trying to install `devtools`, you should update them. The most common reason the `devtools` install doesn't work is because you have an outdated version of one of its dependencies installed. </li>
 
-```{r devtools, echo=T, eval=F}
-install.packages('devtools')
-library(devtools)
+The following packages will also used in Day 3's session on R Markdown. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
+
+```{r d4req, echo = T, results = 'hide', eval = F}
+packages <- c("devtools", "usethis", "roxygen2","stringr", "dplyr")
+
+install.packages(setdiff(packages, rownames(installed.packages())))  
+
 ```
 
-The <i>roxygen2</i> package is a dependency of devtools, and it should be installed if you successfully installed devtools. However, it's always good to check that it installed properly. The roxygen2 package helps with package documentation. The <i>usethis</i> package is relatively new, and some features that used to live in devtools now live in usethis.  
+These packages can take a while to download, and sometimes time out before finishing. After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
 
-```{r roxygen, echo=T, eval=F}
-library(roxygen2)
-library(usethis)
+```{r d4check, echo=T, results = 'hide', eval=F}
+packages <- c("devtools", "usethis", "roxygen2", "stringr", "dplyr")
+
+installed_packages <- packages %in% installed.packages() # check which packages are installed
+if (length(packages[!installed_packages]) > 0){
+  install.packages(packages[!installed_packages], dep = TRUE)} # if some are missing, install them
+
+lapply(packages, library, character.only = TRUE) 
 ```
+</li>
+<li>Finally, please complete the steps in the tab <b>Day 4: Version Control > Git and RStudio</b> to create a GitHub account and connect it to RStudio.</li>
 
-Once these packages load without errors, you're all set. If you have any issues making this work, contact Kate Miller or Sarah Wright prior to training, and we'll help you troubleshoot.
+If you have any issues making this work, contact Kate Miller or Sarah Wright prior to training, and we'll help you troubleshoot.
 </details>
 <br>
 

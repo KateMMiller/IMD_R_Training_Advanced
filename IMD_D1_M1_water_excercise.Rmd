@@ -54,7 +54,7 @@ Entering this location identifier into the `Print_datasets()` function (easiest 
 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
 
-#enter the location of interest tog et a list of datasets:
+#enter the location of interest to get a list of datasets:
 Print_datasets(Location = "BANDRIT01")
 
 #you can also print available metadata for a given location based on it's identifier:
@@ -183,7 +183,7 @@ ggplot(combined_record, aes(x = date_time, y = Q_cfs)) +
   geom_path(color = "blue") +
   geom_path(color = "red", aes(x = date_time, y = value * 500)) +
   theme_bw() +
-  scale_y_continuous(name = "Water Temperature", sec.axis = sec_axis(~ . / 500, name = "Water Temperature (C)"))
+  scale_y_continuous(name = "Discharge (cfs)", sec.axis = sec_axis(~ . / 500, name = "Water Temperature (C)"))
 
 # lets plot temperature and discharge against one another to see their relationship:
 ggplot(combined_record, aes(x = Q_cfs, y = value)) +
