@@ -27,6 +27,10 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
 ```
 
+```{r, include = F}
+rm(list = ls())
+```
+
 #### Web Services
 
 Coming soon...
@@ -34,9 +38,18 @@ Coming soon...
 ```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
 ```
 
+```{r, include = F}
+rm(list = ls())
+```
+
+
 #### Aquarius and NWIS Water Data
 
 ```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
+```
+
+```{r, include = F}
+rm(list = ls())
 ```
 
 
@@ -46,13 +59,12 @@ Coming soon...
 ```
 
 ```{r gisres1, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
-
 ```
 
 
 ### Day 2: Functional Programming {.tabset}
 
-```{r Overview, child = "IMD_D2_M0_Functions.Rmd", error = T}
+```{r Overview, child = "IMD_D2_M0_OverviewOfFunctions.Rmd"}
 ```
 
 ```{r FunctionsI, child = "IMD_D2_M1_Functions.Rmd", error = T}
@@ -146,4 +158,8 @@ Coming soon...
 
 ### Meet the Instructors
 ```{r about, child = "IMD_Meet_the_Trainers.Rmd"}
+```
+
+```{r, include = F}
+rm(list = ls())
 ```
