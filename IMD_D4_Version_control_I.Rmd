@@ -1,7 +1,12 @@
 ---
 author: "Kate Miller & Sarah Wright"
 date: "1/19/2022"
-output: html_document
+output: 
+  bookdown::html_document2:
+    css: custom_styles.css
+    numbered_sections: false
+    number_sections: false
+    fig_caption: false
 ---
 
 #### Intro to version control

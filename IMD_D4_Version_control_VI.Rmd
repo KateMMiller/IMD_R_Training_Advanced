@@ -1,8 +1,3 @@
----
-author: "Kate Miller & Sarah Wright"
-date: "1/20/2022"
-output: html_document
----
 
 #### Troubleshooting
 
@@ -45,6 +40,13 @@ For simple mistakes, just fix it and commit. If a more complex change broke your
 DO NOT DELETE YOUR .git FOLDER
 Don't use `git reset` when collaborating (unless you know what you're doing). This is a good way to create a headache for you and your collaborators.
 
-
+---
+output: 
+  bookdown::html_document2:
+    css: custom_styles.css
+    numbered_sections: false
+    number_sections: false
+    fig_caption: true
+---
 
 
