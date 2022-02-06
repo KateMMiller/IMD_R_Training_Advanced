@@ -18,3 +18,16 @@ output:
 [4] https://adv-r.hadley.nz/
 
 [5] http://adv-r.had.co.nz/Functional-programming.html
+
+
+<h4> Purrr </h4>
+
+[6] https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf Purrr Cheat Sheet
+  
+[7] https://r4ds.had.co.nz/iteration.html Iteration Chapter in R for Data Science 
+
+<h4> Profiling and Benchmarking </h4>
+
+[8] https://rstudio.github.io/profvis/ Provfis Introduction
+
+[9] https://rstudio.github.io/profvis/faq.html Provfis FAQ
