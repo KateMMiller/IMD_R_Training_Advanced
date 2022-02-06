@@ -24,8 +24,6 @@ We will need the `tidvyerse` , `lubridate` and `modelr` libraries
 library(tidyverse)
 library(lubridate)
 library(modelr)
-
-
 ```
 
 

@@ -202,11 +202,8 @@ Let's say that you wanted to speed up the `Fix_Data()` function. Benchmarking is
 
 
 ```{r purr benchmark}
-library(tidyverse)
-library(lubridate)
-library(microbenchmark)
-library(profvis)
 
+library(microbenchmark)
 
 # Original function
 Fix_Data_Lubridate <- function(data) {
