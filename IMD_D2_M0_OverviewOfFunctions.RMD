@@ -57,6 +57,10 @@ base (and packages in base)
   `glm()`
   `all()`
   `map_if()`
+  `paste0()`
+  `length()`
+  `c()`
+  `boxplot()`
   
 dplyr
   `%>%` and `.`
@@ -65,7 +69,6 @@ dplyr
   `case_when`
   `bind_rows()`
   `select()`
-  `starts_with()`
   `rename()`
   `date()`
   `group_by()`
@@ -73,12 +76,15 @@ dplyr
   `summarize()`
   `pivot_longer()`
   
+  
 tidyselect
-  `where`
+  `where()`
+  `starts_with()`
+  `any_of()`
   
 tidyr
   `unite`
-  `pivot_longer`
+  `pivot_longer()`
   
 microbenchmark
   `microbenchmark()`
@@ -91,10 +97,12 @@ ggplot2
   `ggsave()`
   
 purrr
-  `map`
-  `map2`
-  `map_dbl`
+  `set_names()`
+  `map()`
+  `map2()`
+  `map_dbl()`
   `discard()`
+  `map_if()`
   
 lubridate
   `mdy()`
@@ -102,3 +110,9 @@ lubridate
 
 modelr
   `add_predictions()`
+
+readr
+  `read_csv()`
+  
+profvis
+  `profvis()`

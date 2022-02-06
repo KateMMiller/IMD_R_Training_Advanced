@@ -226,4 +226,8 @@ ggplot(combined_record, aes(x = Q_cfs, y = value, color = month)) +
 </details>
 <hr>
 
+```{r, include = F}
+rm(list = ls())
+```
+
 

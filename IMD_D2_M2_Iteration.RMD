@@ -24,8 +24,6 @@ We will need the `tidvyerse` , `lubridate` and `modelr` libraries
 library(tidyverse)
 library(lubridate)
 library(modelr)
-
-
 ```
 
 
@@ -74,8 +72,6 @@ rm(i, Q95, x, Samples)
 </details>
 
 <br>
-
-
 
 <details open><summary class='drop'> Iteration using the `purrr` package - data cleaning </summary>
 
@@ -168,7 +164,7 @@ First I will use `discard()` from the `purrr` package  to just drop the site wit
 
 Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `all_of()`,  `contains()`, and `where()`. Its not a very big package, so its worth checking to see what it has. 
 
-I added in a `Temp_C` column and transformed the temperature data. Using some fuctions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
+I added in a `Temp_C` column and transformed the temperature data. Using some functions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
 
 Then I will use map to get the more consistent data
 
@@ -187,6 +183,7 @@ Fix_Data <- function(data) {
 
 
 intensity_data <- intensity_data_raw %>% map(~ Fix_Data(.x))
+
 
 ```
 
@@ -228,14 +225,14 @@ summary_data <- summary_data %>% map(~ Zero_Intensity_Fix(.x))
 Now we will write a function to make a ggplot graph and use `map()` to graph all the data. The `where()` from the `tidyselect` package is helpful again. 
 
 
-```{r fist_purrr_graph}
+```{r first_purrr_graph}
 
 Summary_Graph <- function(data) {
-  data <- data %>%
+  graph_data <- data %>%
     pivot_longer(cols = where(is.numeric), names_to = "Measure", values_to = "Value") %>%
     filter(Measure != "Temp_F")
 
-  Graph <- ggplot(data, aes(x = Date, y = Value, group = Measure, color = Measure)) +
+  Graph <- ggplot(graph_data, aes(x = Date, y = Value, group = Measure, color = Measure)) +
     geom_point() +
     facet_grid(Measure ~ ., scales = "free_y")
 
@@ -246,25 +243,24 @@ Graphs1 <- summary_data %>% map(~ Summary_Graph(.x))
 
 ```
 
-Note that in the `Summary_Graph()` function I first created the dataset I wanted using `pivot_longer()` and saved it to `data` and then made the graph. Because I was making 2 things in this function I assigned the graph to `Graph` and then used the `return()` function to indicate what should be the output. Because I made the graph last, by default it would be what the function returns, but as you functions get more complicated it can be good to specify that explicitly. Also, I could have written `return(list(data,Graph))` and returned both objects.
+Note that in the `Summary_Graph()` function I first created the dataset I wanted using `pivot_longer()` and saved it to `graph_data` and then made the graph. Because I was making 2 things in this function I assigned the graph to `Graph` and then used the `return()` function to indicate what should be the output. Because I made the graph last, by default it would be what the function returns, but as your functions get more complicated it can be good to specify that explicitly. Also, I could have written `return(list(graph_data,Graph))` and returned both objects.
 
 
 </details>
 
-<details open><summary class='drop'> `purrr`- Doing an analysis and graphing results  </summary>
+<details open><summary class='drop'> `purrr`- Analyzing Data - `map_if()` </summary>
 
 Now we will use general linear regression to examine the relationship between light and temperature. There are a couple of challenges here:  
 
 1) One of the data sets does not have the `Intensity` column, so we need to skip it. We could just cut if from the list, but lets assume that you will be getting more datasets in the future and want the function to just handle that kind of error on its own.  To accomplish this, the `map_if()` function is used. This function is similar to a normal `if()` function, but can be used in the context of iterating over a list.
   
-2) Regression analysis can get kind of complicated and there are lots of potential arguments to your regression function. We want to be able to experiment with different ways to fit the data without having to specify every argument in advance or constantly rewrite the function. To do this, the ellipsis (`...`) is used.
+2) Regression analysis can get kind of complicated and there are lots of potential arguments to your regression function. See `?glm` for a list of options with that function. We want to be able to experiment with different ways to fit the data without having to specify every argument in advance or constantly rewrite the function. To do this, the ellipsis (`...`) is used.
 
-```{r purrr regression}
+```{r purrr_regression}
 
 Intensity_Regression <- function(data, ...) {
   glm(Intensity ~ Temp_C, data = data, ...)
 }
-
 
 Gauss_Reg <- summary_data %>%
   map_if(~ all(c("Intensity", "Temp_C") %in% colnames(.x)),
@@ -280,8 +276,7 @@ Here is what is going on:
 
 `Intensity_Regression()` takes in the data, and the `...` indicates that there may be some other arguments as well. These are other arguments are not specified in advance. The `...` then appears again in the `glm()` function, which indicates that whatever these extra arguments are should go to `glm()`. You can only send the `...` to one place inside your function body, you can't send it to multiple functions. If for some reason  you want to store whatever is in the `...` inside your function you can use ``match.call(expand.dots = FALSE)$ `...` ``. 
   
-When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family` argument was passed to `glm()`. Now I will do it again with a `Gamma` distribution.
-
+When I made the `Gauss_Reg` output I indicated I wanted a Gaussian (normal) distribution for my regression. So, the `family=` argument was passed to `glm()`. Now I will do it again with a `Gamma` distribution.
 
 ```{r gamma_regression, error=TRUE}
 
@@ -293,10 +288,14 @@ Gamma_Reg <- summary_data %>%
 
 ```
 
+
+</details>
+
+<details open><summary class='drop'> Graphing 2 - Working with 2 Lists - `map2()`  </summary>
+
 Lets make a graph of the data vs. fit for each result of the Gaussian regression. 
 
 First, we will add the predictions of the model to each dataset using the `add_predicitons()` from the `modelr` package.
-
 
 ```{r purrr_add_predictions}
 library(modelr)
@@ -309,22 +308,22 @@ summary_data <- map2(.x = summary_data, .y = Gauss_Reg, .f = ~ {
   }
 })
 
+
+
 ```
 
-
-The `map2()` function was used. What this does is take two lists - `.x` and `.y` and then feeds them into a function in parallel. So what happens here is that the function takes the first site from `summary_data` and the first regression from `Gauss_Reg`and sees that there is no , `Intensity` data available so it just returns the original `data.frame`. Then it takes the second element from each list, sees that there is `Intensity` data and uses `add_predictions()` to add a new column to the data and return it. This then repeats down the list. If you have 3+ lists to iterate over, use the `pmap()` function instead. 
+The `map2()` function was used. What this does is take two lists - `.x` and `.y` and then feeds them into a function in parallel. So what happens here is that the function takes the first site from `summary_data` and the first regression from `Gauss_Reg`and sees that there is no `Intensity` data available so it just returns the original `data.frame`. Then it takes the second element from each list, sees that there is `Intensity` data and uses `add_predictions()` to add a new column to the data and return it. This then repeats down the list. If you have 3+ lists to iterate over, use the `pmap()` function instead. 
 
 Now that we have the predictions in the `data.frames`, let's make a graph to compare the model predictions with the data. 
 
 ```{r purrr_graph_predictions}
 
-Pred_Graph_Data<- bind_rows(summary_data, .id="Site") %>% filter(!is.na(Pred))
+Pred_Graph_Data <- bind_rows(summary_data, .id = "Site") %>% filter(!is.na(Pred))
 
-ggplot(Pred_Graph_Data, aes(x=Date, y=Intensity))+
-  geom_point()+
-  geom_line(aes(x=Date, y=Pred, color="red"))+
-  facet_grid(Site~., scales="free_y")
-
+ggplot(Pred_Graph_Data, aes(x = Date, y = Intensity)) +
+  geom_point() +
+  geom_line(aes(x = Date, y = Pred, color = "red")) +
+  facet_grid(Site ~ ., scales = "free_y")
 
 ```
 

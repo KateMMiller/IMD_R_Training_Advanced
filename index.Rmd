@@ -7,6 +7,18 @@ output:
     fig_caption: true
 title: "NPS IMD Advanced R Training"
 ---
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-171818766-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-171818766-1');
+</script>
+</head>
+
 ```{r globaloptions, include = FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
@@ -27,6 +39,10 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
 ```
 
+```{r, include = F}
+rm(list = ls())
+```
+
 #### Web Services
 
 Coming soon...
@@ -34,9 +50,18 @@ Coming soon...
 ```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
 ```
 
+```{r, include = F}
+rm(list = ls())
+```
+
+
 #### Aquarius and NWIS Water Data
 
 ```{r Aqudata, child = "IMD_D1_M1_water_excercise.Rmd", eval = T}
+```
+
+```{r, include = F}
+rm(list = ls())
 ```
 
 
@@ -46,13 +71,12 @@ Coming soon...
 ```
 
 ```{r gisres1, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
-
 ```
 
 
 ### Day 2: Functional Programming {.tabset}
 
-```{r Overview, child = "IMD_D2_M0_Functions.Rmd", error = T}
+```{r Overview, child = "IMD_D2_M0_OverviewOfFunctions.Rmd"}
 ```
 
 ```{r FunctionsI, child = "IMD_D2_M1_Functions.Rmd", error = T}
@@ -131,6 +155,9 @@ Coming soon...
 
 ```
 
+<h4>Day 2: Functional Programming</h4>
+```{r fpres1, child = "IMD_D2_M4_Resources.Rmd"}
+```
 
 <h4>Day 3: Data R Markdown</h4>
 ```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
@@ -146,4 +173,8 @@ Coming soon...
 
 ### Meet the Instructors
 ```{r about, child = "IMD_Meet_the_Trainers.Rmd"}
+```
+
+```{r, include = F}
+rm(list = ls())
 ```

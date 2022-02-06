@@ -36,7 +36,7 @@ The code below performs the following steps for each level of GADM available:
 <li>Reads the downloaded .Rds file into R session</li>
 <li>Converts the file in the .Rds to a simple feature and reprojects from WGS84 (EPSG:4326) to North American Continuous Albers Equal Area (EPSG:5070), which makes it UTM. Obviously you'd want to use whatever projection your other data are in. </li>
 </ol>
-```{r gadmload, echo = T, results = 'hide'}
+```{r gadmload, echo = T, results = 'hide', eval = F}
 library(GADMTools)
 
 # Level 0: National
@@ -58,10 +58,23 @@ us_cnty_utm <- st_transform(st_as_sf(us_cnty, crs = 4326), 5070)
 st_write(us_cnty_utm, "./data/US_Counties.shp", append = F)
 ```
 
+```{r gadmread2, include = FALSE}
+library(GADMTools)
+library(sf)
+
+# Level 0: National
+us_bound_utm <- st_read("./data/US_Boundary.shp")
+
+# Level 1: State/Province
+us_state_utm <- st_read("./data/US_States.shp")
+
+# Level 2: County/district
+us_cnty_utm <- st_read("./data/US_Counties.shp")
+```
+
 ```{r gadmplot, echo = T, results = 'show'}
 plot(us_state_utm[1])
 ```
-
 </details>
 <br>
 
@@ -78,15 +91,13 @@ NPSslate = 'https://atlas-stg.geoplatform.gov/styles/v1/atlas-user/ck5cpvc2e0avf
 NPSlight = 'https://atlas-stg.geoplatform.gov/styles/v1/atlas-user/ck5cpia2u0auf01p9vbugvcpv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRsYXMtdXNlciIsImEiOiJjazFmdGx2bjQwMDAwMG5wZmYwbmJwbmE2In0.lWXK2UexpXuyVitesLdwUg'
 ```
 
-Using the `us_state_utm` layer, which we downloaded from GADM and then reprojected to EPSG 5070 (UTM Albers), we'll make a quick map to show how `tmap` works.   
-
-In the code below, we first add the `us_state_utm` layer via `tm_shape()`, then we specify how the layer should look using `tm_borders()`. Finally we use `tmap_options()` to set the baselayers of the map, which are the part tiles that were defined above.   
+Using the `us_cnty_utm` layer, which we downloaded from GADM and then reprojected to EPSG 5070 (UTM Albers), we'll make a quick map to show how `tmap` works. First I'll filter the full county layer to just include the state of Minnesota. Then I'll make a map with the MN layer called `mn_map`, which first adds the `mn_cnty` layer via `tm_shape()`, then we specifies how the layer should look using `tm_borders()`. Finally we use `tmap_options()` to set the baselayers of the map, which are the part tiles that were defined above. 
 
 ```{r tmapex, echo = T, results = 'hide'}
-library(tmap)
 # Map 
-us_map <- tm_shape(us_state_utm, projection = 5070, 
-                   bounding_box = us_state_utm) +
+mn_cnty <- st_as_sf(us_cnty_utm[us_cnty_utm$NAME_1 == "Minnesota",])
+
+mn_map <- tm_shape(mn_cnty, projection = 5070) +
           tm_borders(col = "black")
 
 tmap_options(basemaps = c(Map = NPSbasic,
@@ -99,7 +110,7 @@ Now we'll change the mode to make the plot interactive.
 
 ```{r, tmview, echo = T, results = 'show'}
 tmap_mode('view') # set to interactive mode
-us_map
+mn_map
 tmap_mode('plot') # return to static mode
 ```
 

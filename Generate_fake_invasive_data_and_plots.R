@@ -28,23 +28,6 @@ invplot_all <- ggplot(invdata, aes(x = cycle, y = inv_cover, group = Plot_Name))
               formula = y ~ x, method = 'lm', se = FALSE, color = '#7E7E7E') +
   facet_wrap(~park)
 
-# invplot_fun 
-invplot_fun <- function(data, park){
-  p <-   
-  ggplot(data %>% filter(park == park), 
-         aes(x = cycle, y = inv_cover, group = Plot_Name))+
-    theme_bw()+
-    theme(panel.grid.major = element_blank(), 
-          panel.grid.minor = element_blank()) +
-    labs(x = 'Cycle', y = "Invasive % Cover") +
-    scale_x_continuous(limits = c(0.9, 3.1), breaks = c(1, 2, 3)) +
-    geom_jitter(color = "#69A466", width = 0.1) +
-    geom_smooth(aes(x = cycle, y = inv_cover, group = park),
-                formula = y ~ x,
-                method = 'lm', se = FALSE, color = '#7E7E7E')
-return(p)
-}
-
 # ACAD only
 invplot_ACAD <- ggplot(invdata %>% filter(park == "ACAD"), 
                        aes(x = cycle, y = inv_cover, group = Plot_Name))+
