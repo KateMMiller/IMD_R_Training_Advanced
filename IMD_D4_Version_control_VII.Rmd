@@ -1,0 +1,13 @@
+#### Resources
+
+```{r about, child = "IMD_Resources_D4_VersionControl.Rmd"}
+```
+
+---
+output: 
+  bookdown::html_document2:
+    css: custom_styles.css
+    numbered_sections: false
+    number_sections: false
+    fig_caption: true
+---

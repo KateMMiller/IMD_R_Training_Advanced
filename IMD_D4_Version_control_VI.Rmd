@@ -43,6 +43,11 @@ Take a deep breath. This is confusing at first but it's not so bad. Merge confli
 
 ##### My push/pull buttons are grayed out in RStudio!
 
+Git doesn't know that your local branch has a corresponding GitHub branch. Run the following in the Terminal:
+
+```
+git push --set-upstream origin <branch-name>
+```
 
 ##### My code is broken!
 
@@ -52,14 +57,5 @@ For simple mistakes, just fix it and commit. If a more complex change broke your
 git revert xxxxxxx
 ```
 This will create a new commit that reverses the changes made in commit `xxxxxxx`. If you want to revert a series of commits, use `git revert xxxxxxx..yyyyyyy` where `yyyyyyy` is the unique identifier of the most recent commit in the series.
-
----
-output: 
-  bookdown::html_document2:
-    css: custom_styles.css
-    numbered_sections: false
-    number_sections: false
-    fig_caption: true
----
 
 

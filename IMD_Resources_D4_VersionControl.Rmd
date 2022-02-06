@@ -1,0 +1,13 @@
+  - [Happy Git with R](https://happygitwithr.com/): A very comprehensive and accessible guide to getting started with Git and GitHub, specifically aimed at R users.
+  - [Git Handbook](https://guides.github.com/introduction/git-handbook/): A concise and readable intro to version control with Git and GitHub.
+  - [GitHub workflow](https://guides.github.com/introduction/flow/): Brief overview of GitHub workflow.
+  - [GitHub tutorial site](https://lab.github.com/): Includes introductory material as well as more advanced stuff.
+  - [Git branching game](https://learngitbranching.js.org/): Awesome interactive game for learning and visualizing Git commands.
+  - [Understanding Git Conceptually](https://www.sbf5.com/~cduan/technical/git/): A conceptual approach to Git:  "you can only really use Git if you understand how Git works"
+  - [Git cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet/): Git command cheat sheet.
+  - [Atlassian Git tutorials](https://www.atlassian.com/git/tutorials): Good reference for command-line Git. Ignore the Bitbucket stuff, though.
+  - [Oh **** Git](https://dangitgit.com/en): What to do when you inevitably break stuff in Git
+  - [Fixing Git](http://sethrobertson.github.io/GitFixUm/fixup.html): A choose-your-own-adventure guide to fixing stuff in git
+  - [Git and GitHub for R Packages](https://r-pkgs.org/git.html): Hadley Wickham's guide to Git and GitHub.
+<br>
+
