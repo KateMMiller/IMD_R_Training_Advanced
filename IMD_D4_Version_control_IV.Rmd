@@ -8,8 +8,6 @@ output: html_document
 
 Version control is essential to effective collaboration on code projects, but it's also an incredibly useful tool when you're working by yourself. It's also a great way to get more familiar with the version control workflow without the added complexity of working with collaborators.
 
-Overview diagram
-
 ##### Branching
 
 If you are adding a new feature to your code, it's good practice to create a new branch to work from. Examples of things you might create a branch for are a new analysis, a complex map or plot, or a few simple maps or plots. You might also create a new branch to fix or improve existing functionality.
@@ -151,11 +149,15 @@ If you look at your commit history, you can see that all branches are now up to 
 
 Congratulations! Now you have the skills you need to start using version control for your code projects.
 
+At this point, the workflow from earlier should make a little more sense.
+
+![version control workflow](images/VersionControlWorkflow.svg)
+
 ##### Guidelines
 
 As you practice this workflow, here are some guidelines to keep in mind:
 
-  - **Commit (snapshot) your work often:**  Small, specific commits make it easier to undo mistakes later
-  - **Write useful commit messages:**  Be brief but descriptive; [resist the urge to save time with generic messages](https://xkcd.com/1296)
-  - **Push to GitHub often:**  If your hard drive fails, this is your backup
-  - **The main branch should work:**  Don't merge code into the `main` branch if you know it's broken (but if it happens, don't panic - just fix the bug on a new branch and merge back into `main`)
+  - **Commit (snapshot) your work often:**  Small, specific commits make it easier to undo mistakes later.
+  - **Write useful commit messages:**  Be brief but descriptive; [resist the urge to save time with generic messages](https://xkcd.com/1296).
+  - **Push to GitHub often:**  If your hard drive fails, this is your backup.
+  - **The main branch should work:**  Don't merge code into the `main` branch if you know it's broken (but if it happens, don't panic - just fix the bug on a new branch and merge back into `main`).

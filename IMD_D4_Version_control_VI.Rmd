@@ -3,9 +3,22 @@
 
 As you learn Git, you will inevitably end up in a tight spot here and there. DO NOT PANIC. It is very hard to permanently lose your work in Git. It is very easy to get confused and think that you did. We'll talk through some common issues and how to fix them, then talk about what to avoid when you're starting out
 
+##### Irrecoverable mistakes
+
+The great thing about Git is that it is hard to make a mistake that can't be fixed. However, there are still a few ways to get yourself into trouble. These guidelines should keep you from doing irreparable damage as you are learning.
+
+  - **Be careful with the revert ![revert button](images/RevertButton.PNG){height=20px} button in RStudio**
+  
+  - **DO NOT DELETE YOUR .git FOLDER**  
+  Deleting your .git folder deletes your entire local Git repository. If you have woven a tangled and confusing web of branches and commits, it may be tempting to just get rid of the whole repository, but if you do this you will likely lose some of your work as well as your only hope of fixing things.
+  - **Avoid `git reset`**
+  The `reset` command can actually be very useful, but misusing it is a good way to lose work and/or create headaches for collaborators. Practice with it and make sure you understand it before you use it in a repository that you care about. In the meantime, use `revert` if you need to safely undo a commit.
+  - **Avoid `git push --force` or `git pull --force`**
+  This overwrites the branch that is being updated. As with `reset`, just make sure you understand what you're doing if you use the `--force` option.
+
 ##### Branch won't push
 
-Chances are it's because there are commits in the remote branch that aren't on your branch. While pulling a branch will do an automatic merge, pushing it will not. You need to pull the remote branch, then push your local branch
+Chances are it's because there are commits in the remote branch that aren't on your branch. While pulling a branch will do an automatic merge, pushing it will not. You need to pull the remote branch, then push your local branch.
 
 ##### I don't see my commit in my local commit history
 
@@ -17,28 +30,28 @@ Are you looking at the right branch in GitHub? If not, switch branches. If you'r
 
 ##### I can't pull/merge/switch branches
 
-You probably have changes that haven't been committed. When you pull or merge, Git combines your commit history with the commit history of the branch you are pulling or merging (remember, pull is just fetch remote branch + merge it). Then it actually changes your working directory files to reflect the new state of the branch. If all your changes have been committed, that's not a problem. If you have uncommitted changes, they would get overwritten if Git didn't throw an error instead. 
+You probably have changes that haven't been committed. When you pull or merge, Git combines your commit history with the commit history of the branch you are pulling or merging (remember, pull is just fetch remote branch + merge it). Then it actually changes your working directory files to reflect the new state of the branch. If all your changes have been committed, that's not a problem. If you have uncommitted changes, they would get overwritten, so Git throws an error to protect you from losing work. 
 
 When you switch branches, Git does a similar thing - it changes the contents of your working directory to reflect the current state of that branch. If your changes aren't committed, they would be overwritten.
 
 Just commit anything with a blue *M* next to it and try again.
-Alternately, do git stash, do the pull/merge/switch, then git stash pop. 
+If you don't want to commit your changes, you can use the `git stash` command, which "stashes" your changes and then removes them from your working directory. Do the pull/merge/switch, then use `git stash pop` to retrieve your uncommitted work. 
 
 ##### AAAAAAAA MERGE CONFLICT EVERYTHING IS BROKEN AND NOTHING WORKS
 
-Take a deep breath. This is confusing at first but it's not so bad. Merge conflicts happen when you and another person make different changes to the same line of code. They can usually be avoided by communicating with your collaborators and making sure you're not working on the same thing. They still happen though, and the fix is simple: just edit the offending file to look like it should. Find the markers indicating the conflict, then keep the version you want to keep (or keep both, or make some edits). Then save, stage, and commit. 
+Take a deep breath. This is confusing at first but it's not so bad. Merge conflicts happen when you and another person make different changes to the same line of code. They can usually be avoided by communicating with your collaborators and making sure you're not working on the same thing. They still happen though, and the fix is simple: just edit the offending file to look like it should. Find the markers indicating the conflict, then keep the version you want to keep (or keep both, or make some edits). Then save, stage, and commit. See the previous tab for more information.
 
 ##### My push/pull buttons are grayed out in RStudio!
 
 
 ##### My code is broken!
 
-For simple mistakes, just fix it and commit. If a more complex change broke your code and you can't fix it, you can *revert* the offending commit (this is a good reason to be thoughtful about how you organize and comment your commits).
+For simple mistakes, just fix it and commit. If a more complex change broke your code and you can't fix it, you can *revert* the commit where the change occurred (this is a good reason to be thoughtful about how you organize and comment your commits). Look at your commit history and find the SHA (unique identifier) for the offending commit(s). You don't have to copy the full code - just the first 7 characters should be enough. In the **Terminal** tab, type the following, replacing `xxxxxxx` with the unique identifier for your commit. 
 
-##### Things to avoid
-
-DO NOT DELETE YOUR .git FOLDER
-Don't use `git reset` when collaborating (unless you know what you're doing). This is a good way to create a headache for you and your collaborators.
+```
+git revert xxxxxxx
+```
+This will create a new commit that reverses the changes made in commit `xxxxxxx`. If you want to revert a series of commits, use `git revert xxxxxxx..yyyyyyy` where `yyyyyyy` is the unique identifier of the most recent commit in the series.
 
 ---
 output: 
