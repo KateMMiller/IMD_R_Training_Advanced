@@ -7,13 +7,17 @@ output:
 ---
 
 #### Tips and Tricks
+```{r_Day2_Mod3_librarys}
+library(tidyverse)
+library(lubridate)
+library(microbenchmark)
+library(profvis)
+```
+
   
 <details open><summary class='drop'> Commenting</summary>
 
-Adding comments to your code can help future users, including future you, understand what 
-the code does and why you did it. However, comments are more work and too many comments can clutter your 
-code with unhelpful information. Also, as you update and improve your code you should update relevant 
-comments as well. The more comments you have the easier it is for your comments and code to get out of sink.  
+Adding comments to your code can help future users, including future you, understand what the code does and why you did it. However, comments are more work and too many comments can clutter your code with unhelpful information. Also, as you update and improve your code you should update relevant comments as well. The more comments you have the easier it is for your comments and code to get out of sync.  
   
 Some things to consider:  
 
@@ -21,7 +25,7 @@ Some things to consider:
   
   2) Don't explain every line. If you code is that hard to follow, then there is a problem with your code. 
 
-  3) If you use functions from packages (e.g. `tidyverse` functions), you don't need repeat basic info from the help.
+  3) If you use functions from common packages (e.g. `tidyverse` functions), you don't need repeat basic info from the help.
 
   4) If your function has different sections that do different things - e.g. prepare data and then use data - it can be helpful to use comments to distinguish each section and explain what it does.  
   
@@ -33,7 +37,6 @@ Some things to consider:
   
   8) If you have a close curly brace or close parenthesis that is many many lines form the where the opening brace / parenthesis is, it can be helpful to indicate what it is closing. 
 
-
 </details>
 
 
@@ -43,17 +46,17 @@ Some things to consider:
 
 Faster is generally better, but it often requires more time to write and can include code that is harder to read.
 
-Most of the time you cna ignore performance. If you run the code and are happy with how long it takes, then there is no problem.
+Most of the time you can ignore performance. If you run the code and are happy with how long it takes, then there is no problem.
 
 Performance can be a consideration when:
 
   1) You are doing the same analysis many (dozens to hundreds) of times. Think of an analysis of each species at many parks, or each water quality measure at many sites.  
     
-  2). If you have very large data files that you need to manipulate.  
+  2) If you have very large data files that you need to manipulate.  
     
-  3). If you are doing a simulation study and need to create and manipulate large numbers of data sets. 
+  3) If you are doing a simulation study and need to create and manipulate large numbers of data sets. 
     
-  4). If you are doing some sort of interactive visualization and need results very quickly. 
+  4) If you are doing some sort of interactive visualization and need results very quickly. 
   
 </details>
 
@@ -136,31 +139,18 @@ When you use the `dplyr` function `mutate()` you are making use of vectorization
 
 <details open><summary class='drop'>Profiling</summary>
 
-"Profiling" is looking at each part of a function to find out how long it takes. This can allow you to identify bottlenecks where speeding up your code might be helpful. Then tools such as `microbenchmark` can be used to compare options. RStudio has profiling tools built in but to use then you need to install the `profivs` package.
+"Profiling" is looking at each part of a function to find out how long it takes. This can allow you to identify bottlenecks where speeding up your code might be helpful. Then tools such as `microbenchmark` can be used to compare options. RStudio has profiling tools built in but to use then you need to install the `profvis` package.
 
 Once you do this you can access the Profile menu in the top menu bar. You can select some code, and use "Profile Selected Line(s)" to run the profiler.
 
 ![RStudio](images/profile_start.jpg)
 
+However, you can run the `profvis()` function to do the same thing with a little more control over the outcome. Here we will run the function. In case you no longer have the logger data handy - here is the code to load it again.
 
-
-This will give you a "Flame Graph" which tells you how much time each part of your function was running. Here we will profile the `Fix_Data()` funciton from earlier. 
-
-![RStudio](images/flame_graph.jpg)
-
-The graph shows time across the bottom. Looking from the bottom to the top you see how long various parts took. You can see that `profvis` (the profile tool) in the bottom row was running the whole time. One row up is `mdy_hms()` from `lubridate` which takes up most of the time. You don't see functions like `select()` or `rename()` as they ran too quickly. So if you wanted to speed up `Fix_Data()` the place to look for improvements is in the date conversion. 
-</details>
-
-
-<details open><summary class='drop'> Benchmarking </summary>
-
-Let's say that you wanted to speed up the `Fix_Data()` function. Benchmarking is a tool you can uses to compare different versions of a function to see which one runs faster. To do this we will use the `microbenchmark` package. Earlier the `as.POSIXct()` function was used to convert the `DateTime` columns from `character` to `date`. Lets see if that is quicker. We will also try the base function `strptime`.
-
-
-```{r purr benchmark}
+```{r prof_vis_load_data, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
-library(microbenchmark)
+library(profvis)
 
 # Recreate intensity data
 fNames <- c(
@@ -176,6 +166,46 @@ fPaths <- paste0("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_I
 intensity_data_raw <- set_names(fPaths, c("APIS01", "APIS02", "APIS03", "APIS04", "APIS05")) %>%
   map(~ read_csv(file = .x, , skip = 1)) %>%
   discard(~ nrow(.x) == 0)
+
+
+# Fix_Data function
+Fix_Data <- function(data) {
+  data %>%
+    select(starts_with("Date") | starts_with("Temp") | starts_with("Intensity")) %>%
+    rename("Date_Time" = starts_with("Date"), "Temp_F" = starts_with("Temp"), "Intensity" = starts_with("Intensity")) %>%
+    mutate(Temp_C = 5 * (Temp_F - 32) / 9, Date_Time = mdy_hms(Date_Time), Date = date(Date_Time))
+}
+
+
+```
+
+With that loaded we can run `profvis()`
+
+```{r profvis_run, eval=FALSE}
+
+profvis::profvis(Fix_Data(intensity_data_raw[[2]]), interval = 0.005)
+
+```
+
+
+This will give you a "Flame Graph" which tells you how much time each part of your function was running. Here we will profile the `Fix_Data()` function from earlier. 
+
+![RStudio](images/flame_graph.jpg)
+
+The graph shows time across the bottom. Looking from the bottom to the top you see how long various parts took. You can see that `profvis` (the profile tool) in the bottom row was running the whole time. One row up is `rename()` from `dplyr`a nd `mdy_hms()` from `lubridate`. Only 5 ms was spent on `rename()` where as 15ms was spent on `mdy_hms()`. Abover those two function are the fucntions that they called, which are not relevant to us now. You don't see functions like `select()` or `mutate()` as they ran too quickly. So if you wanted to speed up `Fix_Data()` the place to look for improvements is in the date conversion. 
+</details>
+
+
+<details open><summary class='drop'> Benchmarking </summary>
+
+Let's say that you wanted to speed up the `Fix_Data()` function. Benchmarking is a tool you can uses to compare different versions of a function to see which one runs faster. To do this we will use the `microbenchmark` package. Earlier the `as.POSIXct()` function was used to convert the `DateTime` columns from `character` to `date`. Lets see if that is quicker. We will also try the base function `strptime`.
+
+
+```{r purr benchmark}
+library(tidyverse)
+library(lubridate)
+library(microbenchmark)
+library(profvis)
 
 
 # Original function
@@ -211,9 +241,9 @@ Fix_Data_strptime <- function(data) {
 
 # Do Comparison
 mb<-microbenchmark(
-   Lubridate = intensity_data_raw %>% map(~ Fix_Data_Lubridate(.x)),
-   POSIXct = intensity_data_raw %>% map(~ Fix_Data_POSIXct(.x)),
-   Strptime = intensity_data_raw %>% map(~ Fix_Data_strptime(.x)),
+   Lubridate = Fix_Data_Lubridate(intensity_data_raw[[2]]),
+   POSIXct =  Fix_Data_POSIXct(intensity_data_raw[[2]]),
+   Strptime = Fix_Data_strptime(intensity_data_raw[[2]]),
   times = 10L, unit = "ms"
 )
 
