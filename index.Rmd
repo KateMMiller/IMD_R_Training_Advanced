@@ -144,7 +144,7 @@ rm(list = ls())
 ```
 
 <h4>Day 2: Functional Programming</h4>
-```{r fpres1, child = "IMD_Resources_D2_M4_Resources.Rmd"}
+```{r fpres1, child = "IMD_D2_M4_Resources.Rmd"}
 ```
 
 <h4>Day 3: Data R Markdown</h4>
