@@ -36,18 +36,20 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```{r dbsql, child = "IMD_D1_Access_SQL.Rmd"}
 ```
 
-```{r GADMsf, child = "IMD_D1_M99_GADM_sf_kmm.RMD"}
+```{r GADMsf, child = "IMD_D1_M2_GADM_sf.RMD"}
 ```
 
 ```{r, include = F}
 rm(list = ls())
 ```
 
-#### Web Services
+```{r web1, child = "IMD_D1_Web_Data1.RMD"}
+```
 
-Coming soon...
+```{r web2, child = "IMD_D1_Web_Data2.RMD"}
+```
 
-```{r FIAdata, child = "IMD_D1_M99_FIA_kmm.RMD"}
+```{r FIAdata, child = "IMD_D1_M3_FIA_kmm.RMD"}
 ```
 
 ```{r, include = F}
