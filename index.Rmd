@@ -7,6 +7,18 @@ output:
     fig_caption: true
 title: "NPS IMD Advanced R Training"
 ---
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-171818766-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-171818766-1');
+</script>
+</head>
+
 ```{r globaloptions, include = FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
@@ -110,6 +122,8 @@ rm(list = ls())
 ```{r VersionControlVI, child = "IMD_D4_Version_control_VI.Rmd"}
 ```
 
+```{r VersionControlVII, child = "IMD_D4_Version_control_VII.Rmd"}
+```
 
 ### Day 4: R Packages {.tabset}
 
@@ -143,9 +157,16 @@ rm(list = ls())
 
 ```
 
+<h4>Day 2: Functional Programming</h4>
+```{r fpres1, child = "IMD_D2_M4_Resources.Rmd"}
+```
 
 <h4>Day 3: Data R Markdown</h4>
 ```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
+```
+
+<h4>Day 4: Version Control</h4>
+```{r vsres1, child = "IMD_Resources_D4_VersionControl.Rmd"}
 ```
 
 <h4>Day 4: R Packages</h4>

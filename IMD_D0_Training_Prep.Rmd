@@ -67,7 +67,8 @@ If you have any issues making this work, contact one of the trainers prior to tr
 The following packages will be used in Day 2's session on functional programming. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
 
 ```{r d2req, echo = T, results = 'hide', eval = F}
-packages <- c("tidyverse", "parallel", "microbenchmark")
+packages <- c("tidyverse", "parallel", "microbenchmark", 
+              "profvis", "modelr", "lubridate", "tidyselect")
 
 install.packages(setdiff(packages, rownames(installed.packages())))  
 
@@ -75,7 +76,8 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 
 After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
 ```{r d2check, echo=T, results = 'hide', eval = F}
-packages <- c("tidyverse", "parallel", "microbenchmark")
+packages <- c("tidyverse", "parallel", "microbenchmark", "profvis", 
+              "modelr", "lubridate", "tidyselect")
 
 installed_packages <- packages %in% installed.packages() # check which packages are installed
 if (length(packages[!installed_packages]) > 0){

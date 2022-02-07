@@ -368,6 +368,8 @@ output:
 <li><a href = "https://github.com/KateMMiller/forestQAQC">forestQAQC</a>: QA/QC summary report and weekly QC checks for NETN and MIDN forest monitoring. Example reports are also posted to the same repo as HTML files.</li>  
 <li><a href = "https://github.com/KateMMiller/NETN_water_summaries">NETN Water Summaries</a>: Uses the dynamic tab approach to generate site tabs for a given park. The plots are also `ggplot` objects that were turned into `plotly` plots to be interactive.</li>
 <li><a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples">Markdown examples used in training.</a>(docx)</li>
+<li>This website! The source code for this site is on GitHub at <a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced">KateMMiller/IMD_R_Training_Advanced</a>.
+
 <li>SER COVID reports </li>
 </ul>
 

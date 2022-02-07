@@ -24,8 +24,6 @@ We will need the `tidvyerse` , `lubridate` and `modelr` libraries
 library(tidyverse)
 library(lubridate)
 library(modelr)
-
-
 ```
 
 
@@ -74,8 +72,6 @@ rm(i, Q95, x, Samples)
 </details>
 
 <br>
-
-
 
 <details open><summary class='drop'> Iteration using the `purrr` package - data cleaning </summary>
 
@@ -168,7 +164,7 @@ First I will use `discard()` from the `purrr` package  to just drop the site wit
 
 Then, I will make a function that can  take the raw data and correct these issues.  Note the use of `starts_with()` to select the columns whose names start the same but have different serial numbers at the end. This is from a small package called `tidyselect`. Many of the `tidyverse` packages use this as a back-end and export these functions. Other similar helpers include `ends_with()`, `any_of()`, `all_of()`,  `contains()`, and `where()`. Its not a very big package, so its worth checking to see what it has. 
 
-I added in a `Temp_C` column and transformed the temperature data. Using some fuctions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
+I added in a `Temp_C` column and transformed the temperature data. Using some functions from `lubrdiate` make the `Date_Time` column be that data type and extract `Date` and `Hour` components.
 
 Then I will use map to get the more consistent data
 
@@ -187,7 +183,6 @@ Fix_Data <- function(data) {
 
 
 intensity_data <- intensity_data_raw %>% map(~ Fix_Data(.x))
-
 
 
 ```
@@ -253,7 +248,7 @@ Note that in the `Summary_Graph()` function I first created the dataset I wanted
 
 </details>
 
-<details open><summary class='drop'> `purrr`- Doing an analysis and graphing results  </summary>
+<details open><summary class='drop'> `purrr`- Analyzing Data - `map_if()` </summary>
 
 Now we will use general linear regression to examine the relationship between light and temperature. There are a couple of challenges here:  
 
@@ -292,6 +287,11 @@ Gamma_Reg <- summary_data %>%
   )
 
 ```
+
+
+</details>
+
+<details open><summary class='drop'> Graphing 2 - Working with 2 Lists - `map2()`  </summary>
 
 Lets make a graph of the data vs. fit for each result of the Gaussian regression. 
 
