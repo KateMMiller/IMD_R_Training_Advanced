@@ -85,8 +85,10 @@ There's another open source group called <a href = "https://www.naturalearthdata
 
 ```{r nedown, echo = T, results = 'hide', eval = F}
 library(rnaturalearth)
+library(rnaturalearthdata)
 
-lakes <- ne_download(scale = 50, # medium scale
+lakes <- ne_download(scale = 10, # large scale
+                     category = "physical",
                      type = 'lakes_north_america', # a named file on their website
                      destdir = getwd(), # save to working dir.
                      returnclass = 'sf' # return as sf instead of sp
@@ -117,7 +119,7 @@ NPSlight = 'https://atlas-stg.geoplatform.gov/styles/v1/atlas-user/ck5cpia2u0auf
 
 Using the `us_cnty_utm` layer, which we downloaded from GADM and then reprojected to EPSG 5070 (UTM Albers), we'll make a quick map to show how `tmap` works. First I'll filter the full county layer to just include the state of Minnesota. Then I'll make a map with the MN layer called `mn_map`, which first adds the `mn_cnty` layer via `tm_shape()`, then we specifies how the layer should look using `tm_borders()`. I added the rivers and lakes layers I got from Natural Earth too. Finally we use `tmap_options()` to set the baselayers of the map, which are the part tiles that were defined above. 
 
-```{r tmapex, echo = T, include = F}
+```{r tmapex, echo = T, results = 'hide'}
 # Map 
 mn_cnty <- st_as_sf(us_cnty_utm[us_cnty_utm$NAME_1 == "Minnesota",])
 
@@ -129,10 +131,6 @@ mn_map_lakes <- mn_map +
                  tm_fill(col = 'lightblue') 
 
 mn_map_lakes 
-```
-
-```{r, echo = F}
-mn_map_lakes
 ```
 
 Now we'll add the NPS baselayers to the map and change the mode to make the plot interactive. 
