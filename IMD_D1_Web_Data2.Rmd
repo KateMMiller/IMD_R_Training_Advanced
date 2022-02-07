@@ -141,6 +141,7 @@ veg_pts_df <- jsonlite::fromJSON(tmp)
 # `df` is a list of data frames. 
 
 veg_pts_sf = sf::st_as_sf(veg_pts_df$features$geometry,  coords = c("x", "y"), crs = 26917) 
+plot(veg_pts_sf)
 ```
 
 </details>

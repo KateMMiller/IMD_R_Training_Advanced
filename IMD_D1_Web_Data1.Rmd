@@ -50,7 +50,7 @@ With that, we're ready to get started.
 
 If we have the URL for a .csv or .txt file, we can read it into `R` as we would read any flat file from a file path on our computer. The first argument for these functions (e.g., `readr::read_csv()`) is typically `file =`, which can be an absolute file path, a file path relative to the current working directory, **OR a complete URL**. For example, we can write `dat <- readr::read_csv("./data/butterflies.csv")` to reference a file path on our computer or `dat <- readr::read_csv("https://raw.githubusercontent//butterflies.csv")` get the data from a webpage.
 
-The example below uses data on National Park Service visitor counts since 1904. These data were originally accessed from the US Department of the Interior National Park Service’s Integrated Resource Management Applications data portal (https://irma.nps.gov/), but here we read the data from a [Tidy Tuesday Project]("https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-09-17")
+The example below uses data on National Park Service visitor counts since 1904. These data were originally accessed from the US Department of the Interior National Park Service’s Integrated Resource Management Applications data portal (https://irma.nps.gov/), but here we read the data from a [Tidy Tuesday Project](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-09-17)
 ```{r, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
 ### NOTES:
 # 1. We can feed the URL directly into the `readr::read_csv()` function instead of first assigning it to a variable name.
@@ -146,7 +146,7 @@ unzip(zipfile = tmp, exdir = "./downloads/example_extracted_files_folder")
 <div class="alert alert-info">
   <strong>CHALLENGE:  Practice reading in flat files and compressed files from the Internet.</strong>
   
-  One way to easily find practice files for this challenge is with [Google Dataset Search]("https://datasetsearch.research.google.com/"). In the search bar, enter a topic (e.g., 'invasive plants') for which you would like to find a data set. Filter the search with these criteria:
+  One way to easily find practice files for this challenge is with [Google Dataset Search](https://datasetsearch.research.google.com/). In the search bar, enter a topic (e.g., 'invasive plants') for which you would like to find a data set. Filter the search with these criteria:
   
   - For `Download format`, select `Tabular` and `Archive`
   - For `Usage rights`, select `Non-commercial use allowed`
@@ -162,9 +162,9 @@ unzip(zipfile = tmp, exdir = "./downloads/example_extracted_files_folder")
 
 Sometimes the data we want to work with are displayed in an HTML table on a webpage, rather than accessible via a download link or a REST API (more about that in later). One way to get the data would be to copy-paste from the webpage into an Excel worksheet, then read the worksheet into `R` (or save as .csv, then read into `R`). Alternatively, we can automate the process by coding it into an `R` script. 
 
-This [webpage]("https://css-tricks.com/complete-guide-table-element/#:~:text=The%20%3Ctable%3E%20element%20in%20HTML%20is%20used%20for,sense%20in%20spreadsheet%20software.%20Essentially%3A%20columns%20and%20rows.") has a nice explanation on how to understand the HTML code for `<table>` elements. It's a useful primer for understanding what we will be doing next.
+This [webpage](https://css-tricks.com/complete-guide-table-element/#:~:text=The%20%3Ctable%3E%20element%20in%20HTML%20is%20used%20for,sense%20in%20spreadsheet%20software.%20Essentially%3A%20columns%20and%20rows.) has a nice explanation on how to understand the HTML code for `<table>` elements. It's a useful primer for understanding what we will be doing next.
 
-In the examples below we pull data from HTML tables on this [Wikipedia page about COVID vaccine deployment]("https://en.wikipedia.org/wiki/Deployment_of_COVID-19_vaccines").
+In the examples below we pull data from HTML tables on this [Wikipedia page about COVID vaccine deployment](https://en.wikipedia.org/wiki/Deployment_of_COVID-19_vaccines).
 
 <details open><summary class='drop2'>Example 1.  Using `rvest` and `htmltab` to read in an HTML table</summary>
 
