@@ -63,18 +63,16 @@ base (and packages in base)
   `glm()`
   `all()`
   `map_if()`
-<<<<<<< HEAD
-</ul>  
-=======
+  `head()` 
   `paste0()`
   `length()`
   `c()`
   `boxplot()`
-  
->>>>>>> 3971960fd8a0b7c964b82e5d3dc7c192a2b6b82d
+</ul>
 dplyr
 <ul>
-  `%>%` and `.`
+  `%>%`
+  `.`
   `filter()`
   `mutate()`
   `case_when`
@@ -86,35 +84,28 @@ dplyr
   `across()`
   `summarize()`
   `pivot_longer()`
-<<<<<<< HEAD
 </ul> 
+
+
 tidyselect
 <ul>
-  `where`
-</ul>
-=======
-  
-  
-tidyselect
   `where()`
   `starts_with()`
   `any_of()`
-  
->>>>>>> 3971960fd8a0b7c964b82e5d3dc7c192a2b6b82d
+</ul>  
+
 tidyr
 <ul>
   `unite`
-<<<<<<< HEAD
   `pivot_longer`
-</ul>
-=======
   `pivot_longer()`
-  
->>>>>>> 3971960fd8a0b7c964b82e5d3dc7c192a2b6b82d
+</ul>
+
 microbenchmark
 <ul>
   `microbenchmark()`
 </ul>  
+
 ggplot2
 <ul>
   `ggplot()`
@@ -123,39 +114,37 @@ ggplot2
   `facet_grid()`
   `ggsave()`
 </ul>  
+
 purrr
-<<<<<<< HEAD
 <ul>
   `map`
   `map2`
   `map_dbl`
   `discard()`
-</ul>  
-=======
   `set_names()`
   `map()`
   `map2()`
   `map_dbl()`
   `discard()`
   `map_if()`
-  
->>>>>>> 3971960fd8a0b7c964b82e5d3dc7c192a2b6b82d
+</ul>
+
 lubridate
 <ul>
   `mdy()`
   `mdy_hms()`
 </ul>
+
 modelr
-<<<<<<< HEAD
 <ul>
   `add_predictions()`
 </ul>
-=======
-  `add_predictions()`
 
 readr
+<ul>
   `read_csv()`
-  
+ </ul> 
 profvis
+<ul>
   `profvis()`
->>>>>>> 3971960fd8a0b7c964b82e5d3dc7c192a2b6b82d
+</ul>
