@@ -1,0 +1,98 @@
+#### Downloading FIA data {.tabset}
+<details open><summary class = 'drop'>Download FIA Manually</summary>
+You can download USFS FIA data in R using their DataStore url. The code below downloads multiple states' PLOT table, prints the length of the table (which you'll want to check against the DataStore recrods), and saves them to a data folder on my hard drive.  
+```{r manFIA, echo = T, results = 'hide', eval = F}
+library(purrr)
+# Create function to iterate download
+downFIA <- function(state, table){
+  csv_name <- paste(state, table, sep = "_")
+  csv_link <- paste0('http://apps.fs.usda.gov/fia/datamart/CSV/', csv_name, '.csv')
+  assign(csv_name, read.csv(csv_link))
+  write.csv(csv_name, paste0("./data/", csv_name, '.csv'))
+}
+
+# Create list of states of interest
+states = c("CT", "RI", "DE")
+
+# Use purrr::map to download each state's PLOT table.
+map(states, ~downFIA(., "PLOT"))
+
+```
+
+Note that you can take this another step further with `purrr::map2()` to download from a list of states and a list of tables. But note that these are big files and the process may crash if trying to do too much in one call.
+</details>
+<br>
+<details open><summary class = 'drop'>Download with `rFIA`</summary>
+The rFIA package was recently developed through a cooperative agreement between NETN and Hunter Stanke, a grad student at Michigan State University. The package was designed to make it easier to access and import FIA data into R and to perform common queries and analyses for specified areas and time series with the FIA data.
+
+<h3>Load library and download data</h3>
+FIA dataset are huge and can take awhile to download. For the purposes here, we're going to download DE and RI's data, since they're the smallest.
+```{r rFIAsetup, echo = T, results = 'hide', eval = F}
+library(rFIA)
+
+# Download CT and RI state data tables to data folder
+getFIA(states = c('DE', 'RI'), dir = "./data")
+
+# Download reference tables (ie lookup tables)
+getFIA(states = 'ref', tables = c('SPECIES', 'PLANT_DICTIONARY'))
+```
+```{r include = F}
+library(rFIA)
+```
+
+<h3>Filtering the data</h3>
+The code below will import database objects into your global environment. To see the names of the tables within the database object, you can just write `names(fia_all)`. To view a specific table, you can write `fia_all$PLOT`.
+```{r importFIA, echo = T, results = 'hide'}
+# Import all states in R that's in the data folder
+fia_all <- readFIA("./data")
+names(fia_all) # Print table names
+table(fia_all$PLOT$STATECD) # View number of plots by state code. Should be 2.
+table(fia_all$PLOT$INVYR) # Range of inventory years in the data
+
+# Import RI data only
+fia_ri <- readFIA("./data", states = 'RI')
+names(fia_ri)
+head(fia_ri$PLOT)
+table(fia_ri$PLOT$STATECD) # View number of plots by state code. Now only 1.
+table(fia_ri$PLOT$INVYR)
+
+```
+
+Other really useful features of the `rFIA` package are that you can clip the data to a time period or county. The code below clips the FIA data for RI to the most recent survey of each plot in their sample design.
+```{r fiaclip, echo = T, results = 'hide'}
+# Clip all data to most recent sample
+all_recent <- clipFIA(fia_all, mostRecent = TRUE)
+
+# Print list of counties in RI
+countiesRI 
+
+# Clip RI to Washington County
+ri_Wash <- clipFIA(fia_ri, mask = countiesRI[5,], mostRecent = F)
+```
+
+You can also calculate common summary statistics and sampling errors using other functions within `rFIA`, including carbon, biomass, diversity, down woody material, seedling density, tree population estimates, tree growth and mortality, etc. I'll show this for the tree population estimates using the `tpa()` function. These functions also allow you to summarize or group at multiple levels, including the state level, the plot level, the subplot level and the tree level. You can also group by species level and size class using this function. Grouping by ownership is also possible, which allows federal lands to be summarized differently than private lands. The `grpBy` argument also allows you to specify multiple grouping variables. 
+
+```{r fiatpa, echo = T, results = 'hide'}
+fia_ri_rec <- clipFIA(fia_ri, mostRecent = TRUE)
+
+# State level tree population estimates
+tpa_ri <- tpa(fia_ri)
+
+# Plot level tree population estimates for most recent survey
+tpa_ri_plot <- tpa(fia_ri_rec, byPlot = TRUE)
+
+# Species level and size class level tree population estimates
+tpa_ri_sppsz <- tpa(fia_ri_rec, bySpecies = TRUE, bySizeClass = TRUE)
+
+# by Ownership
+tpa_ri_own <- tpa(fia_ri_rec, grpBy = OWNGRPCD)
+```
+
+The package also has some built-in plotting functions that help you visualize the data created by the previous step. The plot below is the trees per acre for the state of RI over time.
+
+```{r fiaviz, echo = T}
+head(tpa_ri)
+plotFIA(tpa_ri, y = TPA, plot.title = "Trees per acre")
+```
+</details>
+

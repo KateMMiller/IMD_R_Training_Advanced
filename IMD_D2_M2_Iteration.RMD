@@ -15,7 +15,7 @@ Step 1: Write and test the function.
 Step 2: Iterate the function
 
 
-This section focuses on the many options available for Step 2 
+This section of the course focuses on using the `purrr` package to interate functions. 
 
 
 We will need the `tidvyerse` , `lubridate` and `modelr` libraries
@@ -25,53 +25,6 @@ library(tidyverse)
 library(lubridate)
 library(modelr)
 ```
-
-
-<details open><summary class='drop'>for() Loops</summary>
-
-`for()` loops run the same code a certain number of times. Each time you run through the loop the code is executed. You need to have an index that tells the loop how often to run. This is specified in the `for()` function. 
-
-```{r for_loops}
-## First statement makes i the "index" variable  it will run once for each i
-x <- NA
-for (i in 1:100) {
-
-  ## get 10000 random numbers from a Poisson distribution with a mean i  (changes)
-  Samples <- rpois(10000, i)
-
-  # get 95% upper qauntile - e.g. the number that is higher than 95% of the other samples
-  Q95 <- quantile(Samples, 0.95)
-
-  ## save that to vector "x" using [i] to make sure it goes to the right location
-  x[i] <- Q95
-}
-
-# plot our results
-
-plot(x)
-
-```
-
-`for()` loops are very common in other programming languages.
-
-In R they are less popular:
-
-1) The can be very slow. One error (shown in the example above) is to "grow the object orgnaically". Before I started the loop I assigned the values of `NA` to `x`, so `x` had just one entry. As the loop went along it first overwrote the `NA` and then on every pass after the first one it added a new value. Growing `x` this way requires a lot of rewriting of the `x` which is slow. For this example you don't notice it, but if `x` was a large dataframe or grew to be millions of values you would. This can be avoided by telling R how big the object will be right frome the start. So before the loop O could write `x<-vector(mode="double", 100)` to create a vector that is 100 entries long and is numeric. This will speed up the loop.  
-  
-2)  Loops, especially nested loops can be hard to read and debug if you come back to the code after a long time.  
-  
-3) R has other options that are faster and easier to read.  
-
-```{r for_loop_clean_up}
-
-rm(i, Q95, x, Samples)
-
-```
-
-
-</details>
-
-<br>
 
 <details open><summary class='drop'> Iteration using the `purrr` package - data cleaning </summary>
 
