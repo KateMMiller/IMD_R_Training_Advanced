@@ -122,6 +122,8 @@ rm(list = ls())
 ```{r VersionControlVI, child = "IMD_D4_Version_control_VI.Rmd"}
 ```
 
+```{r VersionControlVII, child = "IMD_D4_Version_control_VII.Rmd"}
+```
 
 ### Day 4: R Packages {.tabset}
 
@@ -161,6 +163,10 @@ rm(list = ls())
 
 <h4>Day 3: Data R Markdown</h4>
 ```{r markres1, child = "IMD_Resources_D3_R_markdown.Rmd"}
+```
+
+<h4>Day 4: Version Control</h4>
+```{r vsres1, child = "IMD_Resources_D4_VersionControl.Rmd"}
 ```
 
 <h4>Day 4: R Packages</h4>
