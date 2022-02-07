@@ -32,7 +32,7 @@ The following packages will be used in Day 1's session on data retrieval. Please
 
 ```{r d1req, echo = T, results = 'hide', eval = F}
 packages <- c("tidyverse", "DBI", "odbc", "readr", "dbplyr", # Reading Databases
-              "GADMTools", "sf", "tmap", # GIS in R
+              "GADMTools", "sf", "tmap", "rnaturalearth", "rnaturalearthdata", # GIS in R
               "readxl", "rvest", "htmltab", "stringr", "jsonlite", "httr", "geojsonsf", # Web services
               "dataRetrieval", "lubridate", "jsonlite", "httr", # Aquarius
               "rFIA" # for USFS FIA data
@@ -51,7 +51,7 @@ install.packages('tmap')
 After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
 ```{r d1check, echo=T, results = 'hide', eval = F}
 packages <- c("tidyverse", "DBI", "odbc", "readr", "dbplyr", # Reading Databases
-              "GADMTools", "sf", "tmap", # GIS in R
+              "GADMTools", "sf", "tmap", "rnaturalearth", "rnaturalearthdata", # GIS in R
               "readxl", "rvest", "htmltab", "stringr", "jsonlite", "httr", "geojsonsf", # Web services
               "dataRetrieval", "lubridate", "jsonlite", "httr", # Aquarius
               "rFIA")

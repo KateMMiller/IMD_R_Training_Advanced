@@ -1,7 +1,9 @@
 #### GIS in R
 <h4>Packages used in this section:</h4>
 ```{r gispkges, echo = T, results = 'hide'}
-library(GADMTools) # for downloading spatial data
+library(GADMTools) # for downloading high res administrative boundaries
+library(rnaturalearth)# for natural earth download functions
+library(rnaturalearthdata) # for cultural and physical boundaries of diff. res.
 library(sf) # for working with simple features
 library(tmap) # for mapping spatial data
 ```
@@ -27,8 +29,8 @@ The `leaflet` package is relatively easy to use for basic mapping. For more adva
 </details>
 <br>
 
-<details open><summary class = 'drop'>Downloading administrative boundaries </summary>
-There's an open source group that hosts a database of geographic boundaries (called GADM), and you can download their data directly in R. Mutliple packages can do this, including `GADMTools` and `geodata`. The maintainer of `geodata` also maintains the `raster` package, so it's a solid package. I'm going to show `GADMTools`, because I found it easier to download and import as simple features, but `geodata` is perfectly acceptable too.
+<details open><summary class = 'drop'>Downloading GADM administrative boundaries </summary>
+There's an open source group that hosts a database of international geographic boundaries (called GADM), and you can download their data directly in R. Mutliple packages can do this, including `GADMTools` and `geodata`. The maintainer of `geodata` also maintains the `raster` package, so it's a solid package. I'm going to show `GADMTools`, because I found it easier to download and import as simple features, but `geodata` is perfectly acceptable too. 
 
 The code below performs the following steps for each level of GADM available:
 <ol>
@@ -78,6 +80,28 @@ plot(us_state_utm[1])
 </details>
 <br>
 
+<details open><summary class = 'drop'>Downloading Natural Earth boundaries </summary>
+There's another open source group called <a href = "https://www.naturalearthdata.com/">Natural Earth</a> that hosts administrative boundaries of differing resolutions for easier small-scale to large-scale plotting. You can download data from their website, or via the `rnaturalearth` R package. Categories of data include cultural, physical or raster. I'll show an example of downloading lake data from this site. 
+
+```{r nedown, echo = T, results = 'hide', eval = F}
+library(rnaturalearth)
+
+lakes <- ne_download(scale = 50, # medium scale
+                     type = 'lakes_north_america', # a named file on their website
+                     destdir = getwd(), # save to working dir.
+                     returnclass = 'sf' # return as sf instead of sp
+                     )
+
+lakes_utm <- st_transform(lakes, crs = 5070)
+```
+
+```{r echo = F, include = F}
+lakes_utm <- st_read("./data/lakes.shp")
+```
+
+</details>
+</br>
+
 <details open><summary class = 'drop'>NPS Park tiles</summary>
 The urls below are the different park tiles available, which can be plotted in the background of `leaflet` or `tmap` maps. I'll show how that works with an example using `tmap`.
 ```{r parktiles, echo = T, results = 'hide'}
@@ -91,24 +115,34 @@ NPSslate = 'https://atlas-stg.geoplatform.gov/styles/v1/atlas-user/ck5cpvc2e0avf
 NPSlight = 'https://atlas-stg.geoplatform.gov/styles/v1/atlas-user/ck5cpia2u0auf01p9vbugvcpv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXRsYXMtdXNlciIsImEiOiJjazFmdGx2bjQwMDAwMG5wZmYwbmJwbmE2In0.lWXK2UexpXuyVitesLdwUg'
 ```
 
-Using the `us_cnty_utm` layer, which we downloaded from GADM and then reprojected to EPSG 5070 (UTM Albers), we'll make a quick map to show how `tmap` works. First I'll filter the full county layer to just include the state of Minnesota. Then I'll make a map with the MN layer called `mn_map`, which first adds the `mn_cnty` layer via `tm_shape()`, then we specifies how the layer should look using `tm_borders()`. Finally we use `tmap_options()` to set the baselayers of the map, which are the part tiles that were defined above. 
+Using the `us_cnty_utm` layer, which we downloaded from GADM and then reprojected to EPSG 5070 (UTM Albers), we'll make a quick map to show how `tmap` works. First I'll filter the full county layer to just include the state of Minnesota. Then I'll make a map with the MN layer called `mn_map`, which first adds the `mn_cnty` layer via `tm_shape()`, then we specifies how the layer should look using `tm_borders()`. I added the rivers and lakes layers I got from Natural Earth too. Finally we use `tmap_options()` to set the baselayers of the map, which are the part tiles that were defined above. 
 
-```{r tmapex, echo = T, results = 'hide'}
+```{r tmapex, echo = T, include = F}
 # Map 
 mn_cnty <- st_as_sf(us_cnty_utm[us_cnty_utm$NAME_1 == "Minnesota",])
 
 mn_map <- tm_shape(mn_cnty, projection = 5070) +
-          tm_borders(col = "black")
+          tm_borders(col = "black") 
 
+mn_map_lakes <- mn_map + 
+                 tm_shape(lakes_utm) +
+                 tm_fill(col = 'lightblue') 
+
+mn_map_lakes 
+```
+
+```{r, echo = F}
+mn_map_lakes
+```
+
+Now we'll add the NPS baselayers to the map and change the mode to make the plot interactive. 
+
+```{r, tmview, echo = T, results = 'show'}
 tmap_options(basemaps = c(Map = NPSbasic,
                           Imagery = NPSimagery,
                           Light = NPSlight,
                           Slate = NPSslate))
-```
 
-Now we'll change the mode to make the plot interactive. 
-
-```{r, tmview, echo = T, results = 'show'}
 tmap_mode('view') # set to interactive mode
 mn_map
 tmap_mode('plot') # return to static mode
