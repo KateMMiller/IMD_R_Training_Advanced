@@ -156,7 +156,6 @@ rm(list = ls())
 ```
 
 ```{r gisres, child = "IMD_Resources_D1_GIS.Rmd", eval = T}
-
 ```
 
 <h4>Day 2: Functional Programming</h4>
