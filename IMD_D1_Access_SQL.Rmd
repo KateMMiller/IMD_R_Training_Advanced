@@ -11,17 +11,24 @@ output:
 <details open><summary class='drop'>Reading Data from Microsoft Access</summary>
 
 ```{r, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
+library(DBI)
+library(odbc)
+library(readr)
+library(magrittr)
+library(dplyr)
+library(dbplyr)
+
 #----------Connect to Access------------#
 
-db_path <- "path/to/database.mdb"
+db_path <- "data/Trees.accdb"
 conn_string <- paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", db_path)
 
-conn <- DBI::dbConnect(odbc::odbc(), .connection_string = conn_string)
+conn <- dbConnect(odbc(), .connection_string = conn_string)
 
 
 #---------------Read the data---------------#
 
-data <- dplyr::tbl(conn, "tbl_MyAccessTable") %>%
+data <- tbl(conn, "tbl_Trees") %>%
   collect()
 
 # Common tidying operations:
@@ -36,13 +43,6 @@ dbDisconnect(conn)
 <details open><summary class='drop'>Reading Data from a SQL Database</summary>
 
 ```{r, echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
-library(DBI)
-library(odbc)
-library(readr)
-library(magrittr)
-library(dplyr)
-library(dbplyr)
-
 #----------Option 1: Hard code db connection info (not great)------------#
 
 sql_driver <- "SQL Server Native Client 11.0"
@@ -55,9 +55,9 @@ conn <- dbConnect(Driver = sql_driver, Server = my_server, Database = my_databas
 #----------Option 2: Read db connection info from shared drive------------#
 
 # This is just a csv with columns for Driver, Server, and Database
-params <- readr::read_csv("path/to/csv/on/shared/drive/stlk-database-conn.csv")
+params <- read_csv("path/to/csv/on/shared/drive/database-conn.csv")
 params$Trusted_Connection <- "Yes"
-params$drv <- odbc::odbc()
+params$drv <- odbc()
 
 conn <- do.call(dbConnect, params)
 
@@ -71,12 +71,12 @@ conn <- dbConnect(odbc(), dsn_name)
 
 #---------------Read the data---------------#
 
-data <- dplyr::tbl(conn, dbplyr::in_schema("analysis", "Chemistry")) %>%  # The first argument to in_schema is the schema name (SQL default is dbo) and the second is the table name.
+data <- tbl(conn, in_schema("analysis", "Chemistry")) %>%  # The first argument to in_schema is the schema name (SQL default is dbo) and the second is the table name.
   collect()
 
 # Common tidying operations:
   data <- mutate_if(data, is.character, trimws) %>%
-    mutate_if(is.character, dplyr::na_if, "")
+    mutate_if(is.character, na_if, "")
 
 # Close the connection as soon as you no longer need it, otherwise you will get weird errors
 dbDisconnect(conn)
