@@ -14,6 +14,7 @@ We want to provide you with a summary of functions and operators that we will be
 </ul>
 
 Base operators and things that look like them. When looking these up, they must be wrapped in `' '`
+ <ul>
   `=`
   `<-`
   `==`
@@ -26,14 +27,19 @@ Base operators and things that look like them. When looking these up, they must 
   `%in%`
   `|`
   `&`
-  
+ </ul> 
 
 base (and packages in base)
+  <ul>
   `library()`
   `[]`
-  `rm`
+  `[[]]`
+  `rm()`
   `function(){}`
   `data.frame`
+  `file.path()`
+  `format`
+  `object.size()`
   `for(){}`
   `apply()`
   `tapply()`
@@ -57,8 +63,9 @@ base (and packages in base)
   `glm()`
   `all()`
   `map_if()`
-  
+</ul>  
 dplyr
+<ul>
   `%>%` and `.`
   `filter()`
   `mutate()`
@@ -72,33 +79,41 @@ dplyr
   `across()`
   `summarize()`
   `pivot_longer()`
-  
+</ul> 
 tidyselect
+<ul>
   `where`
-  
+</ul>
 tidyr
+<ul>
   `unite`
   `pivot_longer`
-  
+</ul>
 microbenchmark
+<ul>
   `microbenchmark()`
-  
+</ul>  
 ggplot2
+<ul>
   `ggplot()`
   `geom_point()`
   `geom_line()`
   `facet_grid()`
   `ggsave()`
-  
+</ul>  
 purrr
+<ul>
   `map`
   `map2`
   `map_dbl`
   `discard()`
-  
+</ul>  
 lubridate
+<ul>
   `mdy()`
   `mdy_hms()`
-
+</ul>
 modelr
+<ul>
   `add_predictions()`
+</ul>
