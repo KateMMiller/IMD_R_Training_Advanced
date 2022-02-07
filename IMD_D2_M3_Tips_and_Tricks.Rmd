@@ -179,7 +179,7 @@ This will give you a "Flame Graph" which tells you how much time each part of yo
 
 ![RStudio](images/flame_graph.jpg)
 
-The graph shows time across the bottom. Looking from the bottom to the top you see how long various parts took. You can see that `profvis` (the profile tool) in the bottom row was running the whole time. One row up is `rename()` from `dplyr`a nd `mdy_hms()` from `lubridate`. Only 5 ms was spent on `rename()` where as 15ms was spent on `mdy_hms()`. Abover those two function are the fucntions that they called, which are not relevant to us now. You don't see functions like `select()` or `mutate()` as they ran too quickly. So if you wanted to speed up `Fix_Data()` the place to look for improvements is in the date conversion. 
+The graph shows time across the bottom. Looking from the bottom to the top you see how long various parts took. You can see that `profvis` (the profile tool) in the bottom row was running the whole time. One row up is `rename()` from `dplyr`a nd `mdy_hms()` from `lubridate`. Only 5 ms was spent on `rename()` where as 15ms was spent on `mdy_hms()`. Above those two function are the functions that they called, which are not relevant to us now. You don't see functions like `select()` or `mutate()` as they ran too quickly. So if you wanted to speed up `Fix_Data()` the place to look for improvements is in the date conversion. 
 </details>
 
 
