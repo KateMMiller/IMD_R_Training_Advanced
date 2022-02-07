@@ -6,7 +6,7 @@ output:
   css: custom_styles.css
 ---
 
-#### Tips and Tricks
+#### Performance
 ```{r_Day2_Mod3_librarys}
 library(tidyverse)
 library(lubridate)
@@ -15,32 +15,7 @@ library(profvis)
 ```
 
   
-<details open><summary class='drop'> Commenting</summary>
-
-Adding comments to your code can help future users, including future you, understand what the code does and why you did it. However, comments are more work and too many comments can clutter your code with unhelpful information. Also, as you update and improve your code you should update relevant comments as well. The more comments you have the easier it is for your comments and code to get out of sync.  
-  
-Some things to consider:  
-
-  1) Try to give functions and things created inside of functions names that indicate what they do / are.   
-  
-  2) Don't explain every line. If you code is that hard to follow, then there is a problem with your code. 
-
-  3) If you use functions from common packages (e.g. `tidyverse` functions), you don't need repeat basic info from the help.
-
-  4) If your function has different sections that do different things - e.g. prepare data and then use data - it can be helpful to use comments to distinguish each section and explain what it does.  
-  
-  5) If you need to do something unusual to account for missing data, special cases, bugs in other people's code - add comments to explain what you are doing.  
-  
-  6) If there was some obvious way to do something but you could not use it for some reason, indicate why.  
-    
-  7) If you are using what seems to you to be an obscure package - note why you are using it. 
-  
-  8) If you have a close curly brace or close parenthesis that is many many lines form the where the opening brace / parenthesis is, it can be helpful to indicate what it is closing. 
-
-</details>
-
-
-<details open><summary class='drop'>Performance - Introduction</summary>
+<details open><summary class='drop'>Introduction</summary>
 
 "Performance" here refers to how fast your code does something.
 
@@ -57,6 +32,18 @@ Performance can be a consideration when:
   3) If you are doing a simulation study and need to create and manipulate large numbers of data sets. 
     
   4) If you are doing some sort of interactive visualization and need results very quickly. 
+  
+  
+For this section we will need the `tidyverse`, `lubridate`, `profvis` and `microbenchmark` libraries. 
+
+```{r libraries_performance}
+
+library(tidyverse)
+library(lubridate)
+library(profvis)
+library(microbenchmark)
+```
+
   
 </details>
 
