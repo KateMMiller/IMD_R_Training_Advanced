@@ -24,7 +24,7 @@ header-includes:
 - \setlength{\topskip}{6pt}
 - \rhead{\raisebox{-1.01cm}{\includegraphics[width=36pt] {./images/ah_small_flat_4c_blackbkgr_k100.jpg}}\hspace*{7pt}}
 - \lhead{ \textcolor{black}{\rule[-5pt]{20.6cm}{16pt}} \hspace{-20.5cm} \vspace{-0.1cm}
-  \color{white}\textsf{Eastern Forest Working Group} \textcolor{black}{\rule[-33.5pt]{20.6cm}{42pt}}
+  \color{white}\textsf{Northeast Temperate Network} \textcolor{black}{\rule[-33.5pt]{20.6cm}{42pt}}
   \hspace{-20.5cm} \color{white}\textsf{Inventory \& Monitoring Program} }
 - \chead{ \hspace{10.5cm} \color{white}\textsf{National Park Service} \\ \hspace{12.1cm}
   \color{white}\textsf{U.S. Department of the Interior} }
