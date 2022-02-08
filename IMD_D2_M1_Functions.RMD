@@ -418,7 +418,7 @@ Some questions you might have:
 
 *Can my functions call other functions?* Yes, totally common. `lm()` really  just formats the output and calls `lm.fit()` to do the heavy lifting.
 
-*Should I have functions that depend on multiple packages?* Not in my opinion. Most of the packages you are using are either compiled in C or are driven by base R. When you start writing functions that depend on a pyramid scheme of other functions you are setting yourself up for unstable functions. You are not in control of how other people decide to change (or worse not update) their packages.  
+*Should I have functions that depend on multiple packages?* It depends on the nature of your package. But in general no. You want to keep it to just a few packages. Most of the packages you are using are either compiled in C or are driven by base R. When you start writing functions that depend on a pyramid scheme of other functions, you are setting yourself up for unstable functions. You are not in control of how other people decide to change (or worse not update) their packages.  
 
 But moving on, let's see how we did and use the general framework of our original `for` loop.
 ```{r MyFirstFunction.07, echo=T, eval=F}
