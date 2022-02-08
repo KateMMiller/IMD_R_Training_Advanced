@@ -529,9 +529,7 @@ text(x= c(800, 800, 1400), y= c(18, 10, 15),
      labels = c("Sequential", "Parallel", "At 1600 elements \n my computer crashed \n... something about\n an unstable stack."), 
      col = c("black", "purple", "red"))
 ```
-
-
-If you run this on smaller datasets or faster tasks, you may see little gain or you may even discover that it is slower. This is because there is 'overhead' involved in initiating and sending tasks to threads so this only returns a benefit when the individual task takes longer than the sum total of overhead required to run a parallel session.
+That may seem excessive, but large list can easily be built during model exercises. If you run this on smaller datasets or faster tasks, you may see little gain or you may even discover that it is slower. This is because there is 'overhead' involved in initiating and sending tasks to threads. As such, this only returns a benefit when the individual task takes longer than the sum total of overhead required to run a parallel session.
 
 One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly.For that reason be sure to remeber to set the number of cores or threads you plan on using to nCores-1. In `future_lapply` we do this with `availableCores()-1`. On my machine availableCores() returns the number of logical cores (threads) which is 8. 
 ```{r cleanup, echo=F, eval=T}
