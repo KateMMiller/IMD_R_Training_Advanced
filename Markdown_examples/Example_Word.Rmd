@@ -116,12 +116,10 @@ invplot_fun(invdata, park = params$park)
 
 
 ## Literature Cited
-<p class = 'litcited'>
-Mitchell, B. R., W. G. Shriver, F. Dieffenbach, T. Moore, D. Faber-Langendoen, G. Tierney, P. Lombard, and J. Gibbs. 2006. Northeast Temperate Network Vital Signs Monitoring Plan. Technical Report NPS/NER/NRTR – 2006/059. National Park Service, Northeast Temperate Network, Woodstock, Vermont.</p>
 
-<p class = 'litcited'>
-Stevens, Don L., Jr., and A. R. Olsen. 2004. Spatially balanced sampling of natural resources. Journal of the American Statistical Association 99:262-278.</p>
+Mitchell, B. R., W. G. Shriver, F. Dieffenbach, T. Moore, D. Faber-Langendoen, G. Tierney, P. Lombard, and J. Gibbs. 2006. Northeast Temperate Network Vital Signs Monitoring Plan. Technical Report NPS/NER/NRTR – 2006/059. National Park Service, Northeast Temperate Network, Woodstock, Vermont.
 
-<p class = 'litcited'>
-Tierney, G. L., B. R. Mitchell, K. M. Miller, J. Comiskey, A. Kozlowski, and D. Faber-Langendoen. 2014. Northeast Temperate Network long-term forest monitoring protocol: 2014 revision. Natural Resource Report NPS/NETN/NRR—2014/805. National Park Service, Fort Collins, Colorado.</p>
+Stevens, Don L., Jr., and A. R. Olsen. 2004. Spatially balanced sampling of natural resources. Journal of the American Statistical Association 99:262-278.
+
+Tierney, G. L., B. R. Mitchell, K. M. Miller, J. Comiskey, A. Kozlowski, and D. Faber-Langendoen. 2014. Northeast Temperate Network long-term forest monitoring protocol: 2014 revision. Natural Resource Report NPS/NETN/NRR—2014/805. National Park Service, Fort Collins, Colorado.
 
