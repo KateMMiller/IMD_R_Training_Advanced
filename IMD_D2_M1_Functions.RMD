@@ -11,7 +11,6 @@ library(dplyr);library(ggplot2)
 #### Goals, overview, and a little review
 <details open><summary class='drop2'>Goals</summary>
 Writing code is a collection of evolutionary continua along introductory and advanced methods, new and old methods, less efficient and more efficient methods, etc. This is all driven by an evolution in the availability of functions that do different things as well as an evolution in your coding style. Our goal in this course is to provide you with tools that will expand your toolkit and help you evolve your coding approaches. 
-
 The only thing you will ever master in R is the ability to read R code and the ability to try new ways to do things - it is constantly changing.
 
 This module will provide a look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have: 
@@ -28,8 +27,7 @@ JP - Functions are a way of taking a large problem and breaking it down into sim
 <center>**When do you need to create a function?**</center>
 + When what is available doesn't do what you want it to do.
 + When you are about to do something more than twice. 
-+ When you see a repeating pattern in the code you are writing. 
-+ When you are recycling the same code and changing variable names or values.
++ When you see a repeating pattern in the code you are writing. + When you are recycling the same code and changing variable names or values.
 
 Evolution of a function
 <ul>
@@ -90,13 +88,13 @@ system.time(for (i in 1:nIter) {
 }) #2.5 seconds on my system
 rm(OutDat)
 ```
-Even on this toy example the preallocated `for` loop executes in half the time. However, we have had to put a fair amount of thought into preallocating the output object, and added code to assign output.
+Even on this toy example, the preallocated `for` loop executes in half the time. However, we have had to put a fair amount of thought into preallocating the output object, and added code to assign output.
 
-In short, if you are outputting something from a `for` loop you should always preallocate. 
+In short, if you are outputting something from a `for` loop you should always preallocate. Then you should go find a functional that does what you want. 
 
 </details>
 <details open><summary class='drop2'>Flagging Loop</summary>
-Let's step back to what we were doing in the introduction week processing hobo data. We are going to use raw hobo air temperature files. Just a little bit of background here, again, there are ~5 columns in most of these files. 
+Let's step back to what we were doing in the introduction week processing Hobo data. We are going to use raw Hobo air temperature files. Just a little bit of background here, again, there are ~5 columns in most of these files. 
   <ul>
   <li>Col. 1 is a sequential index column</li>
   <li>Col. 2 is a date and time string</li>
@@ -116,9 +114,7 @@ All we want to do with these is a little QA/QC. Usually that consists of:
 First we need to create the file names and paths we want to read in.
 ```{r MyFirstFunction.01, echo=T, eval=T}
 #create a few variables that will be used for file path manipulation later on
-inPath <- paste0(
-  "https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/"
-) #location of the data
+inPath <- "https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Intro/master/Data/" #location of the data
 fNames <- c(
   "APIS01_20548905_2021_temp.csv",
   "APIS02_20549198_2021_temp.csv",
@@ -144,11 +140,11 @@ format(object.size(HoboData), units="Mb") #how many Mb of memory is this object 
 names(HoboData)
 head(HoboData[[1]])
 ```
-This is now a list of dataframes and it is taking up ~2.3 Mb of memory - not too much. The next step is to actually do some stuff to this. Next we will go through and do some QA/QC flagging on HoboData. 
+This is now a list of dataframes and it is taking up ~2.3 Mb of memory - not too much. The next step is to actually do the QA/QC flagging on the object `HoboData`. 
 
 </details>
 <details open><summary class='drop3'><i>Data Flagging and Output Loop</i></summary>
-Next we will write a loop that will flag the data based on some criteria and then write it out to a csv file on our computer. 
+Next we will write a loop that will flag the data based on some criteria and then write it out to a csv file on our computer.  
 ```{r MyFirstFunction.03, echo=T, eval=T}
 OutPath <- paste0(getwd(), "/hobo_outputs/") # or put your preferred path here (we will use this later)
 # set up some arbitrary QA/QC thresholds
@@ -205,27 +201,27 @@ What are the problems with the the code above?
 </details>
 #### Creating Functions
 <details open><summary class='drop2'>Types of Functions</summary>
-In R (and computer science) there are two types of functions: "pure" functions and "impure" functions. This is a definition that describes their behavior, not their quality. For our purposes, an "impure" function is one that has "side effects" (e.g. modifies your system (write.csv) or the global environment) or one that can be affected by something in the global environment (e.g. it depends on a variable with a certain "name" being present in the environment that is not named in the argument list). A pure function doesn't do this and only depends on the input arguments. 
+In R (and computer science) there are two types of functions: "pure" functions and "impure" functions. This is a definition that describes their behavior, not their quality. For our purposes, an "impure" function is one that has "side effects" (e.g. modifies your system (write.csv) or the global environment) or one that can be affected by something in the global environment (e.g. it depends on a variable with a certain name being present in the global environment that is not named in the argument list). A pure function doesn't do this and only depends on the input arguments and does not modify the state of anything else in the global environment. 
 
-In general, and especially if you are preparing packages, you should *try* and separate pure and impure behaviors so that pure functions are totally pure and impure functions are totally impure. This is a goal, not a requirement of creating a function and is perhaps less critical if you are developing functions for you personal use and not developing a package. 
+In general, and especially if you are preparing packages, you should *try* and separate pure and impure behaviors so that pure functions are totally pure and impure functions are totally impure. It helps avoid unexpected surprises when executing a function. This is a goal, not a requirement of creating a function and is perhaps less critical if you are developing functions for you personal use and not developing a package. 
 
-Pure - it is some sort of mathematical function it is probably pure.
+Pure - if is some sort of mathematical function it is probably pure.
 <ul>`sqrt` `log` `mean` etc</ul>
 Impure - it has 'side effects' or is affected by the outside environment. 
 <ul> `write.csv` `plot` </ul>
 
-We will point out some example sof this in the functions we are about to develop from that for loop.
+We will point out some examples of this in the functions we are about to develop from that for loop.
 
 </details>
 
 <details open><summary class='drop2'>Anatomy of a Function</summary>
 A function *usually* has 3 components - the function name, arguments, and the body/source code/expressions. Let's look at `lm(x)` as an example:
 
-**name** - In this case it is simply "lm" which stands for linear model. Function names should be simple and somewhat intuitive. You should also be careful not to give your function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. 
+**name** - In this case it is simply "lm" which stands for linear model. Function names should be simple and somewhat intuitive. Some say they should be verbs. You should also be careful not to give your function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. 
 
 **arguments** - These are variables that are created in the parentheses and passed into the body of the equation for evaluation. Arguments tell the function what the data are and they tell it how to handle the data. In this case `lm(formula, data)` is telling the `lm` function that the first thing will be a formula and the second item will be a data object.   
 
-Almost all functions have more than 1 argument, however most of the time you are only specifying 2 or 3 when you call the function. If you want to know what arguments a function can accept, `help()` will take you to a hopefully useful explanation. In there you can see what arguments have defaults, what those defaults are, and when you should think about changing the defaults.
+Almost all functions have more than 1 argument, however most of the time you are only specifying 2 or 3 when you call the function. If you want to know what arguments a function can accept, `help()` will take you to a hopefully useful explanation. In the help, you can see what arguments have defaults, what those defaults are, and when you should think about changing the defaults. If help is unhelpful, you can always put the function name in the console and it should show you the arguments and their defaults.
 
 **source code** - This is what the function does (also called 'source', body, expressions). 95% of the time you can safely ignore the source. However, it is useful to look at the source when you want to understand why a function is doing what it is doing, modify a function, see what arguments it can accept, what the defaults are, etc. The source can be accessed by typing the function name without parentheses in the console. 
 
@@ -235,7 +231,7 @@ Unlike a for loop, R will return the last value of the function body automatical
 #run these in the console without the () to see what lies underneath
 lm
 ```
-Some functions show R source, some don't. If they don't that means they are compiled in C. `lm` has quite a lot to show us. This is just a handy trick for knowing what is going on and possibly why something isn't working. Note, here it return the output z (aka the model object) by simply having z as the last line.  
+Some functions show R source, some don't. If they don't that means they are compiled in C. `lm` has quite a lot to show us. This is just a handy trick for knowing what is going on and possibly why something isn't working. Note, here it returns the output `z` (aka the model object) by simply having `z` as the last line.  
 
 </details>
 
@@ -417,7 +413,14 @@ This changed a bit from that original version. An `if/else` statement was added.
 Is this pure or impure?
 *This is now much further over onto the impure side of the spectrum.* 
 
-Let's see how we did and use the general framework of our original `for` loop.
+Some questions you might have:
+*How many arguments can you have?* There is no limit but too many arguments that have to be entered kind of defeats the purpose of a function. It also makes it harder to use. It is fairly common to see 1-3 required arguments and then a slew of optional ones.
+
+*Can my functions call other functions?* Yes, totally common. `lm()` really  just formats the output and calls `lm.fit()` to do the heavy lifting.
+
+*Should I have functions that depend on multiple packages?* Not in my opinion. Most of the packages you are using are either compiled in C or are driven by base R. When you start writing functions that depend on a pyramid scheme of other functions you are setting yourself up for unstable functions. You are not in control of how other people decide to change (or worse not update) their packages.  
+
+But moving on, let's see how we did and use the general framework of our original `for` loop.
 ```{r MyFirstFunction.07, echo=T, eval=F}
 #OutPath <- paste0(getwd(), "/hobo_outputs/") #change this if you want it going elsewhere 
 
