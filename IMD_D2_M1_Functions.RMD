@@ -6,42 +6,51 @@ output:
     css: custom_styles.css
 ---
 ```{r setup, echo=F, eval=T, include=FALSE}
-library(dplyr)
+library(dplyr);library(ggplot2)
 ```
 #### Goals, overview, and a little review
-<details open><summary class='drop'>Goals</summary>
-Coding and writing code is an evolutionary process.  There are introductory and advanced, new and old, less efficient and more efficient ways to tackle problems. All of this represent an evolution in the availability of functions that do different things as well as an evolution in your coding style. Our goal in this course is to provide you with tools that will help you evolve your coding approaches. The only thing you will ever master in R is the ability to read R code and the ability to try new ways to do things - it is constantly changing.
+<details open><summary class='drop2'>Goals</summary>
+Coding and writing code is an evolutionary process.  There are introductory and advanced, new and old, less efficient and more efficient ways to tackle problems. All of this represents an evolution in the availability of functions that do different things as well as an evolution in your coding style. Our goal in this course is to provide you with tools that will expand your toolkit and help you evolve your coding approaches. 
 
-This module will provide a look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have. 
+The only thing you will ever master in R is the ability to read R code and the ability to try new ways to do things - it is constantly changing.
+
+This module will provide a look at how to make a function and then we will look at how you apply that function in iteration. The goal with this is to equip you with the two most powerful tools any R user can have: 
 <ul>
 1) The ability to create a function.<br> 
 
 2) The ability to use that function to get a lot of repetitive tasks done quickly.<br> 
 </ul>
 </details>
-<details open><summary class='drop'>What is a function?</summary>
+<details open><summary class='drop2'>What is a function?</summary>
 Thomas - A function is a container for a series of steps that are performed on data. It has some fixed expectations about input and output - another way of saying that is that a function expects a specific pattern(s) for input and for output. A function is also an expression of what another person thinks the right way to do something is. The nice thing is that if you don't like all that, you can write your own function, but be selective about that. 
 
 JP - Functions are a way of taking a large problem and breaking it down into simpler discrete steps. Each function can just focus on one step and makes it easier to do that step in isolation. You can then reuse the functions to help solve new problems in the future. 
 
-<ul>
-*In the beginning* - In R most people learn a `for` loop as a their first method of iteration. After learning this, most people typically write a `for` loop like what we looked at in the intro course where the `for` loop contains the full expression of code that will be implemented.<br> 
-
-*After a while* - Eventually they recognize that they are reusing or even rewriting that code in the same script or other projects. So they take it out of the script and write a function that they can use anywhere.<br> 
-
-*Later* - They may still be using that `for` loop to call the function and they may still have some code around the `for` loop that ensures it is preallocated or returning data in the correct format. It get annoying doing that every time and making sure you did it right every time. So they turn to a functional.<br>
-
-*Yet Later* - Functionals continue to evolve as new packages are released or redeveloped and the coder seeks simpler or faster ways to accomplish their goals.<br> </ul>
-
-When do you need to create a function?
-
+<center>**When do you need to create a function?**</center>
 + When what is available doesn't do what you want it to do.
 + When you are about to do something more than twice. 
-+ When you see a repeating pattern in the code you are writing. 
-+ When you are recycling the same code and changing variable names or values.
++ When you see a repeating pattern in the code you are writing. + When you are recycling the same code and changing variable names or values.
+
+Evolution of a function
+<ul>
+1) Someone writes a `for` loop as a their first method of iteration. After learning this, most people typically write a `for` loop like what we looked at in the intro course where the `for` loop contains the full expression of code that will be implemented.<br> 
+
+2) After a while they begin to recognize that they are reusing or even rewriting that code in the same script or other projects. So they wrap it in a function so thaty they can reuse it anywhere.<br> 
+
+3) They quickly realize that their `for` loop wrapped in a function isn't as flexible or as useful as they thought it would be so they start breaking it up into smaller functions. Perhaps they keep the for loop.<br> 
+
+4) They remove the for loop from inside the function. But they may be putting some combination of the function inside of a for loop to do what they need to do.<br> 
+
+5) They get tired of having to remember the tricks needed to make the for loop work they way they want each time and they turn to a "functional." They know what they want to do to the data and just want to iterate that over the data and get an expected result without too much ceremony. So they turn to a functional.<br>
+
+6) Functionals continue to evolve as new packages are released or redeveloped and the coder seeks simpler, faster, or clearer ways to accomplish their goals.<br> </ul>
+<br>
 
 </details>
-<details open><summary class='drop'>for Loop Review</summary>
+
+<details open><summary class='drop2'>for Loop Review</summary>
+*For loops aren't bad; but duplicated code can conceal important differences, and why do more work than you have to? - Hadley Wickham*
+
 Early on, many functions start out at for loops. A for loop has a `for()` statement which contains a definition of the iteration conditions usually something like`i in vec`. Then it has the body of the loop wrapped in `{}` which contains the expressions that will evaluate `i`.
 
 Consider the simple for loop that returns a dataframe to console:
@@ -82,11 +91,12 @@ system.time(for (i in 1:nIter) {
 }) #2.5 seconds on my system
 rm(OutDat)
 ```
-Even on this toy example the preallocated `for` loop executes in half the time. However, we have had to do put a fair amount of thought into preallocating the output object, and adding code to assign output.
+Even on this toy example the preallocated `for` loop executes in half the time. However, we have had to put a fair amount of thought into preallocating the output object, and adding code to assign output.
 
 In short, if you are outputting something from a `for` loop you should always preallocate or consider purrr because it preallocates for you. 
+
 </details>
-<details open><summary class='drop'>Flagging Loop</summary>
+<details open><summary class='drop2'>Flagging Loop</summary>
 Let's step back to what we were doing in the introduction week processing hobo data. We are going to use raw hobo air temperature files. Just a little bit of background here, there are ~5 columns in most of these files. 
   <ul>
   <li>Col. 1 is a sequential index column</li>
@@ -103,7 +113,7 @@ All we want to do with these is  little QA/QC. Usually that consists of:
   <li>Save it out to a new file. 
   </ul>
 
-<details open><summary class='drop2'>   Data Ingestion</summary>
+<details open><summary class='drop3'><i>Data Ingestion</i></summary>
 First we need to create the file names and paths we want to read in.
 ```{r MyFirstFunction.01, echo=T, eval=T}
 #create a few variables that will be used for file path manipulation later on
@@ -134,8 +144,9 @@ for(i in fNames){
 format(object.size(HoboData), units="Mb") #how many Mb of memory is this object now occupying
 ```
 This is now a list of dataframes and it is taking up ~2.3 mb of memory - not too much. The next step is to actually do some stuff to this. Next we will go through and do some QA/QC flagging on HoboData. 
+
 </details>
-<details open><summary class='drop2'>   Data Flagging and Output Loop</summary>
+<details open><summary class='drop3'><i>Data Flagging and Output Loop</i></summary>
 Next we will write a loop that will flag the data based on some criteria and then write it out to a csv file on our computer. 
 ```{r MyFirstFunction.03, echo=T, eval=T}
 OutPath <- paste0(getwd(), "/hobo_outputs/") # or put your preferred path here (we will use this later)
@@ -188,36 +199,44 @@ What are the problems with the the code above?
 <li>We are hardcoding the data name into the loop. So we have to remember to change the name of the data. We could avoid this with some more code and creating a copy of the variable, but that is inconvenient. </li>
 <li>We are wrangling the data *and* writing the data all in this loop. Not the worst thing that has ever happened, but it might be nice to have separate functions for this.</li>
 </ul>
+
 </details>
 </details>
-<details open><summary class='drop'>Creating Functions</summary>
-<details open><summary class='drop2'>Anatomy of a function</summary>
-*Everything is a function. But what is it really?*
-A function *usually* has 3 components - the function name, arguments, and the body/source code/expressions. 
+#### Creating Functions
+<details open><summary class='drop2'>Types of Functions</summary>
+In R (and computer science) there are two types of functions. "Pure" functions and "impure" functions. This is a definition that describes their behavior, not their quality. For our purposes, an "impure" function is one that has "side effects" (e.g. modifies your system (write.csv) or the global environment) or one that can be affected by something in the global environment (e.g. it depends on a variable with a certain "name" being present in the environment that is not named in the argument list). A pure function doesn't do this and only depends on the input arguments. 
 
-*Hang on, what was that 'usually' jazz?*
-Okay, there are 'named functions' and 'anonymous functions.' The difference is that when you plan on reusing a function, you give it a name (3 components). If you don't plan on using it ever again, you don't give it a name (2 components) and it is called an 'anonymous function.' I am going to show you examples of both, but not get too hung up on the taxonomy.
+In general, and especially if you are preparing packages, you should *try* and separate pure and impure behaviors so that pure functions are totally pure and impure functions are totally impure. This is a goal, not a requirement of creating a function and is perhaps less critical if you are developing functions for you personal use and not developing a package. 
 
-Let's look at `mean(x)` as an example:
+Pure - it is some sort of mathematical function it is probably pure.
+<ul>`sqrt` `log` `mean` etc</ul>
+Impure - it has site effects or is affected by the outside environment. 
+<ul> `write.csv` `plot` </ul>
 
-**name** - In this case it is simply "mean". Function names should be simple and somewhat intuitive (If your function calculates the data mean, but you name it "Pat" that doesn't make sense). You should also be careful not to give you function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. R is pretty good about warning you about this. 
+We will use this general idea and point out aspects of it as we encounter them a little later.
 
-**arguments** - What you put inside the parentheses. Arguments tell the function what the data are and they tell it how to handle the data. In this case `mean(x)` is telling the mean function that the data to operate on are x.  
+</details>
+
+<details open><summary class='drop2'>Anatomy of a Function</summary>
+A function *usually* has 3 components - the function name, arguments, and the body/source code/expressions. Let's look at `lm(x)` as an example:
+
+**name** - In this case it is simply "lm" which stands for linear model. Function names should be simple and somewhat intuitive. You should also be careful not to give your function the same name as something that exists in base R or in a package that you might commonly use. This can cause conflicts in your environment and unexpected results. 
+
+**arguments** - These are variables that are created in the parentheses and passed into the body of the equation for evaluation. Arguments tell the function what the data are and they tell it how to handle the data. In this case `lm(formula, data)` is telling the `lm` function that the first thing will be a formula and the second item will be a data object.   
 
 Almost all functions have more than 1 argument, however most of the time you are only specifying 2 or 3 when you call the function. If you want to know what arguments a function can accept, `help()` will take you to a hopefully useful explanation. In there you can see what arguments have defaults, what those defaults are, and when you should think about changing the defaults.
 
 **source code** - This is what the function does (also called 'source', body, expressions). 95% of the time you can safely ignore the source. However, it is useful to look at the source when you want to understand why a function is doing what it is doing, modify a function, see what arguments it can accept, what the defaults are, etc. The source can be accessed by typing the function name without parentheses in the console.
 ```{r lookingAtAFunction, eval=F}
 #run these in the console without the () to see what lies underneath
-mean
-
 lm
-
 ```
-Some functions have more information on what they are doing some don't. `mean` doesn't have much to show us. That is because it is a compiled function and part of the R source code. If you need to or already have the ability to dig down into compiled functions you probably don't need to be in this course. But, see reference [1] if you want to try! 
+Some functions show R source, some don't. If they don't that means they are compiled in C. This is just a handy trick for knowing what is going on and possibly why something isn't working.  
+
 </details>
+
 <details open><summary class='drop2'>Modifying a Function</summary>
-First things first. How do we create a function? There is a function to create functions, it is called `function()`. It can be used in two ways, either to create a named function or an anonymous function. The difference between the two is that a named function can be reused by just calling the name, while an anonymous function will need to be copy and pasted each time you want to use it. For now, we are going to focus on named functions. 
+First things first. How do we create a function? There is a function to create functions, it is called `function()`. It can be used in two ways, either to create a named function or an anonymous function. The difference between the two is that a **named function** can be reused by just calling the name, while an **anonymous function** will need to be copied and pasted each time you want to use it. **For now, we are going to focus on named functions, but will show you an anonymous function when we use one later on.**
 
 ```{r MyFirstFunction04, echo=T, eval=T}
 mean2<-  #Tell [R] that I want this new function to be named "mean2"
@@ -239,7 +258,9 @@ Let's unpack this a little:
 
  `mean(x,na.rm=na.rm)` - this passes our data to x and passes the value entered for `na.rm` to `na.rm`.<br>
 </ul>
+
 </details>
+
 <details open><summary class='drop2'>Evolving the Flagging Loop into a Function I</summary>
 Let's start evolving that original `for` loop into a function (or functions) so that we can rerun it on other hobo data in the future without needing to copy and paste this. As the for loop was written, its the primary purpose was to flag and write out the data. A logical first step is to basicaly just wrap the `for` loop in a `function(){}` declaration with a few arguments. 
 
@@ -250,7 +271,7 @@ Note as I progress through this, I am going to comment out non-essential bits of
 #TempUpper <- 40
 #TempLower <- (-40)
 
-HoboQAQCeR <- function(data, #If we supply data = HoboData, the code below will substitute all instance of "data" with "???". 
+HoboQAQC <- function(data, #If we supply data = HoboData, the code below will substitute all instance of "data" with "???". 
                        fNames = names(data), #extract the file names that are supplied to data as the default filenames
                        OutPath = paste0(getwd(), "/hobo_outputs/"), #set up an output path character string.
                        TempUpper = 40, #Make the temperature flag thresholds into one of  the function's arguments. 
@@ -282,15 +303,15 @@ HoboQAQCeR <- function(data, #If we supply data = HoboData, the code below will 
   }
 }
 
-#HoboQAQCeR(data=HoboData) #uncomment to call function
+#HoboQAQC(data=HoboData) #uncomment to call function
 ```
 
-By wrapping it in function and setting some default values, we can call this by simply invoking `HoboQAQCeR(data=HoboData)`.This is basically identical to our original `for` loop, but we have made some changes. The primary change is that we can put any list that has the same columns and list structure into this function now. 
+By wrapping it in function and setting some default values, we can call this by simply invoking `HoboQAQC(data=HoboData)`.This is basically identical to our original `for` loop, but we have made some changes. The primary change is that we can put any list that has the same columns and list structure into this function now. 
 
 Let's break it down: 
 
 <ul>
-`HoboQAQCeR <- function(` - declare a function that is going to be named `HoboQAQCeR`. It will take the arguments that are listed in `function()`<br>
+`HoboQAQC <- function(` - declare a function that is going to be named `HoboQAQC`. It will take the arguments that are listed in `function()`<br>
 
 `data,` - The first argument of our function. Something has to be supplied here each time in the form of `data = Something` or just `Something`. If just a variable name is supplied, the function will assume that the first thing it receives is the data. What this does is in the environment of that function, is that it creates a variable named `data` that contains a copy of the data that was in `VariableName`. <br>  
 
@@ -302,17 +323,23 @@ Let's break it down:
 `{` - defines the start of the function environment. All variables defined in here and in the function list are available within the function environment only. The function is closed at the bottom with a corresponding `}`. <br>
 </ul>
 
-Let's say we want to go back and do this again next year. We could could easily reuse this. However, this is not as flexible as it could be. This is pretty rigid in terms of what things must be named (e.g. temperature must be named `T_F`), not all of the thresholds can be changed, and it is not putting our data into an environment variable.   
+What are the impure aspects of this function?
+*The obvious one is that it is creating directories and writing out files to the hard drive.*
+
+Let's say we want to go back and do this again next year. We could could easily reuse this. However, this is not as flexible as it could be. This is pretty rigid in terms of what things must be named (e.g. temperature must be named `T_F`), not all of the thresholds can be changed, and it is not putting our data into an environment variable.  
+
 </details>
+
 <details open><summary class='drop2'>Evolving the Flagging Loop into a Function II</summary>
 Now, let's turn our previous flagging loop into a function that we can reuse later. First we are going to take for loop apart and focus on creating a function that will flag the data, then we will create one that writes the data. 
 
+*functions shown here are to demonstrate function development and should be not be used for actual data QA/QC.*
 ```{r MyFirstFunction.05, echo=T, eval=T,results='hide'}
 #OutPath <- paste0(getwd(), "/hobo_outputs/") 
 
 #for (i in fNames) {
 
-HoboFlaggeR <- function(data, #argument that accepts the name of the input data, assumed to be a dataframe. 
+HoboFlag <- function(data, #argument that accepts the name of the input data, assumed to be a dataframe. 
                         TempName="T_F", #Gives us some flexibility if we want to supply a different column name
                         TChange=10, #Allows to provide a value for the temperature change flagging threshold 
                         TempUpper=40, #provide a value for the upper temperature limit flag 
@@ -341,13 +368,17 @@ That gives us a function that will flag the data. We put some options into the c
 There are two new things we did here
 `get()` - This searches for an object name supplied as a character string or symbol. If we were to supply it as a symbol `T_F` in the function arguments, then the function would look for `T_F` in the global environment and wouldn't findit. By providing it as a character string, it is treating it as a piece of data for now. Get then uses that to look within the environment of the dplyr data pipe to find the object with the corresponding name. There are other ways to do this, but this is currently the simplest I am aware of. 
 
-`return()` - If you want something exported from a function into the global environment you have to tell it to `return()` something. 
+`return()` - If you want something exported from a function into the global environment you have to tell it to `return()` something.
+
+Is `HoboFlag` pure or impure?
+*I am not sure if it is entirely pure, but it is much closer to that side of the spectrum.*
 
 Arguably, the data writing step was a completely separate task. So, we should create a second function to tackle that.
 
+*functions shown here are to demonstrate function development and should be not be used for actual data QA/QC.*
 ```{r MyFirstFunction.06, echo=T, eval=T}
 #Writes the data out and creates directories. 
-HoboWriteR <- function(i, #an index variable, needs to be the filename.
+HoboWrite.csv <- function(i, #an index variable, needs to be the filename.
                        data, #this is the input data, it could be a list or a dataframe, but ultimately we will need to output a dataframe from this function.
                        OutPath=paste0(getwd(), "/hobo_outputs/"), #same as before
                        ...) { # elipsis will let us pass in some optional arguments on the columns we want.
@@ -369,42 +400,48 @@ HoboWriteR <- function(i, #an index variable, needs to be the filename.
 ```
 This changed a bit from that original version. An `if/else` statement was added. This was done to allow some flexibility so this function could work with either a `for` loop or a functional named `lapply()` (we will get to that in a minute) and still track the file name without a whole lot of issue.
 
+Is this pure or impure?
+*This is now much further over onto the impure side of the spectrum.* 
+
 Let's see how we did and use the general framework of our original `for` loop.
 ```{r MyFirstFunction.07, echo=T, eval=F}
 #OutPath <- paste0(getwd(), "/hobo_outputs/") #change this if you want it going elsewhere 
 
 for (i in fNames) {
-HoboFlaggeR(HoboData[[i]])%>%
-HoboWriteR(i, data= . , OutPath = OutPath)
+HoboFlag(HoboData[[i]])%>%
+HoboWrite.csv(i, data= . , OutPath = OutPath)
 rm(i) #optional housekeeping
 }
 ```
-Cool! These functions are pretty specific to a certain types of data, but you get the idea. Because we have created functions with a variety of arguments, if we want to change all or some of the flagging values we are using, we don't need to do a whole lot other than supply different values to those variables. Note: this does not change the defaults. 
+Cool! These functions are pretty specific to a certain type of data so they aren't super useful, but you get the idea. Because we have created functions with a variety of arguments, if we want to change all or some of the flagging values we are using, we don't need to do a whole lot other than supply different values to those variables. 
 
+Note: Giving it a different value when you call the function (see below) only changes the value of that argument for that one call of the function. The default will be as before in the next call of the funciton if it is not changed.
 ```{r MyFirstFunction.08, echo=T, eval=F}
 OutPath <- paste0(getwd(), "/hobo_outputs/") 
 
 for (i in fNames) {
-HoboFlaggeR(HoboData[[i]], TChange=15)%>%
-HoboWriteR(i, data= . , OutPath = OutPath)
+HoboFlag(HoboData[[i]], TChange=15)%>%
+HoboWrite.csv(i, data= . , OutPath = OutPath)
 rm(i) #optional housekeeping
 }
 ```
 
 Wouldn't it be nice if we weren't setting up that `for` loop every time and it was easier to get the data back out of this?
-</details>
-</details>
-<details open><summary class='drop'>Functional Programming</summary>
-<details open><summary class='drop2'>Functional Programming Defined</summary>
-"Functional programming" isn't about writing code that is *functional*, it is a technical thing. For our purposes, a functional is a higher-order function that takes a function and data as its input (maybe a few other things as well) and returns a predefined certain output (.e.g  vector, list, dataframe, etc). Each functional has a fixed type of input and a fixed type of output. This is one of the reasons why functionals are preferred over for loops. Functionals have an expected behavior. With for loops you are defining the behavior. With functionals, that is largely done and you are just picking the one or combination that does what you want. This course focuses on `apply` and `map` families. 
 
-**The end goal of functional programming is more stable, transparent, and reliable code.**
+</details>
+
+#### Functional Programming
+<details open><summary class='drop2'>Functional Programming Defined</summary>
+"Functional programming" isn't about writing code that works or is *functional*, it is a paradigm for coding. The end goal of functional programming is more stable, transparent, and reliable code. The basic idea is: <i>We have these nice functions that behave in very specific and predicatble ways, why stuff them into unruly for loops and spend time trying to figure out how to iterate them and get the data out?</i> 
+
+
+For our purposes, a **functional** is a higher-order function that takes a function (and data) as its input (maybe a few other things as well) and returns a predefined output (.e.g  vector, list, dataframe, etc). Each functional has a fixed type of input and a fixed type of output. This is one of the reasons why functionals are preferred over `for` loops - no surprises. Functionals have an expected behavior. With for loops you are defining the behavior and probably have not define how it should react to all possible cases. With functionals, that is largely done and you are just picking the functional (or combination of fucntionals) that do what you want. This course focuses on `apply` and `map` families. 
 
 </details>
 <details open><summary class='drop2'>apply Family of Functionals</summary>
 One family of functionals that often replaces `for()` is the `apply` family of functions. There are a lot of options for what to use depending on your inputs, what you want to do, and expected outputs. Two of the primary advantages of functionals is a known mode of iteration and a known output. 
 
-`apply()` - operates on things resembling a dataframe. It will operate on everything so it has to be reduce to only data classes that the vectorized function you want to apply can handle. It can operate by row `MARGIN=1` or by column `MARGIN=2` and the output will be a named vector. 
+`apply()` - operates on things resembling a dataframe. It will operate on everything so it has to be reduced to only data classes that the vectorized function you want to apply can handle. It can operate by row `MARGIN=1` or by column `MARGIN=2` and the output will be a named vector. 
 ```{r ApplyFamily.0, echo=T, eval=T,results='hide'}
 apply(mtcars, MARGIN = 2, FUN=function(x) sd(x)/mean(x)) #anonymous function that calculates the coefficient of variation 
 ```
@@ -426,67 +463,77 @@ data_list<-list(A=1:10, B=11:20, C=c(21:29,NA))
 sapply(data_list, mean2)
 ```
 
-You will find and learn about apply functions as you need them. In my work, I find `lapply()` to be the most versatile for the types of data operations I need to do.   
+You will find and learn about apply functions as you need them. In my work, I find `lapply()` to be the most versatile for the types of data operations I need to do.
+
 </details>
  
 <details open><summary class='drop2'>Flagging functions with lapply() </summary>
-Now we are going to step back to those functions we created `HoboFlaggeR()` and `HoboQAQCeR()` and call them with lapply.  
+Now we are going to step back to those functions we created `HoboFlag()` and `HoboWrite()` and call them with lapply.  
 ```{r MyFirstFunction.09, echo=T, eval=T, results=F}
 OutPath <- paste0(getwd(), "/hobo_outputs/") 
 
-lapply(HoboData, FUN=HoboFlaggeR)%>%
-lapply(names(.), FUN=HoboWriteR, data=., OutPath=OutPath)
+lapply(HoboData, FUN=HoboFlag)%>%
+lapply(names(.), FUN=HoboWrite.csv, data=., OutPath=OutPath)
 ```
 
 If we want those data available in the global environment for further manipulation, we just run that function through `lapply()` separately.
 ```{r MyFirstFunction.10, echo=T, eval=T,results='hide'}
-d<-lapply(HoboData, FUN=HoboFlaggeR)
+d<-lapply(HoboData, FUN=HoboFlag)
 #str(d) #uncomment to inspect
 ```
 
-Once we are done with further manipulation, we have the option to pass it back to the `HoboWriteR()` function.  
+Once we are done with further manipulation, we have the option to pass it back to the `HoboWrite.csv()` function.  
 ```{r MyFirstFunction.11, echo=F, eval=F,results='hide'}
 OutPath <- paste0(getwd(), "/hobo_outputs/") 
 
-lapply(names(d), FUN=HoboWriteR, data=d, OutPath=OutPath )
+lapply(names(d), FUN=HoboWrite.csv, data=d, OutPath=OutPath )
 ```
+
 </details>
-<details open><summary class='drop'>Flagging functions with lapply() </summary>
-We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single processing core. In other words, for something like lapply (or `map`, or `foreach`) it processes each iteration sequentially on a single core. It doesn't need to be that way. Most computers have more than 2 cores.  you could be executing different independent iteration steps on separate cores and recombining the results. This is called 'parallel processing'.
+#### Parallel Processing
+<details open><summary class='drop2'>Parallel Processing</summary>
+We are dealing with small problems. Small problems seldom push into the limits of your computer. Large datasets and complex functions can take a long time to process (even after you fully optimize them). In R, this is primarily a function of your processor speed. R is only running on a single thread (thread not core). In other words, for something like `lapply()` or `map()` it processes each iteration sequentially on a single thread. It doesn't need to be that way. My computer has 4 physical cores and 2 threads (logical cores) per physical core.  You could be executing different independent iterations steps on separate cores/threads and recombining the results. This is called 'parallel processing'.
 
-There are versions of this out there for `lapply` but they never seem to work quite right. But, the good news is that there does appear to be a ~new unified framework that can be used for any coding style. So, base, tidy, and foreach approaches can all be easily parallelized using the functions in the `future.apply` package. 
+But, the good news is that the futures packages provides a unified framework for conducting parallel processing in R providing solutions for `apply` and `map` families. For apply family it is the `future.apply` package and for map it is `furrr`.
 
-So let's explore and time a parallelization of lapply. Your code may vary if not on Windows. This will take 1-2 minutes to run depending on your computer.
-
-```{r ggcustom, eval=T, echo=T}
-ggplotCustom <- function(i, DataList, pattern = ".csv", replacement = "_plot.pdf", OutPath = paste0(getwd(), "/hobo_outputs/"), device = "pdf", height = 5, width = 5, units = "in") {
-  p <- ggplot(data = DataList[[i]], aes(x = idx, y = T_F)) +
-    geom_point() +
-    ggtitle(names(DataList)[i])
-  ggsave(
-    filename = gsub(pattern = pattern, replacement = replacement, names(DataList)[i]),
-    path = OutPath, plot = p, device = device,
-    height = height, width = width, units = units
-  )
-}
-```
+You can experiment with different ways to do this, but we are going to create a plotting function. This is an 'impure' function that save the output to your harddrive. 
 
 ```{r Parallelapply, eval=F}
+#You don't need to run this. I have run this for you below.
 library(future.apply)
-HoboData2 <- c(rep(HoboData, 5)) # make the dataset larger
+HoboData2 <- c(rep(HoboData, 5)) #optionally make the dataset larger. This will take the below code longer to run.
 
-plan("multisession", workers = parallel::detectCores() - 1) # initiate a multicore session, the number of cores to use to 1 fewer than the max detected. Reduces chance of overwhelming the system.
+plan(multisession, workers = availableCores()-1) # initiate a multisession cores/sessions is set to use 1 fewer than the max detected. Reduces chance of overwhelming the system.
 microbenchmark::microbenchmark(
-  "sequential"={lapply(seq_along(HoboData2), FUN=ggplotCustom, HoboData2)},
-  "parallel"={future_lapply(seq_along(HoboData2), FUN=ggplotCustom, HoboData2)},
-  times=5,
-  unit="s"
+  
+  "sequential"=lapply(HoboData2, FUN=HoboFlag),
+  
+  "parallel"=future_lapply(HoboData2, FUN=HoboFlag),
+  
+  times=5, #number of times to do this
+  unit="s" #units of time needed to completely evaluate each expression
 )
-plan("sequential")  # close the multicore session.
-
+plan("sequential")  # Important! close the multicore session by setting it back to sequential.
+rm(HoboData2)
 ```
-My run says that parallelization was 23% faster than sequential. Not a huge speed improvement, but something to keep in mind to try if a chunk of code is taking ~30 minutes to execute. Now I kind of want to go and see if this approach can speed up `file.copy`. 
+I will let you run this on your own machines if you are interested. I wouldn't recommend doing this now, it takes about 5-10 mins. Results will vary by computer. My run says that parallelization was 23% faster than sequential. Not a huge speed improvement, but something to keep in mind to try if a chunk of code is taking ~30 minutes to execute. 
 
-One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly. Best to test it with small data then scale up.
+```{r parallelPlot, echo=T, eval=T}
+#low tech for high tech data
+ListItems <- 25 * 2^(0:6) # Number of list items
+Sequential <- c(0.52, 1.08, 2.42, 4.39, 9.08, 18.05, NA) # mean time to complete in s
+Parallel <- c(1.1, 1.26, 2.19, 3.58, 5.9, 11.17, NA) # mean time to complete in s
+plot(Sequential ~ ListItems, type = "l", col = "black", lwd = 2, ylab= "time (s)", xlab="# of list elements")
+lines(Parallel ~ ListItems, col = "purple", lwd = 2, lty = 3)
+text(x= c(800, 800, 1400), y= c(18, 10, 15), 
+     labels = c("Sequential", "Parallel", "At 1600 elements \n my computer crashed \n... something about\n an unstable stack."), 
+     col = c("black", "purple", "red"))
+```
 
 
+If you run this on smaller datasets or faster tasks, you may see little gain or you may even discover that it is slower. This is because there is 'overhead' involved in initiating and sending tasks to threads so this only returns a benefit when the individual task takes longer than the sum total of overhead required to run a parallel session.
+
+One important thing to remember is that initiating a parallel session can slow down your computer significantly if not done properly.For that reason be sure to remeber to set the number of cores or threads you plan on using to nCores-1. In `future_lapply` we do this with `availableCores()-1`. On my machine availableCores() returns the number of logical cores (threads) which is 8. 
+```{r cleanup, echo=F, eval=T}
+rm(list=ls())
+```
