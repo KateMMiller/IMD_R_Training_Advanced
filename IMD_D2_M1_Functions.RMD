@@ -455,17 +455,19 @@ For our purposes, a **functional** is a higher-order function that takes a funct
 <details open><summary class='drop2'>apply Family of Functionals</summary>
 One family of functionals that often replaces `for()` is the `apply` family of functions. There are a lot of options for what to use depending on your inputs, what you want to do, and expected outputs. Two of the primary advantages of functionals is a known mode of iteration and a known output. 
 
-`apply()` - operates on things resembling a dataframe. It will operate on everything so it has to be reduced to only data classes that the vectorized function you want to apply can handle. It can operate by row `MARGIN=1` or by column `MARGIN=2` and the output will be a named vector. 
+`apply()` - operates on things resembling a dataframe. It will operate on everything in that object so it has to be reduced to only data classes that the vectorized function you want to apply can handle. It can operate by row `MARGIN=1` or by column `MARGIN=2` and the output will be a named vector. (It can also operate by each element of the dataframe if you set the `MARGIN=c(1,2)`, I have difficulty imagining why you would want to do that.) 
 ```{r ApplyFamily.0, echo=T, eval=T,results='hide'}
 apply(mtcars, MARGIN = 2, FUN=function(x) sd(x)/mean(x)) #anonymous function that calculates the coefficient of variation 
 ```
 <br>
 But perhaps we prefer list output to vector output. `lapply()` could be called to operate on a dataframe, in which case it will operate on each column. This is similar to `apply` with `MARGIN=2` but with list output. 
 ```{r ApplyFamily.1, echo=T, eval=T,results='hide'}
-lapply(mtcars, FUN=function(x) sd(x)/mean(x))
+lapply(mtcars, FUN=function(x) sd(x)/mean2(x))
 ```
+In general, I do not find myself frequently using `apply` families of functions to operate on single dataframes. There are more convenient options available for those types of tasks in `dplyr` and other coding frameworks in R.
+
 <br>
-`lapply()` - Takes a list (or vector) as input and provide a list as output.
+`lapply()` - Takes a list (or vector) as input and provides a list as output. So, we could pass it a list of vectors or a list of dataframes.
 ```{r ApplyFamily.2, echo=T, eval=T,results='hide'}
 data_list<-list(A=1:10, B=11:20, C=c(21:29,NA))
 lapply(data_list, mean2)
@@ -476,10 +478,9 @@ lapply(data_list, mean2)
 data_list<-list(A=1:10, B=11:20, C=c(21:29,NA))
 sapply(data_list, mean2)
 ```
+You will find and learn about apply functions as you need them. In my work, I find `lapply()` to be the most versatile for the types of data operations I need to do. 
 
-You will find and learn about apply functions as you need them. In my work, I find `lapply()` to be the most versatile for the types of data operations I need to do.
-
-But remember, a functional may not be the solution, many tasks in R are `vectorized`. What we can accomplish with `apply`ing `mean` to `mtcars` could just as easily be done with `colmeans()`.
+But remember, a functional may not be the solution, many tasks in R are `vectorized`. What we can accomplish with `apply`ing `mean` to `mtcars` could just as easily be done with `colmeans()`. Google and Stackoverflow are a good way to find these simpler solutions. 
 </details>
  
 <details open><summary class='drop2'>Flagging functions with lapply() </summary>
@@ -490,26 +491,27 @@ OutPath <- paste0(getwd(), "/hobo_outputs/")
 lapply(HoboData, FUN=HoboFlag)%>%
 lapply(names(.), FUN=HoboWrite.csv, data=., OutPath=OutPath)
 ```
-
-If we want those data available in the global environment for further manipulation, we just run that function through `lapply()` separately.
+<br>
+If we want those data available in the global environment for further manipulation, we just run the HoboFlag function through `lapply()` separately and assign its output to a variable in the environment.
 ```{r MyFirstFunction.10, echo=T, eval=T,results='hide'}
 d<-lapply(HoboData, FUN=HoboFlag)
 #str(d) #uncomment to inspect
 ```
-
+<br>
 Once we are done with further manipulation, we have the option to pass it back to the `HoboWrite.csv()` function. 
 ```{r MyFirstFunction.11, echo=F, eval=F,results='hide'}
 OutPath <- paste0(getwd(), "/hobo_outputs/") 
 
 lapply(names(d), FUN=HoboWrite.csv, data=d, OutPath=OutPath )
 ```
-Or we could get wild and pass it to lm, then extract coefficients, and then...
+<br>
+Or, we could get wild and pass it to lm, then extract coefficients, and then...
 ```{r MyFirstFunction.12, echo=F, eval=F,results='hide'}
-Sites<-names(d)[-3]
-lapply(Sites, FUN=function(x) lm(T_F~idx, data=d[[x]]))%>%
-lapply(coef)%>%
-bind_rows()%>%  
-dplyr::mutate(Sites=Sites,.before="(Intercept)")
+Sites<-names(d)[-3] #remove a problem site with no data
+lapply(Sites, FUN=function(x) lm(T_F~idx, data=d[[x]]))%>% #anonymous function
+lapply(coef)%>% #extract slope and intercept
+bind_rows()%>% #glue all the list items together into 1  
+dplyr::mutate(Sites=Sites,.before="(Intercept)") #add the new column before the existing column named "(Intercept)"
 
 ```
 
@@ -549,7 +551,7 @@ library(ggplot2)
 d<-data.frame(ListItems=rep(25 * 2^(0:5),2), # Number of list items
               Type=rep(c("Sequential","Parallel"),each=6),
               Time_s=c(0.52, 1.08, 2.42, 4.39, 9.08, 18.05, 
-                        1.1, 1.26, 2.19, 3.58, 5.9, 11.17)) # mean time to complete in s
+                        1.1, 1.26, 2.19, 3.58, 5.9, 11.17)) # mean time to complete time in s
 
     ggplot(data=d, aes(ListItems, Time_s))+ 
     geom_line(aes(colour=Type,linetype=Type))+
