@@ -518,16 +518,17 @@ rm(HoboData2)
 ```
 I will let you run this on your own machines if you are interested. I wouldn't recommend doing this now, it takes about 5-10 mins. Results will vary by computer. My run says that parallelization was 23% faster than sequential. Not a huge speed improvement, but something to keep in mind to try if a chunk of code is taking ~30 minutes to execute. 
 
-```{r parallelPlot, echo=T, eval=T}
-#low tech for high tech data
-ListItems <- 25 * 2^(0:6) # Number of list items
-Sequential <- c(0.52, 1.08, 2.42, 4.39, 9.08, 18.05, NA) # mean time to complete in s
-Parallel <- c(1.1, 1.26, 2.19, 3.58, 5.9, 11.17, NA) # mean time to complete in s
-plot(Sequential ~ ListItems, type = "l", col = "black", lwd = 2, ylab= "time (s)", xlab="# of list elements")
-lines(Parallel ~ ListItems, col = "purple", lwd = 2, lty = 3)
-text(x= c(800, 800, 1400), y= c(18, 10, 15), 
-     labels = c("Sequential", "Parallel", "At 1600 elements \n my computer crashed \n... something about\n an unstable stack."), 
-     col = c("black", "purple", "red"))
+```{r parallelPlot, echo=F, eval=T}
+library(ggplot2)
+#set data up for ggplot
+d<-data.frame(ListItems=rep(25 * 2^(0:5),2), # Number of list items
+              Type=rep(c("Sequential","Parallel"),each=6),
+              Time_s=c(0.52, 1.08, 2.42, 4.39, 9.08, 18.05, 
+                        1.1, 1.26, 2.19, 3.58, 5.9, 11.17)) # mean time to complete in s
+
+    ggplot(data=d, aes(ListItems, Time_s))+ 
+    geom_line(aes(colour=Type,linetype=Type))+
+    theme_classic()
 ```
 That may seem excessive, but large list can easily be built during model exercises. If you run this on smaller datasets or faster tasks, you may see little gain or you may even discover that it is slower. This is because there is 'overhead' involved in initiating and sending tasks to threads. As such, this only returns a benefit when the individual task takes longer than the sum total of overhead required to run a parallel session.
 
