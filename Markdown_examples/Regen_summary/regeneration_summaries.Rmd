@@ -1,0 +1,419 @@
+---
+output: 
+  html_document:
+    fig_caption: yes
+    css: www/styles.css
+    anchor_sections: FALSE
+    includes:
+        in_header: "header_manual.html"
+fig_width: 6 
+fig_height: 4 
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.kable.NA = '')
+```
+
+```{r imports, include = FALSE, results = 'hide'}
+library(tidyverse)
+library(forestTrends)
+library(png)
+library(knitr)
+
+dens_df <- read.csv("../Data/EFWG_full_dataset_20211101.csv")
+park_names <- read.csv("../Data/park_names.csv")
+```
+
+```{r capnums, echo = FALSE, include = FALSE}
+outputFormat = opts_knit$get("rmarkdown.pandoc.to")
+fignum = 1
+numFig = function(x){
+  if(outputFormat == 'html'){
+    x = paste0("<br><b>Figure ", fignum, ". </b>", x)
+    fignum <<- fignum + 1
+  }; x
+}
+
+```
+
+```{r, list_setup, include = FALSE}
+parks <- unique(dens_df$Unit_Code)
+networks <- unique(dens_df$Network)
+```
+DRAFT Region 1 Forest Regeneration Summaries {.tabset .tabset-pills}
+---------------------------------------------------
+### About the Project
+<h2>Introduction</h2>
+Forests cover tens of thousands of acres in eastern national parks, providing habitat for countless plants, animals, fungi, and insects. Beyond offering beautiful landscapes for outdoor recreation and learning about our nation’s history, park forests protect water quality and soil stability, as well as influence our local weather and reduce some gases that contribute to climate change. 
+ 
+However, these critical park resources face a range of interacting stressors: invasive plant dominance, over-abundant white-tailed deer populations, development of surrounding lands, novel pests and pathogens, altered disturbance regimes, increasingly frequent extreme weather events, and changing climate conditions. 
+ 
+Forest health monitoring data from five Inventory and Monitoring (I&M) Networks within NPS Region 1 have identified concerning long-term, region-wide trends in tree regeneration that indicate significant threats to future sustainability of park forests. An abundant regeneration layer containing tree seedlings and saplings (small trees) of varying sizes and composed of species found in the canopy is an important component of a healthy forest. Many parks lack the minimum level of seedling and sapling density needed to replace canopy trees as they die, whether from age, natural disturbance, or the effects of non-native pests and pathogens. When forests lack sufficient regeneration, or the species composition in the regeneration layer does not match the canopy, we call this a regeneration debt (<a href="https://irma.nps.gov/DataStore/DownloadFile/646625">Miller & McGill 2019</a>). The most severe form of regeneration debt is a complete lack of regeneration, which, if allowed to persist, can ultimately lead to loss in forest habitat. 
+ 
+Even in parks where I&M has documented “healthy” regeneration (i.e., seedling and sapling density at levels sufficient to sustain a future tree canopy), some regeneration is composed of primarily non-canopy tree species or species whose future is known to be threatened (e.g., ash trees (Fraxinus spp.), which are being decimated by an exotic insect pest, Emerald Ash Borer). Compositional mismatch between the species in the regeneration layer and the canopy is another type of regeneration debt that can be problematic if the species in the regeneration layer are invasive, like tree-of-heaven (<i>Ailanthus altissima</i>), or suboptimal, like ash. 
+ 
+The regeneration failure observed across the region is occurring with a simultaneous increase in non-native plant abundance (<a href="https://irma.nps.gov/DataStore/DownloadFile/657390">Miller et al. 2020</a>), which may further suppress regeneration. The increasing trend in non-native plants has been documented in most parks, even those where deer density and browse have been brought under control through years of deer management.  
+ 
+At worst, these stressors cause the parks’ native forests to be replaced by thickets of exotic invasive shrubs that impede cultural viewsheds and increase visitors’ exposure to disease-carrying ticks. Collectively, these impacts can result in increased operational costs for parks to ensure visitor safety and preserve park infrastructure and have the potential to change the character of a park’s specific resource that visitors have come to enjoy. Managing for resilient park forests is imperative to ensure long-term ecosystem health, maintain biodiversity, and meet the NPS mission of preserving park resources unimpaired for future generations.
+
+This document summarizes status and trends in forest structure and diversity, primarily related to tree regeneration, using data collected by the National Park Service Inventory and Monitoring Division (I&M) in 39 parks spanning five I&M networks in Region 1 (Figure 1). Trends are based on change over time across three complete survey cycles, with Cycle 1 spanning 2008 – 2011, Cycle 2 spanning 2012 – 2015, and Cycle 3 spanning 2016 – 2019. Status is based on the most recent 4-year survey period that is consistent among all parks, which is 2016 – 2019. These results are currently in draft and are being used to frame multiple reports and manuscripts on forest regeneration in eastern parks. This document is not to be shared publicly.
+
+```{r map, fig.cap = numFig("Map of parks included in regional regeneration project."), out.width='70%', dpi = 600}
+
+include_graphics("./results/map_of_parks.jpg")
+```
+
+<h2>Methods</h2>
+```{r, methods, results='asis', echo=F}
+cat(readLines('Methods.html'))
+```
+
+<h2>Literature Cited</h2><div style="text-indent: -36px; padding-left:36px;">
+<p>Bates, D., M. Maechler, and B. Bolker. 2015. Fitting linear mixed-effects models using lme4. Journal of Statistical Software 67:1–48.</p>
+
+<p>Givens, G. H., and J. A. Hoeting. 2012. Computational statistics. John Wiley &amp; Sons, Hoboken, New Jersey, USA.</p>
+
+<p>Maas, C.J., and J.J. Hox. 2004. The influence of violations of assumptions on multilevel parameter estimates and their standard errors. Computational Statistics &amp; Data Analysis 46:427–440.</p>
+
+<p>Miller, K.M. and B.J. McGill. 2019. Compounding human stressors cause major regeneration debt in over half of eastern US forests. Journal of Applied Ecology 56(6): 1355-1366.</p>
+
+<p>Miller, K.M., B.J. McGill, A.S. Weed, C.E. Seirup, J.A. Comiskey, E.R. Matthews, S.J. Perles, and J.P. Schmit. 2021. Long‐term trends indicate that invasive plants are pervasive and increasing in eastern national parks. Ecological Applications 31(2):p.e02239.</p>
+
+<p>McWilliams, W.H., Westfall, J.A., Brose, P.H, Dey, D.C., Hatfield, M., Johnson, K., Laustsen, K.M., Lehman, S.L., Morin, R.S., Nelson, M.D., Ristau, T.E., Royo, A.A., Stout, S.L., Willard, T., Woodall, C.W. 2015. A regeneration indicator for Forest Inventory and Analysis: history, sampling, estimation, analytics, and potential use in the midwest and northeast United States. Gen. Tech. Rep. NRS-148. Newtown Square, PA: U.S. Department of Agriculture, Forest Service, Northern Research Station. 74 p. <a href="https://doi.org/10.2737/NRS-GTR-148" class="uri">https://doi.org/10.2737/NRS-GTR-148</a>.</p>
+
+<p>Niewinski, A.T., T.W. Bowersox, and R.L. Laughlin. 2006. Vegetation Status in Selected Woodlots at Gettysburg National Military Park Pre and Post White-tailed Deer Management. Technical Report NPS/NER/NRTR–2006/037. National Park Service. Philadelphia, PA.</p>
+
+<p>Stevens, D.L., and A.R. Olsen. 2004. Spatially balanced sampling of natural resources. Journal of the American Statistical Association 99:262–278.</p>
+
+<p>Vickers, L.A., W.H. McWilliams, B.O. Knapp, A.W. D’Amato, M.R. Saunders, S.R. Shifley, J.M. Kabrick, D.C. Dey, D.R. Larsen, and J.A. Westfall. 2019. Using a tree seedling mortality budget as an indicator of landscape-scale forest regeneration security. Ecological Indicators 96:718-727.</p>
+</div>
+
+### Summary {.tabset}
+
+#### Regeneration Status
+
+```{r grid, fig.cap = numFig("Summary of status and trends for each metric and park combination grouped by regeneration condition adapted from <a href='https://www.fs.fed.us/nrs/pubs/jrnl/2018/nrs_2018_vickers_001.pdf'>Vickers et al. (2018).</a> Regeneration status categories are defined as: "), out.width = "90%"}
+
+include_graphics("./results/intercept_lat_net/results_grid4.svg")
+```
+
+<p class='caption'>
+<ul>
+<li><b>Imminent Failure:</b> Parks that are experiencing severe regeneration failure and are at risk of forest loss. In some cases, for example MORR, forest loss is already underway.</li>
+<li><b>Probable Failure:</b> Parks are also experiencing regeneration failure as indicated by lacking and/or declining sapling density, although seedlings are more abundant than in the Imminent Failure category.</li>
+<li><b>Insecure: </b> Parks lack sapling density, but have sufficient and often increasing seedling layers and overall lower deer browse impacts. Significant trends in the Insecure category tend to be due to forest dynamics, like succession, than regeneration failure.</li>
+<li><b>Secure: </b> Parks have abundant seedling and sapling layers and show few concerning trends.</li>
+</ul>
+</p>
+<p class='caption'>
+Status metrics (row 1) are based on the most recent 4 years of data (2016:2019). Status thresholds were defined as:
+<ul class = 'caption'>
+<li><b>Sapling Density: </b> Densities &lt; 0.1 stems/sq.m are classified as Critical; densities between 0.1 – 0.3 stems/sq.m are classified as Caution (Niewinski et al. 2006); densities ≥ 0.3 stems/sq.m are classified as Acceptable.</li>
+<li><b>Sapling Density: </b> Densities &lt; 0.25 stems/sq.m are classified as Critical; densities between 0.25 – 1.99 stems/sq.m are classified as Caution; densities ≥ 2 stems/sq.m are classified as Acceptable.</li>
+<li><b>% Stocked Plots: </b> Proportions &lt;33% are classified as Critical; proportions between 33% – 66% are classified as Caution; proportions ≥ 67% stems/sq.m is classified as Acceptable. Note that stocking thresholds are adjusted based on park average deer browse index, such that parks that average 3 or higher for deer browse index must have a stocking index of 100 to be considered stocked. Parks that average &lt; 3 for deer browse index only require a stocking index of 50 to be stocked.</li>
+<li><b>Stocking Index: </b> Average stocking &lt; 25 is classified as Critical; average stocking between 25 – 100 is classified as Caution; average stocking ≥ 100 is classified as Acceptable (McWilliams et al. 2015). Note that the stocking index only includes native canopy-forming species, and does not include ash species (<i>Fraxinus</i> spp.).</li>
+<li><b>Deer Browse Impacts: </b> Average DBI ≥ 4 is classified as Critical; average DBI between 3.01 – 3.99 is classified as Caution; average DBI ≤ 3 is classified as Acceptable (McWilliams et al. 2015).</li>
+<li><b>Flat Tree Diameter Distribution: </b> Only Critical and Acceptable levels were defined for this metric. Critical was determined using Akaike information criteria (AIC) to determine whether a log-linear or linear model better predicted the tree diameter distribution by size class for a given park. If AIC determines a linear fit to be the best model, this indicates there are fewer trees than expected in lower size classes, and is suggestive of prolonged recruitment failure. Therefore, parks that are best fit by a linear model are classified as Critical. Parks best fit by log-linear model are classified as Acceptable.</li>
+<li><b>Sorensen: </b> Sorensen similarity is presence-only based similarity that ranges from 0 to 1, and includes all species observed in each strata. Only 2 thresholds were defined for this metric. Similarity &lt; 0.2 is classified as Critical, and similarity ≥ 0.2 is classified as Acceptable.</li>
+</ul>
+</p>
+<p class='caption'>
+Trend metrics (rows 2-5) are grouped by species type, with Total including all tree species; Native Canopy only including native, canopy forming species; Other Native including native species that are typically understory trees; and Exotic including non-native tree species. Note that ash species (<i>Fraxinus</i> spp.) are not considered native canopy-forming species due to impacts from Emerald Ash Borer. Trends were assessed using non-parametric bootstrapping and random intercept linear models. Only metrics with &gt; 6 plots and with &gt; 10% non-zero values were modeled.
+</p>
+<br>
+
+#### Regeneration Status Map
+```{r regmap, fig.cap = numFig("Map of Region 1 parks by regeneration status. Parks in the <b>Imminent Failure</b> regeneration category are experiencing regeneration failure and are at risk of forest loss. In some cases, for example MORR, forest loss is already underway. Parks in the <b>Probable Failure</b> category are also experiencing regeneration failure as indicated by lacking and/or declining sapling density, although seedlings are more abundant than in the Severe category. Parks in the <b>Insecure</b> category lack sapling density, but have sufficient and often increasing seedling layers and overall lower deer browse impacts. Significant trends in the <b>Secure</b> category tend to be due to forest dynamics, like succession, than regeneration failure. Parks in the Secure category have abundant seedling and sapling layers and show few concerning trends.."), dpi = 600, out.width = "90%"}
+include_graphics("./results/NPS_RegenStatus_Region1.jpg")
+```
+
+### Regional Trends {.tabset}
+
+#### Deer Browse Index
+
+```{r dbi_cycle, fig.cap = numFig("Deer browse impacts by cycle. Bars represent proportion of plots experiencing low, medium, high and very high impacts."), out.width = "90%"}
+include_graphics("./results/DBI_by_cycle_simp.svg")
+```
+<br>
+
+#### Stocking Index
+
+```{r stock_trends, fig.cap = numFig("Trends in regeneration stocking index by park and cycle. The stocking index only includes native canopy-forming species and is an index of whether the regeneration layer is sufficient to stock the future canopy. Note that ash species (<i>Fraxinus</i> spp.) are not included in the stocking index. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/stock_final.svg")
+```
+
+
+#### All Tree Species {.tabset}
+
+##### Tree BA
+
+```{r tree_ba_tot, fig.cap = numFig("Trends in total live tree basal area (BA; sq.m/ha) by park and cycle. Trees are stems that are >= 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Tree_BA_Total.svg")
+```
+<br>
+
+##### Tree Density
+
+```{r tree_dens_tot, fig.cap = numFig("Trends in total live tree density (stems/ha) by park and cycle. Trees are stems that are >= 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019. Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Tree_Dens_Total.svg")
+```
+<br>
+
+##### Sapling BA
+
+```{r sap_ba_tot, fig.cap = numFig("Trends in total sapling basal area (BA; sq.m/ha) by park and cycle. Saplings are stems that are >= 1 cm and < 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Sap_BA_Total.svg")
+```
+<br>
+
+##### Sapling Density
+
+```{r sap_dens_tot, fig.cap = numFig("Trends in total sapling density (stems/sq.m) by park and cycle. Saplings are stems that are >= 1 cm and < 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Sap_Dens_Total.svg")
+```
+<br>
+
+##### Seedling Density
+
+```{r seed_dens_tot, fig.cap = numFig("Trends in total seedling density (stems/sq.m) by park and cycle. Seedlings are stems that are >= 15 cm tall and < 1 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Seed_Dens_Total.svg")
+```
+
+#### By Tree Species Group {.tabset}
+
+##### Tree BA
+
+```{r tree_ba_sppgrp, fig.cap = numFig("Trends in live tree basal area by species group (BA; sq.m/ha) by park and cycle. Trees are stems that are >= 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/spp_grp_plots/Tree_BA.svg")
+```
+<br>
+
+##### Tree Density 
+
+```{r tree_dens_sppgrp, fig.cap = numFig("Trends in live tree density by species group (stems/ha) by park and cycle. Trees are stems that are >= 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/spp_grp_plots/Tree_Dens.svg")
+```
+<br>
+
+##### Sapling BA
+
+```{r sap_ba_sppgrp, fig.cap = numFig("Trends in sapling basal area (BA; sq.m/ha) by species group by park and cycle. Saplings are stems that are >= 1 cm and < 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/spp_grp_plots/Sap_BA.svg")
+```
+<br>
+
+##### Sapling Density
+
+```{r sap_dens_sppgrp, fig.cap = numFig("Trends in sapling density (stems/sq.m) by species group by park and cycle. Saplings are stems that are >= 1 cm and < 10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/spp_grp_plots/Sap_Dens.svg")
+```
+<br>
+
+##### Seedling Density
+
+```{r seed_dens_sppgrp, fig.cap = numFig("Trends in seedling density (stems/sq.m) by species group by park and cycle. Seedlings are stems that are >= 15 cm tall and < 1 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/spp_grp_plots/Seed_Dens.svg")
+```
+<br>
+
+#### By Tree Size Class {.tabset}
+
+##### Diameter Distribution
+```{r tree_dist, fig.cap = numFig("Live tree diameter at breast height (DBH) distribution in 10 cm increments by park and cycle. Trees are stems that are >=10 cm DBH. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019. Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/Diam_Dist_line.svg")
+```
+<br>
+
+##### BA 10 cm DBH
+
+```{r tree_ba_tot10, fig.cap = numFig("Trends in live tree basal area (BA; sq.m/ha) for trees 10-20 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_10cm_BA_Total.svg")
+```
+<br>
+
+##### BA 20 cm DBH
+
+```{r tree_ba_tot20, fig.cap = numFig("Trends in live tree basal area (BA; sq.m/ha) for trees 20-30 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_20cm_BA_Total.svg")
+```
+<br>
+
+##### BA 30 cm DBH
+
+```{r tree_ba_tot30, fig.cap = numFig("Trends in live tree basal area (BA; sq.m/ha) for trees 30-40 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_30cm_BA_Total.svg")
+```
+<br>
+
+##### Density 10 cm DBH
+
+```{r tree_dens_tot10, fig.cap = numFig("Trends in live tree density (stems/ha) for trees 10-20 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_10cm_Dens_Total.svg")
+```
+<br>
+
+##### Density 20 cm DBH
+
+```{r tree_dens_tot20, fig.cap = numFig("Trends in live tree density (stems/ha) for trees 20-30 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_20cm_Dens_Total.svg")
+```
+<br>
+
+##### Density 30 cm DBH
+
+```{r tree_dens_tot30, fig.cap = numFig("Trends in live tree density (stems/ha) for trees 30-40 cm DBH by park and cycle. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/tree_30cm_Dens_Total.svg")
+```
+<br>
+
+#### Similarity {.tabset}
+
+##### Saplings vs. Canopy
+
+```{r sap_sim_sor, fig.cap = numFig("Trends in Sorensen similarity between sapling and canopy species by park and cycle. Sorensen similarity is presence-only based similarity that ranges from 0 to 1. A score of 0 indicates there are no species in common between the two strata. A score of 1 indicates all species are in common between strata. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Sor_sap.svg")
+```
+<br>
+
+##### Seedlings vs. Canopy
+
+```{r seed_sim_sor, fig.cap = numFig("Trends in Sorensen similarity between seedling and canopy species by park and cycle. Sorensen similarity is presence-only based similarity that ranges from 0 to 1. A score of 0 indicates there are no species in common between the two strata. A score of 1 indicates all species are in common between strata. Cycle 1 = 2008:2011; cycle 2 = 2012:2015; cycle 3 = 2016:2019.  Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/intercept_lat_net/TSS_by_sppgrp/Sor_seed.svg")
+```
+<br>
+
+### Regional Status {.tabset}
+
+#### % of Stocked Plots
+```{r pct_stock_c3, fig.cap = numFig("Percent of sufficiently stocked plots in most recent 4-year period (2016:2019), sorted from high to low by park. Parks without bars had no sufficiently stocked plots. The level required for a plot to be stocked was adjusted deer browse impact, where parks averaging > 3 (moderate) for deer browse impact required a stocking index of 100 or more. Parks averaging 3 or less for deer browse impact required a stocking index of 50 or more. The dashed line indicates the threshold used to determine critically low stocking in Figure 2."), out.width = "90%"}
+include_graphics("./results/cycle_3_status_plots/Pct_stocked_plots.svg")
+```
+<br>
+
+#### Stocking Index 
+
+```{r stock_c3, fig.cap = numFig("Average stocking index in most recent 4-year period (2016:2019), sorted from high to low by park. Stocking index only includes native canopy-forming species. Note that ash species (<i>Fraxinus</i> spp.) were not included in the index. Error bars are bootstrapped 95% confidence intervals."), out.width = "90%"}
+include_graphics("./results/cycle_3_status_plots/Cycle_3_stocking_index.svg")
+```
+<br>
+
+#### Composition by Species Group
+```{r comp_c3_grp, fig.cap = numFig("Proportion of suboptimal species groups comprising regeneration layers in recent 4-year period (2016:2019). Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/Prop_species_groups_option1.svg")
+```
+<br>
+
+
+#### Composition by Species
+```{r comp_c3_spp, fig.cap = numFig("Proportion of suboptimal species comprising regeneration layers in recent 4-year period (2016:2019). Parks are sorted from high to low latitude."), out.width = "90%"}
+include_graphics("./results/Prop_species.svg")
+```
+<br>
+
+
+#### Sapling Density
+
+```{r sap_c3, fig.cap = numFig("Sapling density of native canopy-forming species in most recent 4-year period (2016:2019), sorted from high to low by park. Note that ash species (<i>Fraxinus</i> spp.) were not included as canopy species. Error bars are bootstrapped 95% confidence intervals."), out.width = "90%"}
+include_graphics("./results/cycle_3_status_plots/Cycle_3_sapling_density_natcan.svg")
+```
+<br>
+
+#### Seedling Density
+
+```{r seed_c3, fig.cap = numFig("Seedling density of native canopy-forming species in most recent 4-year period (2016:2019), sorted from high to low by park. Note that ash species (<i>Fraxinus</i> spp.) were not included as canopy species. Error bars are bootstrapped 95% confidence intervals."), out.width = "90%"}
+include_graphics("./results/cycle_3_status_plots/Cycle_3_seedling_density_natcan.svg")
+```
+<br>
+
+#### Saplings versus Canopy: Sorensen 
+
+```{r sap_sor_c3, fig.cap = numFig("Sorensen similarity between sapling and canopy species in most recent 4-year period (2016:2019), sorted from high to low by park. Sorensen similarity is presence-only based similarity that ranges from 0 to 1. A score of 0 indicates there are no species in common between the two strata. A score of 1 indicates all species are in common between strata. Error bars are bootstrapped 95% confidence intervals."), out.width = "90%"}
+
+include_graphics("./results/cycle_3_status_plots/Cycle_3_Sorensen_sapling_vs_canopy.svg")
+```
+<br>
+
+#### Seedlings versus Canopy: Sorensen 
+
+```{r seed_sor_c3, fig.cap = numFig("Sorensen similarity between seedling and canopy species in most recent 4-year period (2016:2019), sorted from high to low by park. Sorensen similarity is presence-only based similarity that ranges from 0 to 1. A score of 0 indicates there are no species in common between the two strata. A score of 1 indicates all species are in common between strata. Error bars are bootstrapped 95% confidence intervals."), out.width = "90%"}
+
+include_graphics("./results/cycle_3_status_plots/Cycle_3_Sorensen_seedling_vs_canopy.svg")
+```
+<br>
+
+### Park-level Trends {.tabset}
+```{r tab_setup, include = FALSE}
+networks <- sort(unique(park_names$Network))
+```
+
+```{r net_tabs2, results = 'asis'}
+for(i in seq_along(networks)){
+  cat("#### ", networks[i], "{.tabset}", "\n")
+  park_list = sort(unique(park_names$park[park_names$Network == networks[i]]))
+  
+  for(p in seq_along(park_list)){
+    park = park_list[p]
+    park_name = park_names$park_full[park_names$park == park]
+    
+    park_template <- 
+      paste0("##### {{park}}\n\n",
+             "<h2>{{park_name}}</h2>", "\n\n",
+             
+             "<details open><summary><h3>All Tree Species and Sizes</h3></summary>\n\n",
+             "```{r,", park, "_total, ", 
+               "fig.cap=numFig('Trends in live tree, sapling and seedling abundance of all species and all size classes.'), out.width = '98%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/total/', 
+               park, '_Total_metrics.svg'))\n\n",
+             "```\n\n",
+             "</details>\n",
+             
+             "<details open><summary><h3>By Tree Species Group</h3></summary>\n\n",
+             "```{r,", park, "_sppgrp, ", 
+               "fig.cap=numFig('Trends in tree, sapling and seedling abundance by species group.'), out.width = '98%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/spp_grp/', 
+               park, '_spp_grp.svg'))\n\n",
+             "```\n\n",
+             "</details>\n",
+             
+             "<details open><summary><h3>Stocking Index</h3></summary>\n\n",
+              "```{r,", park, "_stock, ", 
+               "fig.cap=numFig('Trends in regeneration stocking index by cycle. The stocking index only includes native canopy-forming species and is an index of whether the regeneration layer is sufficient to stock the future canopy. Note that ash species (<i>Fraxinus</i> spp.) are not included in the stocking index.'), out.width = '40%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/indices/', 
+               park, '_stock_noline.svg'))\n\n",
+             "```\n\n",
+             "</details>\n",
+             
+             "<details open><summary><h3>By Trees by Size Class</h3></summary>\n\n",
+             "```{r,", park, "_sizetrends, ", 
+               "fig.cap=numFig('Trends in tree basal area (BA) and density by 10 cm size classes.'), out.width = '80%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/tree_sizes/', 
+               park, '_size_metrics.svg'))\n\n",
+             "```\n\n",
+             "</details>\n",
+             
+             "<details open><summary><h3>Tree Diameter Distribution</h3></summary>\n\n",
+             "```{r,", park, "_diamdist, ", 
+               "fig.cap=numFig('Tree DBH distribution in 10 cm increments by park and cycle.'), out.width = '50%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/tree_sizes/', 
+               park, '_diam_dist.svg'))\n\n",
+             "```\n\n",
+             "</details>\n",
+             
+             "<details open><summary><h3>Deer Browse Index</h3></summary>\n\n",
+             "```{r,", park, "_dbi, ", 
+               "fig.cap=numFig('Deer browse impacts by cycle. Bars represent proportion of plots experiencing low, medium, high and very high impacts.'), out.width = '40%'}\n\n",
+             "knitr::include_graphics(paste0('./results/intercept_lat_net/park_plots/indices/', 
+               park, '_dbi.svg'))\n\n",
+             "```\n\n",
+             "</details>\n"
+             
+              )
+  park_tabs <- knitr::knit_expand(text = park_template)
+  cat(knitr::knit(text = unlist(park_tabs), quiet = TRUE))
+  }
+
+  }
+
+
+```
