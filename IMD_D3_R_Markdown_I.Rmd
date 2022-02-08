@@ -282,7 +282,6 @@ tinytex::reinstall_tinytex()
 
 ```
 
-tinytex::reinstall_tinytex()
 </details>
 <br>
 <details open><summary class='drop'>Output to Word</summary>
