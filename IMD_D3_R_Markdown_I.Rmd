@@ -259,8 +259,30 @@ Rendering to PDF requires a LaTeX engine that runs under the hood. The easiest e
 2. Enforcing page breaks and designing print friendly outputs is much easier than with HTML output.
 
 <h3>Cons of PDF output</h3>
-1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with. There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML (or R). 2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes  minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you'll likely need to use some (or a lot of) LaTeX along the way.  
+1. LaTeX is a challenging, clunky, and not overly rewarding coding language to work with. There are decent websites offering help and examples, but it's nothing like the help community and resources for HTML (or R). 
+2. I'm no expert on LaTeX, so perhaps it just me. But I've spent hours fine-tuning a header in LaTeX that takes  minutes to figure out in HTML, only to have it break after updating a LaTeX package. If your output needs to be PDF, pause to think whether you REALLY need it to be PDF. If PDF is still what you want, you'll likely need to use some (or a lot of) LaTeX along the way.  
 3. It's much harder to make PDFs 508 Compliant using R Markdown. The functionality just isn't there, as far as I know. PDFs have to be modified after they're rendered to be 508 Compliant, which kind of defeats the purpose of automated reporting.
+4. Requires installing a LaTeX engine. MikTex is the most commonly used engine outside of R Markdown. There's a smaller implementation called `tinytex` that was developed by the same developer as the `knitr` package. To install the `tinytex` LaTeX engine, you can run the following code: 
+
+```{r tiny, echo = T, eval = F}
+install.packages('tinytex')
+tinytex::install_tinytex()
+
+#Check that it worked: 
+writeLines(c(
+  '\\documentclass{article}',
+  '\\begin{document}', 'Hello world!', '\\end{document}'
+), 'test.tex')
+tinytex::pdflatex('test.tex') 
+# Console should say [1] "test.pdf"
+
+# If you ever run into issues with markdown not knitting PDF, 
+# sometimes running the code below will fix the problem:
+tinytex::reinstall_tinytex()
+
+```
+
+tinytex::reinstall_tinytex()
 </details>
 <br>
 <details open><summary class='drop'>Output to Word</summary>
