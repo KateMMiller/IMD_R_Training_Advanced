@@ -1,7 +1,7 @@
 ---
 output: 
   officedown::rdocx_document:
-    reference_docx: NRR_skeleton_v4_2.docx
+    reference_docx: NRR_template_skeleton_v4_2.docx
     tables:
       style: Table
       layout: autofit
