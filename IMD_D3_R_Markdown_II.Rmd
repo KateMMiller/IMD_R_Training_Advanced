@@ -23,11 +23,11 @@ wetsum <- wetdat %>% group_by(Site_Name, Year) %>%
 ```
 
 </details>
-
+<br>
 <details open><summary class='drop'>kable and kableExtra</summary>
 The code below creates a simple table that renders in HTML, is only as wide as the records in the table, and has alternating row colors. If you're outputting to PDF, your format will be "latex" instead of "HTML" and you'll need to use LaTeX for any custom formatting/styling that aren't built into kable and kableExtra.
 
-Note also that the version of kableExtra on CRAN currently has a bug that causes `collapse_rows()` not to function. I'll show what this does in a minute, but for now, just know that if you want to collapse rows in your kable, you'll need to install the development version of kableExtra on GitHub. Code for that is below. You'll need the `devtools` package installed to install it. If you've already loaded `kableExtra` in your session, you'll also need to restart your session (Note: Ctrl + Shift + F10 is the fastest way to restart your R session).
+Note also that the version of `kableExtra` on CRAN currently has a bug that causes `collapse_rows()` not to function. I'll show what this does in a minute, but for now, just know that if you want to collapse rows in your `kable`, you'll need to install the development version of `kableExtra` on GitHub. Code for that is below. You'll need the `devtools` package installed to install it. If you've already loaded `kableExtra` in your session, you'll also need to restart your session (Note: Ctrl + Shift + F10 is the fastest way to restart your R session).
 <br>
 ```{r kab1, echo = T, results = 'hide', warning = FALSE, message = FALSE}
 devtools::install_github("haozhu233/kableExtra")
@@ -41,20 +41,19 @@ wet_kable
 wet_kable
 ```
 <br>
-Note the use of pipes in the code above. The great thing about kable and kableExtra is that you can pipe functions together to build out a large table with all kinds of formatting, including conditional formatting. You can also make a custom kable function that has all of the formatting options you want, and just specify the dataset to build the table for. You can then pipe more features onto that function. We'll show a couple of these examples below.
+Note the use of pipes in the code above. The great thing about `kable` and `kableExtra` is that you can pipe functions together to build out a large table with all kinds of formatting, including conditional formatting. You can also make a custom `kable` function that has all of the formatting options you want, and just specify the dataset to build the table for. You can then pipe more features onto that function. We'll show a couple of these examples below.
 <br>
 ```{r kab3, echo = T, results = 'hide'}
 # custom kable function that requires data, column names and caption
 make_kable <- function(data, colnames = NA, caption = NA){
   kab <- kable(data, format = 'html', col.names = colnames, align = 'c', caption = caption) %>% 
-      kable_styling(fixed_thead = TRUE, 
-                    bootstrap_options = c('condensed', 'bordered', 'striped'), 
-                    full_width = FALSE, 
-                    position = 'left', 
-                    font_size = 12) %>%
-      row_spec(0, extra_css = "border-top: 1px solid #000000; border-bottom: 1px solid #000000;") %>% 
-      row_spec(nrow(data), extra_css = 'border-bottom: 1px solid #000000;')
-
+         kable_styling(fixed_thead = TRUE, 
+                       bootstrap_options = c('condensed', 'bordered', 'striped'), 
+                       full_width = FALSE, 
+                       position = 'left', 
+                       font_size = 12) %>%
+         row_spec(0, extra_css = "border-top: 1px solid #000000; border-bottom: 1px solid #000000;") %>% 
+         row_spec(nrow(data), extra_css = 'border-bottom: 1px solid #000000;')
 }
 
 # use function with wetsum data
@@ -70,16 +69,17 @@ wetkab2
 <br>
 There are a couple of new things to point out in the code: 
 <ol>
-<li>Because we set the arguments for colnames and caption to default to `NA`, you don't have to specify them for the function. If you don't, the column names in the table will be the names in the dataframe, and the caption will be omitted. </li>
+<li>Because we set the arguments for colnames and caption to default to `NA`, you don't have to specify them for the function. If you don't, the column names in the table will be the names in the dataframe, and the caption will be omitted. If you don't set a default for an argument, it will be required, like the data.</li>
 <li>We set the columns to be centered with `align = 'c'`. If you wanted the first column to be left, and the next 3 to be centered, you would write `align = c('l', rep('c', 3))`. </li>
-<li>The fixed_thead = TRUE means that if a scroll bar is added to the table, the table header (top row), will be fixed. Here we piped a scroll_box at the end of the code to show how that works. You can add a scroll box to the width of the page by adding a `width = "###px"` to the argument. Note also that if you add a scroll box, you'll want that line of code to be last. Otherwise you're likely to run into weird issues with kable that prevent the table from rendering. This is why I piped it at the end, instead of adding to the function. </li>
-<li>The position = 'left' left justifies the table on the page (default is center).</li>
+<li>The `fixed_thead = TRUE` means that if a scroll bar is added to the table, the table header (top row), will be fixed. Here we piped a scroll_box at the end of the code to show how that works. You can add a scroll box to the width of the page by adding a `width = "###px"` to the argument. </li>
+<li>Note also that if you add a scroll box, you'll want that line of code to be last. Otherwise you're likely to run into weird issues with kable that prevent the table from rendering, and will get a cryptic error message about `Error in UseMethod("nodeset_apply")`. This is why I piped it at the end, instead of adding to the function. </li>
+<li>The `position = 'left'` will left justify the table on the page (default is center).</li>
 <li>The line starting `row_spec(0, )` adds a black border to the top and bottom of the header, which kable considers row 0. </li>
 <li>The final `row_spec(nrow(data))` is adding a black border to the bottom of the table regardless of the number of rows in the table.</li>
 </ol>
 
 <br>
-Finally, here are a few helpful options that render based on values in the table. Note that because we added a scroll box to wetkab2, we'll start the code over, rather than add the features via pipe to wetkab2. The scroll box always needs to be the last call in your code. If it's not you'll get a cryptic error message about `Error in UseMethod("nodeset_apply")`.
+We'll add a few more bells and whistles to the table. Note that because we added a scroll box to wetkab2, we'll start the code over, rather than add the features via pipe to wetkab2. 
 <ul>
 <li><b>Conditional formatting</b> was applied to column 3 in the table (wetsum$num_inv). In the code below, the `ifelse()` that ends in FALSE is just allowing the default color to be printed instead of the conditional color. That allows the alternating row colors to remain.</li>
 <li><b>Collapsing rows</b> were applied to column 1. In the rendered table you should see that Sites that are repeated in the data are merged vertically in column 1. This is a really helpful feature to make tables more digestible. Note that once you collapse a row, all pipes afterwards subtract the row you collapsed from the table dimensions, and it can be tricky to deal with. In general, it's best to have the `collapse_rows()` pipe after any `column_spec()` or `row_spec()` calls. You can also collapse on multiple columns, but it is finicky about the order of the pipes. Just use trial and error until you find the order that works. Note also that `collapse_rows()` only works in the development version of the package (see above for installation instructions).</li> 
@@ -89,7 +89,6 @@ Finally, here are a few helpful options that render based on values in the table
 wetkab3 <- make_kable(wetsum, 
                       colnames = c("Site", "Year", "# Invasive", "# Protected"),
                       caption = "Table 1. Summary of wetland data") %>% 
-           row_spec(0, extra_css = "border-top: 1px solid #000000; border-bottom: 1px solid #000000;") %>% 
            column_spec(3, background = ifelse(wetsum$num_inv > 0, "orange", FALSE)) %>% 
            collapse_rows(1, valign = 'top') 
 ```
@@ -120,9 +119,9 @@ ans_tab
 </div>
 
 </details>
-
+<br>
 <details open><summary class='drop'>DT::datatables</summary>
-Using the same wetsum dataset we created earlier, we'll make a table using `datatable()` and will add some of the features that `kable()` doesn't have and that usually lead me to choose datatable over kable. We'll start with a basic example and build on it.
+Using the same `wetsum` dataset we created earlier, we'll make a table using `datatable()` and will add some of the features that `kable()` doesn't have and that usually lead me to choose datatable over kable. We'll start with a basic example and build on it.
 
 ```{r dt1, echo = T, results = 'hide'}
 library(DT)
@@ -146,7 +145,7 @@ I also added an option that stops the table from spanning the entire page.
 ```{r dt3, echo = T, results = 'hide'}
 # modify pageLength and lengthMenu
 wetdt2 <- datatable(wetsum, colnames = c("Site", "Year", "# Invasive", "# Protected"),
-                    width = "40%",
+                    width = "45%",
                     options = list(pageLength = 10,
                                    lengthMenu = c(5, 10, 20))
                     )
@@ -161,15 +160,15 @@ wetdt2
 
 Several additional features with datatable are shown in the code below. 
 <ul>
-<li>CSS can be specified in the table. Here we added a cell-border stripe, which adds vertical lines between columns the same way `bootstrap_options` added striped cells in kable.</li> 
-<li>Filtering by one or more columns in the table can be really handy. This is often the reason I end up using datatable instead of kable. The code below adds a filter to the top of the columns in the table. This is a particularly useful feature if your tables have a lot of rows.</li>
+<li>CSS can be specified in the table. Here we added a `cell-border stripe`, which adds vertical lines between columns the same way `bootstrap_options` added striped cells in kable.</li> 
+<li>Filtering by one or more columns in the table can be really handy. This is often the reason I end up using `datatable()` instead of `kable()`. The code below adds a filter to the top of the columns in the table. This is a particularly useful feature if your tables have a lot of rows.</li>
 <li>Allowing data to be editable is also potentially really useful. For example, you can add a blank Notes column that can then be updated and saved in the table. In the code below, I made the Notes column editable at the cell-level. Note that you have to double-click on the row to edit it. Just beware that adding notes to tables in R Markdown can cause some strange behaviors with tabs. </li>
-<li>Piping the formatStyle at the end allows us to set conditional formatting like we did for cable, where any value > 0 in the 3rd column will be orange.</li>
+<li>Piping the `formatStyle()` at the end allows us to set conditional formatting like we did for `kable`, where any value > 0 in the 3rd column will be orange.</li>
 </ul>
 <div>
 ```{r dt5, echo = T, results = 'hide'}
 wetdt3 <- datatable(data.frame(wetsum, "Notes" = NA), 
-                    width = "40%",
+                    width = "45%",
                     colnames = c("Site", "Year", "# Invasive", "# Protected", "Notes"),
                     options = list(pageLength = 10),                        
                     class = 'cell-border stripe',
@@ -199,14 +198,14 @@ There are multiple ways to display a image that's stored on disk. The easiest wa
 
 Note that inserting a hyperlinked url is very similar. Just omit the ! and put the url in parenthesis instead of the path to the image. Like: `[Link to IMD home page](https://www.nps.gov/im)`
 
-You can also use the HTML <img> tag. The code below will produce the exact same image as the markdown code above. I seem to be able to remember better the <img> tag better than the markdown version, so I tend to use this more often. 
+You can also use the HTML <img> tag. The code below will produce the exact same image as the markdown code above. I seem to be able to remember the `<img>` tag better than the markdown version, so I tend to use this more often. 
 ```{html, verbtxt5, results = 'asis'}
 <img src="./images/map_of_parks.jpg" alt = "Map of Region-1 IMD parks" width="400px">
 ```
 
 ![Map of Region-1 IMD parks.](./images/map_of_parks.jpg){width=400px}.
 
-I also like knitr's `include_graphics()` function, as it can make iteration easier. For example, you can include a bunch of figures in a report based on a list of file names. Below I'm including all the photos in a photopoint folder, and making them only 25% of the width of the page. That puts them in a grid, which can be handy. You can also add breaks between each item in the list, and then they'll plot separately. If you have an analysis with lots of plots, and they take awhile to render, I tend to write the plots to a disk and them bring them into the markdown document with `include_graphics()`. Using `include_graphics()` also means you're running it in code chunks instead of the plain text, and allows you to dynamically number and reference figure names and specify figure captions at the same time. I'll show that trick in a minute.
+I also like knitr's `include_graphics()` function, as it can make iteration easier. For example, you can include a bunch of figures in a report based on a list of file names (See Regeneration Summary in Gallery). Below I'm including all the photos in a photopoint folder, and making them only 25% of the width of the page. That puts them in a grid, which can be handy. You can also add breaks between each item in the list, and then they'll plot separately. If you have an analysis with lots of plots, and they take awhile to render, I tend to write the plots to a disk and them bring them into the markdown document with `include_graphics()`. Using `include_graphics()` also means you're running it in code chunks instead of the plain text, and allows you to dynamically number and reference figure names and specify figure captions at the same time. I'll show that trick in a minute.
 
 ````
 `r ''````{r photopoints, echo = T, out.width = "25%"}

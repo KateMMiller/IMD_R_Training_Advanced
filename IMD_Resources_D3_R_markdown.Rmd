@@ -26,4 +26,5 @@
 <li><a href="https://ardata-fr.github.io/officeverse/index.html">MS `officeverse`</a> covers the main packages that add more functionality for outputting .Rmd to Microsoft products, including Word and Powerpoint. </li>
 <li><a href="https://rmarkdown.rstudio.com/articles_docx.html">Happy collaboration with Rmd to docx</a> is RStudio's page on outputting to Word. Though happy is a strong word in my experience.</li>
 <li><a href="https://towardsdatascience.com/awesome-r-markdown-word-report-with-programmatically-inserted-headings-outputs-and-19ad0de29a22">Awesome R Markdown Word report</a> blog covers useful tasks like cross-referencing figures and tables.</li>
+<li><a href="https://noamross.github.io/redoc/">redoc GitHub page</a> for porting changes in Word back into R Markdown.</li>
 </ul>

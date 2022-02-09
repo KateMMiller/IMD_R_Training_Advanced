@@ -1,0 +1,251 @@
+---
+title: "NPS Visitor Trends"
+output: 
+  flexdashboard::flex_dashboard:
+      theme: yeti
+      orientation: columns 
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+### Load packages----
+pkgs <- c("tidyverse",
+          "flexdashboard",
+          "crosstalk",
+          "scales",
+          "DT",
+          "echarts4r",
+          "echarts4r.maps", # used for demo, not needed by participants
+          "reactable",
+          "plotly",
+          "sparkline")
+
+installed_pkgs <- pkgs %in% installed.packages()
+if (length(pkgs[!installed_pkgs]) > 0) install.packages(pkgs[!installed_pkgs],dep=TRUE) 
+lapply(pkgs, library, character.only = TRUE)
+
+
+# install.packages("remotes")
+# remotes::install_github('JohnCoene/echarts4r.maps')
+
+# MIGHT need development version of leaflet to work with crosstalk
+# devtools::install_github("rstudio/leaflet")
+
+### Get data----
+parks_dat <- readRDS("./data/final_parks_dat.RDS") # I had already imported and cleaned/summarized the park visits data in a separate scripts
+```
+
+```{r}
+
+# Can't facet by and have timeline simultaneously so need each unit_type in separate col
+parks_wide_unit <- parks_dat %>%
+  dplyr::select(region, unit_type, unit_code, year, visitors_1m) %>%
+  distinct() %>%
+  tidyr::pivot_wider(names_from = unit_type, values_from = visitors_1m)
+
+region_unit_tot <- parks_dat %>%
+  dplyr::group_by(region, unit_type, year) %>%
+  dplyr::summarize(visitors_1m_tot = sum(visitors_1m)) %>%
+  tidyr::pivot_wider(names_from = unit_type, values_from = visitors_1m_tot)
+
+region_wide_unit <- parks_dat %>%
+  dplyr::select(region, state, year) %>%
+  dplyr::filter(state != "DC") %>%
+  dplyr::distinct() %>%
+  dplyr::left_join(region_unit_tot, by = c("region", "year"))
+
+```
+
+Map
+=====================================
+
+Column {style="height:100pc;"}
+-------------------------------------
+
+###
+
+```{r}
+
+joint_map <- function(p) {
+  p %>%
+    em_map("USA") %>%
+    e_tooltip() %>%
+    e_group("map_grp") %>%
+    e_legend(show = FALSE) %>%
+    e_timeline_opts(
+      playInterval = 200, 
+      loop = FALSE) %>%
+    e_toolbox_feature("dataZoom") %>%
+    e_toolbox_feature(feature = "reset") %>%
+    e_toolbox_feature("dataView") %>%
+    e_toolbox_feature("saveAsImage")
+  } 
+
+e_map_NHS <- region_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(state, Id = "map_NHS", timeline = TRUE) %>%
+  e_map(serie = National_Historic_Site, name = "National Historic Sites", map = "USA") %>% 
+  e_visual_map(National_Historic_Site) %>%
+  e_title("Sum of annual visitor counts (in millions) by region", "National Historic Sites") %>%
+  joint_map()
+
+e_map_NM <- region_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(state, Id = "map_NM", timeline = TRUE) %>%
+  e_map(serie = National_Monument, name = "National Monuments", map = "USA") %>% 
+  e_visual_map(National_Monument) %>%
+  e_title("   ", "National Monuments") %>%
+  joint_map()
+
+e_map_NP <- region_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(state, Id = "map_NP", timeline = TRUE) %>%
+  e_map(serie = National_Park, name = "National Parks", map = "USA") %>% 
+  e_visual_map(National_Park) %>%
+  e_title("  ", "National Parks") %>%
+  joint_map() %>%
+  e_connect_group("map_grp")
+
+e_arrange(e_map_NHS, e_map_NM, e_map_NP)
+```
+
+Column {style="height:100pc;"}
+-------------------------------------
+
+###
+
+```{r}
+
+joint_hist <- function(p) {
+  p %>%
+    e_x_axis(min = 0, max = 11) %>%
+    e_tooltip() %>%
+    e_group("hist_grp") %>%
+    e_legend(show = FALSE) %>%
+    e_timeline_opts(
+      playInterval = 200,
+      loop = FALSE) %>%
+    e_toolbox_feature("dataZoom") %>%
+    e_toolbox_feature(feature = "reset") %>%
+    e_toolbox_feature("dataView") %>%
+    e_toolbox_feature("saveAsImage")
+}  
+  
+e_hist_NHS <- parks_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(Id = "hist_NHS", timeline = TRUE) %>%
+  e_histogram(serie = National_Historic_Site, name = "National Historic Sites", breaks = seq(0, 11, by = .2)) %>%
+  e_title("Distribution of annual visitor counts (in millions) across park units", "National Historic Sites") %>%
+  joint_hist()
+  
+e_hist_NM <- parks_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(Id = "hist_NM", timeline = TRUE) %>%
+  e_histogram(serie = National_Monument, name = "National Monuments", breaks = seq(0, 11, by = .2)) %>%
+  e_title("   ", "National Monuments") %>%
+  joint_hist()
+
+e_hist_NP <- parks_wide_unit %>%
+  dplyr::group_by(year) %>%
+  e_charts(Id = "hist_NP", timeline = TRUE) %>%
+  e_histogram(serie = National_Park, name = "National Parks", breaks = seq(0, 11, by = .2)) %>%
+  e_title("   ", "National Parks") %>%
+  joint_hist() %>%
+  e_connect_group("hist_grp")
+
+e_arrange(e_hist_NHS, e_hist_NM, e_hist_NP)
+```
+
+Time Series by Region & Unit Type
+===================================== 
+
+```{r}  
+parks_dat_shared <- SharedData$new(
+  parks_dat %>% 
+    dplyr::select(year, region, unit_type, unit_name, visitors_1m, gas_constant) %>%
+    dplyr::mutate(HoverLabel = paste("Park Name: ", unit_name, "<br>Year: ", year, "<br>Visitor Count: ", visitors_1m))
+)
+  
+filter_select("unit_type", "Select a unit type", parks_dat_shared, multiple = FALSE, ~unit_type)
+
+filter_select("region", "Select a region", parks_dat_shared, multiple = FALSE, ~region)
+```
+
+```{js}
+function filter_default(){
+  document.getElementById("unit_type").getElementsByClassName("selectized")[0].selectize.setValue("National_Park", false);
+  document.getElementById("region").getElementsByClassName("selectized")[0].selectize.setValue("IM", false);
+}
+$(document).ready(filter_default);
+```
+
+Column {.tabset .tabset fade}
+-------------------------------------
+
+###
+
+```{r}
+  
+plot_ly(parks_dat_shared, 
+        x = ~year, 
+        y = ~visitors_1m, 
+        text = ~HoverLabel, # hover information
+        hoverinfo ="text",
+        color = ~unit_name, 
+        type = 'scatter', 
+        mode = 'lines') %>%
+          layout(title = 'Trends in Visitor Counts at NPS Units, 1985 - 2015',
+         xaxis = list(
+           title = 'Year',
+           showspikes = TRUE,
+           spikemode  = "across", # draw line across plot
+           spikedash = "dot",
+           spikecolor = "red",
+           spikesnap = "data",
+           spikethickness = 2),
+         yaxis = list (title = 'Annual Visitor Count (in Millions)'))
+```
+
+###
+
+```{r}
+DT::datatable(
+    parks_dat_shared,
+    class="compact stripe",
+    rownames= FALSE,
+    extensions = 'Buttons',
+    options = list(
+      autoWidth = TRUE,
+      dom = 'Blfrtip',
+                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                   lengthMenu = list(c(15,30,50,-1),
+                                     c(15,30,50,"All")),
+                   columnDefs = list(list(visible=FALSE, targets=3),
+                                     list(width = '100px', targets = 1:3))
+))
+```
+
+About this Dashboard
+=====================================
+
+### 
+
+```{r}
+
+plot_ly(parks_dat_shared,
+        x = ~gas_constant, 
+        y = ~visitors_1m, 
+        color = ~unit_type, 
+        type = 'scatter', 
+        mode = 'points') %>%
+  layout(title = 'Visitor Counts vs National Gas Averages, 1985 - 2015',
+         xaxis = list(
+           title = 'Gas Price')
+         )
+```
+
+### Data source
+
+The data used in this dashboard come from....  can be found at
+[give a name](https://)

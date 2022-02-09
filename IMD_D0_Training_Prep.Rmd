@@ -101,7 +101,10 @@ If you are attending Day 3: R Markdown, you must have a LaTeX engine installed t
 The following packages will also used in Day 3's session on R Markdown. Please run the code chunk below to install all of the required packages that are not currently installed on your machine.
 
 ```{r d3req, echo = T, results = 'hide', eval = F}
-packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT")
+packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT",
+              "tidyverse", "flexdashboard", "crosstalk", "leaflet",
+              "DT", "echarts4r", "reactable", "plotly", "sparkline",
+              "dygraphs")
 
 install.packages(setdiff(packages, rownames(installed.packages())))  
 
@@ -110,7 +113,10 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 After you run the code chunk above, please run the following code to ensure everything was successfully installed. 
 
 ```{r d3check, echo=T, results = 'hide', eval=F}
-packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT")
+packages <- c("rmarkdown", "tidyverse", "knitr", "kableExtra", "DT",
+              "tidyverse", "flexdashboard", "crosstalk", "leaflet",
+              "DT", "echarts4r", "reactable", "plotly", "sparkline",
+              "dygraphs")
 
 installed_packages <- packages %in% installed.packages() # check which packages are installed
 if (length(packages[!installed_packages]) > 0){

@@ -14,11 +14,27 @@ params:
 #### Render to HTML, PDF, Word
 To show the subtle differences between rendering to different outputs, I rendered roughly the same Markdown report to HTML, Word and PDF. The RMD files and their output are posted to the repository for this website (<a href="https://github.com/KateMMiller/IMD_R_Training_Advanced">KateMMiller/IMD_R_Training_Advanced</a>). The actual folder is called <a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples">Markdown_examples</a>. 
 
-For the HTML and PDF I also included an NPS banner in the report to show how to make that work. Note that the arrowhead image is missing from the repo (I don't think we can share these publicly). You'll need to specify your own version of that for these to work. The NPS_banner.html that feeds into the HTML report is also in this folder, along with the example_styles.css. Note that that LaTeX code to make the banner in the PDF version is NOT pretty. Revisiting this header for the training reminded me why I decided never again to work in LaTeX a few years ago.
+A couple of notes on the Rmd files in that folder: 
+<ul>
+<li>For the HTML and PDF I also included an NPS banner in the report to show how to make that work. Both are specified in the YAML at the top. I make no claims about how closely this matches NPS graphic identity. Use at your own risk</li>
+  <ul>
+  <li>Note that the arrowhead image is missing from the repo (I don't think we can share these publicly). You'll need to specify your own version of that for these to work.</li> 
+  <li>The NPS_banner.html that feeds into the HTML report is also in this folder, along with the example_styles.css that drives a lot of the formatting in the html header. </li>
+  <li>That LaTeX code to make the banner in the PDF version is NOT pretty. Revisiting this header for the training reminded me why I decided never again to work in LaTeX a few years ago.</li>
+  <li>I couldn't include an NPS banner for the output to Word. It's very possible `officedown` has a function to make that work, but I didn't have a chance to look into it. I also couldn't get cross-referencing to work with the figures. Again, `officedown` is likely the answer. I just ran out of time (and enthusiasm?) to troubleshoot it.</li>
+  </ul>
+<li>If you want to use dynamic figure references, you need to use the `bookdown` version of html or or pdf document, rather than the `rmarkdown` version. The default formatting for `bookdown` adds a bunch of section numbering, which I didn't want. That's what this `numbered_section` stuff is all about. What's useful for writing a book (most of the online R help books are written in `bookdown`) is not useful for all purposes.</li>
+<li>Styling is different for each output.</li>
+  <ul>
+  <li>For HTML, styling is controlled in the `css: example_styles.css`.</li>
+  <li>For PDF, you can specify the font type and size in the YAML.</li>
+  <li>For Word, you specify styles by importing a template called a `reference_docx`. The one I'm importing is literally a lightweight version of the NPS NRR template.</li>
+</ul>
+<li>Other differences are that I couldn't get dynamic figure references to work in the output to word. The `officedown` or `officer` package is supposed to be able to do this, but it didn't work on my first try.</li>
+<li>I also couldn't get the bibliography to work at all, but I didn't try very hard. If I ever get it to work, I'll add a tab to this website to show how to do it.</li>
+</ul>
 
-I couldn't include an NPS banner for the output to Word. It's very possible `officedown` has a function to make that work, but I didn't have a chance to look into it. I also couldn't get cross-referencing to work with the figures. Again, `officedown` is likely the answer. I just ran out of time troubleshooting it.
-
-#### Parameters & Iteration
+#### Parameters 
 <details open><summary class = 'drop'>Parameters</summary>
 One great feature of R Markdown that really helps with automated reporting is the use of parameters. Parameters are things that you will set in the YAML at the top, and that will be used in the report to do things like filtering data or printing names. For example in the code below, we set park, park_long, and cycle as parameters in the YAML. We then specify them in the next code chunk using ```params$park``` to create a plot for just the park we specified, and printed the ```params$park_long``` in the caption for that figure. Then we made a table of the park and cycle we just specified using ```params$park``` and ```params$cycle```, and again used the ```param$park_long``` in the table caption.
 
@@ -172,7 +188,7 @@ Answer 1. Change the YAML to the following:
 output: html_document
 params:
   park: "SARA"
-  park_long: "Saratogal National Historical Park"
+  park_long: "Saratoga National Historical Park"
   cycle: 3
 ---
 ````
@@ -180,10 +196,13 @@ params:
 </div>
 </details>
 <br>
+<hr>
 
+#### Bells and Whistles
+I'm including several other tricks that have really helped with reports I've developed. If we don't have time to cover them, they're at least here for you to look over on your own time.
+<br>
 <details open><summary class = 'drop'>Iterating with `params`</summary>
 Taking this a step further, you can run a script that iterates through a list (e.g., list of parks), and generates a report for each item on the list. I saved the code above where we created a park-specific figure and table using parameters in the YAML, called example_for_params.Rmd. Now I'll show the code to render an HTML for each park in the dataset (ACAD, MABI, and SARA). The example .Rmd I used for this is 
-
 
 ```{r markiter, echo = T, eval = F}
 # load packages
@@ -205,15 +224,12 @@ cycle_list = rep(c(1, 2, 3), 3)
 # Create the render function that we will iterate with
 render_fun <- function(parkcode, parklong, cyclename){
     render(input = paste0(indir, rmd),
-         params = list(park = parkcode,
-                       park_long = parklong,
-                       cycle = cyclename),
-         output_file = paste0("Example_for_", 
-                              parkcode,
-                              "_cycle_", 
-                              cyclename, 
-                             ".html"),
-         output_dir = outdir)
+           params = list(park = parkcode,
+                         park_long = parklong,
+                         cycle = cyclename),
+           output_file = paste0("Example_for_", parkcode,
+                                "_cycle_", cyclename, ".html"),
+           output_dir = outdir)
 }
 
 # Map render_fun() to the lists. 
@@ -221,12 +237,8 @@ render_fun <- function(parkcode, parklong, cyclename){
 pmap(list(park_list, park_long_list, cycle_list), 
      ~render_fun(..1, ..2, ..3))
 ```
-
 </details>
 <br>
-
-#### Bells and Whistles
-I'm including several other tricks that have really helped with reports I've developed. If we don't have time to cover them, they're at least here for you to look over on your own time.
 
 <details open><summary class = 'drop'>Conditional evaluation</summary>
 Not only can you set `eval = TRUE/FALSE` or `include = TRUE/FALSE`, but you can set these conditionally using objects in your global environment. For example, I have an .Rmd report that runs weekly checks on our forest data during the field season, and it's primarily looking for errors, like missing data or values that are out of range. I only want the report to print the results of a check if it finds something. The way I do this is below:
@@ -247,7 +259,7 @@ print(nrow(fake_check1))
 ````</p>
 </code></pre>
 </details>
-
+<br>
 
 <details open><summary class = 'drop'>Dynamic Tabsets </summary>
 Another trick that has come in handy (although is not the easiest thing to implement) is to dynamically generate tabsets using lists. For example, we have one water summary .Rmd that takes park as a parameter. Using the park, the code figures out which sites occur at that park, and populates the site tabs specific to the park for that report. Here's a simplified version of that approach below. 
@@ -359,26 +371,35 @@ for(i in seq_along(park_list)){
 #### Viewing source code
 <h4>HTML</h4>
 If you're rendering to HTML, you can view the actual HTML and CSS under the hood by right clicking on the document in your browser and either inspecting or viewing source code (actual terms differ across browsers). R Markdown makes a lot of default assumptions about the container and divisions and has a lot of built-in CSS that can sometimes be hard to change. Viewing the source code can help you figure out where things are going wrong. If it's a specific tag or class in a tag, you can redefine those tags or add new classes in your custom CSS. 
-
+<br>
+<br>
 <h4>LaTeX</h4>
-If you're rendering to PDF or MS Word, you can save the template used to generate the report by adding the code below to the YAML:
+If you're rendering to PDF, you can save the template used to generate the report by adding the code below to the YAML:
 <pre class="r"><code>---
 output: 
    pdf_document: 
       keep_tex: yes
 ---
 </code></pre>
+<br>
 
+<h4>Word</h4>
+To view the XML code under the hood of a Word document, change the extension of the document from ".docx" to ".zip", and then click on the zip file. Inside the zip file, open the "word" folder. The source code for your document is called "document.xml". Any text reader should be able to open this file. I find that WordPad provides a decent view of the code. If you have Visual Studio, that might be even better. 
+<br>
+<hr>
 
 #### Gallery of Examples
 <ul>
 <li>This website! The source code for this site is on GitHub at <a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced">KateMMiller/IMD_R_Training_Advanced</a>.</li>
 <li><a href = "https://doimspp.sharepoint.com/sites/nps-nrss-imdiv/SitePages/Southeast-COVID-19.aspx?xsdata=MDN8MDF8fDA4ZDMwNjRjYzg0NDQ3M2FiMGM2NDU5NzQwOGMxYmEyfDA2OTNiNWJhNGIxODRkN2I5MzQxZjMyZjQwMGE1NDk0fDF8MHw2Mzc2NTY2Nzg3MTYwNjEwMzR8R29vZHxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaUlpd2lRVTRpT2lJaUxDSlhWQ0k2TVRKOQ%3D%3D&sdata=bkVpTEsweFlBeWYvd1V5ZFlick15YU1vNDc5MFUxQm10RGkyVkRsS0d1az0%3D&ovuser=0693b5ba-4b18-4d7b-9341-f32f400a5494%2Cecheng%40nps.gov&OR=Teams-HL&CT=1644276140430">NPS SER COVID-19 Status Report</a></li>
-<li><a href = "https://github.com/NCRN/ForestVegIAR">NCRN Forest Vegetation Investigator's Annual Report</a></li>
+<li>NCRN Forest Vegetation Investigator's Annual Report <a href = "https://github.com/NCRN/ForestVegIAR">code</a>, and <a href="https://doimspp.sharepoint.com/:u:/s/ScientistsTraining2022/EcirTbl0tXlBjT0UOahnlkYB88uJb4T86uuyjVZ6YvIQGg?e=nsRTo4">example output </a>(NPS only).</li>
 <li><a href = "https://github.com/NCRN/ForestVegQC/tree/NewQC">NCRN Forest Vegetation QA/QC Reports using DT package</a></li>
 <li><a href = "https://github.com/KateMMiller/forestQAQC">forestQAQC</a>: QA/QC summary report and weekly QC checks for NETN and MIDN forest monitoring. Example reports are also posted to the same repo as HTML files.</li>  
+<li><a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples/Regen_summary">Regeneration summary code</a> and <a href = "https://doimspp.sharepoint.com/:u:/s/ScientistsTraining2022/EWs7GqfTSy5InkJy0MAqIXcBYk3QxtqrgZeVM10NC4sSsw?e=gEYtjo">output</a> (NPS only).</li>
 <li><a href = "https://github.com/KateMMiller/NETN_water_summaries">NETN Water Summaries</a>: Uses the dynamic tab approach to generate site tabs for a given park. The plots are also `ggplot` objects that were turned into `plotly` plots to be interactive.</li>
-<li><a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples">Markdown examples used in training.</a>(docx)</li>
+
+<li><a href = "https://github.com/KateMMiller/IMD_R_Training_Advanced/tree/main/Markdown_examples">Markdown examples used in training.</a></li>
+
 </ul>
 
 #### Resources

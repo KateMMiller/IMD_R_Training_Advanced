@@ -33,11 +33,11 @@ return(p)
 }
 
 # Plot invasives by cycle for specified park
-invplot <- invplot_fun(invdata, park = "ACAD") 
+invplot <- invplot_fun(invdata, park = params$park) 
 
 # Filter invasive data to only include specified park and cycle
 parkinv <- invdata %>% 
-  filter(park == "ACAD" & cycle == 3) %>% 
+  filter(park == params$park & cycle == 3) %>% 
   select(-park)                    
 
 parktab <- kable(parkinv, format = 'html',

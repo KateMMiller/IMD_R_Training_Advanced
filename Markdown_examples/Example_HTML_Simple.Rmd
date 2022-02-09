@@ -1,0 +1,30 @@
+---
+output: 
+  bookdown::html_document2:
+    numbered_sections: false
+    number_sections: false
+    fig_caption: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.align = "left", out.width = "50%")
+```
+
+```{r fkinv, include = FALSE}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+devtools::source_url("https://raw.githubusercontent.com/KateMMiller/IMD_R_Training_Advanced/main/Generate_fake_invasive_data_and_plots.R")
+```
+
+```{r fig-inv-all, fig.cap = "Trends in invasive plant cover in NETN parks.", out.width = "50%"}
+invplot_all
+```
+
+
+```{r fig-inv-acad, fig.cap = "Trends in invasive plant cover in ACAD.", out.width = "50%"}
+invplot_ACAD
+```
+
+
+As you can see in Figure \@ref(fig:fig-inv-acad), invasive cover appears to be declining. Whereas, invasive cover appears more stable in other NETN parks (Figure \@ref(fig:fig-inv-all)).
