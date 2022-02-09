@@ -4,6 +4,8 @@ output:
   flexdashboard::flex_dashboard:
       theme: yeti
       orientation: columns 
+editor_options: 
+  chunk_output_type: inline
 ---
   
 ```{r setup, include=FALSE}
@@ -57,7 +59,7 @@ region_wide_unit <- parks_dat %>%
 
 ```
 
-Map
+Big Picture
 =====================================
 
 Column {style="height:100pc;"}
@@ -157,9 +159,72 @@ e_hist_NP <- parks_wide_unit %>%
 e_arrange(e_hist_NHS, e_hist_NM, e_hist_NP)
 ```
 
+Heat Maps
+===================================== 
+
+Column {style="height:100pc;"}
+-------------------------------------
+
+###
+
+```{r}
+
+joint_heat <- function(p) {
+  p %>% 
+  e_tooltip(formatter = htmlwidgets::JS("
+  function(params){
+  return('Year: ' + params.value[0] + '<br />Park Code: ' + params.value[1]  + '<br />Annual Visitor Count (in millions): ' + params.value[2])
+  }
+  ")
+  ) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature("dataZoom") %>%
+    e_toolbox_feature(feature = "reset") %>%
+    e_toolbox_feature("dataView") %>%
+    e_toolbox_feature("saveAsImage")
+} 
+
+parks_dat %>% 
+  dplyr::filter(unit_type == "National_Historic_Site") %>%
+  e_charts(x = year) %>% 
+  e_heatmap(y = unit_code, visitors_1m) %>% 
+  e_visual_map(visitors_1m) %>% 
+  e_title("Annual visitor counts (in millions) by park unit (rows) and year (cols)", "National Historic Sites") %>%
+  joint_heat()
+```
+
+###
+
+```{r}
+parks_dat %>% 
+  dplyr::filter(unit_type == "National_Monument") %>%
+  e_charts(x = year) %>% 
+  e_heatmap(y = unit_code, visitors_1m) %>% 
+  e_visual_map(visitors_1m) %>% 
+  e_title("Annual visitor counts (in millions) by park unit (rows) and year (cols)", "National Monuments") %>%
+  joint_heat()
+```
+
+###
+
+```{r}
+parks_dat %>% 
+  dplyr::filter(unit_type == "National_Park") %>%
+  e_charts(x = year) %>% 
+  e_heatmap(y = unit_code, visitors_1m) %>% 
+  e_visual_map(visitors_1m) %>% 
+  e_title("Annual visitor counts (in millions) by park unit (rows) and year (cols)", "National Parks") %>%
+  joint_heat()
+```
+
 Time Series by Region & Unit Type
 ===================================== 
 
+Inputs {.sidebar}
+-------------------------------------
+
+<br>
+<h4>
 ```{r}  
 parks_dat_shared <- SharedData$new(
   parks_dat %>% 
@@ -170,7 +235,11 @@ parks_dat_shared <- SharedData$new(
 filter_select("unit_type", "Select a unit type", parks_dat_shared, multiple = FALSE, ~unit_type)
 
 filter_select("region", "Select a region", parks_dat_shared, multiple = FALSE, ~region)
+
 ```
+</h4>
+
+<br>
 
 ```{js}
 function filter_default(){
@@ -180,7 +249,9 @@ function filter_default(){
 $(document).ready(filter_default);
 ```
 
-Column {.tabset .tabset fade}
+The data in this dashboard are a subset of National Park Service visitor counts from 1985 to 2015. These data were originally accessed from the US Department of the Interior National Park Service’s Integrated Resource Management Applications data portal (https://irma.nps.gov/), but were directly read from a [Tidy Tuesday Project](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-09-17). 
+
+Column
 -------------------------------------
 
 ###
@@ -204,8 +275,16 @@ plot_ly(parks_dat_shared,
            spikecolor = "red",
            spikesnap = "data",
            spikethickness = 2),
-         yaxis = list (title = 'Annual Visitor Count (in Millions)'))
+         yaxis = list (title = 'Annual Visitor Count (in Millions)'),
+         legend = list(xanchor = "center",
+                       yanchor = "top",
+                       y = -0.2,
+                       x = 0.5))
+
 ```
+
+Column
+-------------------------------------
 
 ###
 
@@ -218,34 +297,9 @@ DT::datatable(
     options = list(
       autoWidth = TRUE,
       dom = 'Blfrtip',
-                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-                   lengthMenu = list(c(15,30,50,-1),
-                                     c(15,30,50,"All")),
-                   columnDefs = list(list(visible=FALSE, targets=3),
-                                     list(width = '100px', targets = 1:3))
+      buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+      lengthMenu = list(c(15,30,50,-1),
+                        c(15,30,50,"All")),
+      columnDefs = list(list(className = 'dt_center', targets = "_all"))
 ))
 ```
-
-About this Dashboard
-=====================================
-
-### 
-
-```{r}
-
-plot_ly(parks_dat_shared,
-        x = ~gas_constant, 
-        y = ~visitors_1m, 
-        color = ~unit_type, 
-        type = 'scatter', 
-        mode = 'points') %>%
-  layout(title = 'Visitor Counts vs National Gas Averages, 1985 - 2015',
-         xaxis = list(
-           title = 'Gas Price')
-         )
-```
-
-### Data source
-
-The data used in this dashboard come from....  can be found at
-[give a name](https://)
