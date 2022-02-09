@@ -23,7 +23,7 @@ title: "NPS IMD Advanced R Training"
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
 
-<h2>NPS Inventory and Monitoring Division Advanced R Training: February 5 -- February 8, 2022</h2> {.tabset .tabset-pills}
+<h2>NPS Inventory and Monitoring Division Advanced R Training: February 7 -- February 10, 2022</h2> {.tabset .tabset-pills}
 --------------------------------------------------
 
 ### Prep for Training {.tabset}
