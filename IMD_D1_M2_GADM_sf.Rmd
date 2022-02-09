@@ -90,7 +90,7 @@ library(rnaturalearthdata)
 lakes <- ne_download(scale = 10, # large scale
                      category = "physical",
                      type = 'lakes_north_america', # a named file on their website
-                     destdir = getwd(), # save to working dir.
+                     destdir = paste0(getwd(), "/data"), # save to working dir.
                      returnclass = 'sf' # return as sf instead of sp
                      )
 
