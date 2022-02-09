@@ -182,9 +182,21 @@ At this point, you can add a note to your pull request, tag a reviewer, and look
 When you are ready, click on **Create pull request**. 
 
 **Collaborator 2**  
-In your GitHub repository, navigate to **Pull requests** and click on the one your collaborator just created. You can look over the code in GitHub to see what was done. It's also a good idea to pull the `group-size-plot` down to your local repository so that you can actually run the code and verify that it works for you. From the **Git** tab in RStudio, use the branch dropdown to switch to `group-size-plot`. If you don't see it in your local branches, look under **Remote:Origin**. Clicking on it will create a local version of the branch.
+In your GitHub repository, you'll see a badge next to **Pull requests** with a "1" on it, indicating that there is one open pull request. Navigate to **Pull requests** and click on the one your collaborator just created. 
 
-Run the code and verify that it works. When you're satisfied, go back to the pull request review on GitHub. You can add any feedback that you want to. For the purposes of this class, we'll go ahead and approve the request and merge `group-size-plot` into `main`. In real life, you may want to request corrections or improvements before merging.
+![open pull request](images/GH_PR_step1.png)
+
+You can look at the **Commits** and **Files changed** tabs to see what was done. It's also a good idea to pull the `group-size-plot` down to your local repository so that you can actually run the code and verify that it works for you. From the **Git** tab in RStudio, use the branch dropdown to switch to `group-size-plot`. If you don't see it in your local branches, look under **Remote:Origin**. Clicking on it will create a local version of the branch.
+
+![pull request needs review](images/GH_PR_step2.png)
+
+Run the code and verify that it works. When you're satisfied, go back to the pull request review on GitHub. If you see a message that your review was requested, click on the green **Add your review** button at the top of the screen. This will take you to the **Files changed** page where you can make comments on specific lines of code and decide whether to approve merging it into the main branch, request changes before it is merged, or just provide general feedback.
+
+![pull request review screen](images/GH_PR_add_review.png){width=50%}  ![pull request finish review](images/GH_PR_add_review2.png){width=50%}
+
+For the purposes of this class, we'll go ahead and approve the request and merge `group-size-plot` into `main`. In real life, you may want to request corrections or improvements before merging. Go back to the **Conversation** tab for the pull request, add any comments you would like, then click on the green **Merge pull request** button.
+
+![pull request finish review](images/GH_PR_step3.png)
 
 Now our local `main` branch needs to be updated, so switch to it in RStudio and click **Pull**.
 
