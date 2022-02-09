@@ -372,7 +372,7 @@ for(i in seq_along(park_list)){
 <h4>HTML</h4>
 If you're rendering to HTML, you can view the actual HTML and CSS under the hood by right clicking on the document in your browser and either inspecting or viewing source code (actual terms differ across browsers). R Markdown makes a lot of default assumptions about the container and divisions and has a lot of built-in CSS that can sometimes be hard to change. Viewing the source code can help you figure out where things are going wrong. If it's a specific tag or class in a tag, you can redefine those tags or add new classes in your custom CSS. 
 <br>
-
+<br>
 <h4>LaTeX</h4>
 If you're rendering to PDF, you can save the template used to generate the report by adding the code below to the YAML:
 <pre class="r"><code>---
@@ -381,6 +381,7 @@ output:
       keep_tex: yes
 ---
 </code></pre>
+<br>
 
 <h4>Word</h4>
 To view the XML code under the hood of a Word document, change the extension of the document from ".docx" to ".zip", and then click on the zip file. Inside the zip file, open the "word" folder. The source code for your document is called "document.xml". Any text reader should be able to open this file. I find that WordPad provides a decent view of the code. If you have Visual Studio, that might be even better. 
