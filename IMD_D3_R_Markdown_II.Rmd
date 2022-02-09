@@ -23,7 +23,7 @@ wetsum <- wetdat %>% group_by(Site_Name, Year) %>%
 ```
 
 </details>
-
+<br>
 <details open><summary class='drop'>kable and kableExtra</summary>
 The code below creates a simple table that renders in HTML, is only as wide as the records in the table, and has alternating row colors. If you're outputting to PDF, your format will be "latex" instead of "HTML" and you'll need to use LaTeX for any custom formatting/styling that aren't built into kable and kableExtra.
 
@@ -119,9 +119,9 @@ ans_tab
 </div>
 
 </details>
-
+<br>
 <details open><summary class='drop'>DT::datatables</summary>
-Using the same wetsum dataset we created earlier, we'll make a table using `datatable()` and will add some of the features that `kable()` doesn't have and that usually lead me to choose datatable over kable. We'll start with a basic example and build on it.
+Using the same `wetsum` dataset we created earlier, we'll make a table using `datatable()` and will add some of the features that `kable()` doesn't have and that usually lead me to choose datatable over kable. We'll start with a basic example and build on it.
 
 ```{r dt1, echo = T, results = 'hide'}
 library(DT)
@@ -145,7 +145,7 @@ I also added an option that stops the table from spanning the entire page.
 ```{r dt3, echo = T, results = 'hide'}
 # modify pageLength and lengthMenu
 wetdt2 <- datatable(wetsum, colnames = c("Site", "Year", "# Invasive", "# Protected"),
-                    width = "40%",
+                    width = "45%",
                     options = list(pageLength = 10,
                                    lengthMenu = c(5, 10, 20))
                     )
@@ -168,7 +168,7 @@ Several additional features with datatable are shown in the code below.
 <div>
 ```{r dt5, echo = T, results = 'hide'}
 wetdt3 <- datatable(data.frame(wetsum, "Notes" = NA), 
-                    width = "40%",
+                    width = "45%",
                     colnames = c("Site", "Year", "# Invasive", "# Protected", "Notes"),
                     options = list(pageLength = 10),                        
                     class = 'cell-border stripe',
