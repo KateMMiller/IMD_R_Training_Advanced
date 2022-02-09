@@ -98,7 +98,7 @@ Rendering to Word can be a helpful way to generate a Results section for a repor
 
 <h3>Cons of Word output</h3>
 1. This is the most limited output, particularly if you just use R Markdown's built-in ```output: word_document```. You really can only apply the main styles in the template you imported. Figures and tables don't always render all that well (or at all), and often need to be tweaked again in Word. Headers and footers don't render either. To do anything beyond applying main styles, you'll likely need to employ packages in the `officeverse`, including `officedown` and `flextable` packages. I've only spent a little time looking over these packages. They seem useful, but require learning another set of packages and conventions. 
-2. Incorporating track changes back into R Markdown is a messy, manual process. It's not something you'd want to do repeatedly for the same paper.
+2. Incorporating track changes back into R Markdown is often a messy, manual process. It's not something you'd want to do repeatedly for the same paper. Note however that a recent package on GitHub called `redoc` may make porting changes to the Word document back to R Markdown relatively straightforward (see the <a href="https://noamross.github.io/redoc/">redoc GitHub page</a> for more detail. 
 3. I have yet to get a reference management system to work in Markdown. While it's possible, it may be hard to implement on government furnished equipment using approved software.
 </details>
 <br>
