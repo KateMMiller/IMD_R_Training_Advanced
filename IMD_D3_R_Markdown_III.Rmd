@@ -382,6 +382,10 @@ output:
 ---
 </code></pre>
 
+<h4>Word</h4>
+To view the XML code under the hood of a Word document, change the extension of the document from ".docx" to ".zip", and then click on the zip file. Inside the zip file, open the "word" folder. The source code for your document is called "document.xml". Any text reader should be able to open this file. I find that WordPad provides a decent view of the code. If you have Visual Studio, that might be even better. 
+<br>
+<hr>
 
 #### Gallery of Examples
 <ul>
