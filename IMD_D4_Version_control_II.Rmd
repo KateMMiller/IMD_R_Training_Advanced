@@ -10,7 +10,7 @@ output: html_document
 
 This is the general workflow that version control follows. For the moment, ignore the stuff on the right - we'll get to that soon.
 
-![version control workflow](images/VersionControlWorkflow.svg)
+![](images/VersionControlWorkflow.svg)
 
 ##### Git vs. GitHub
 

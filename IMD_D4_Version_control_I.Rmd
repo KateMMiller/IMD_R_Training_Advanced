@@ -6,7 +6,7 @@ output:
     css: custom_styles.css
     numbered_sections: false
     number_sections: false
-    fig_caption: false
+    # fig_caption: false
 ---
 
 #### Intro to version control
@@ -19,7 +19,7 @@ If your code was a Word document, this is the point where you would turn on Trac
 
 ##### Why version control...?
 
-![why version control](images/WhyVersionControl.png){width=250px}
+![](images/WhyVersionControl.png){width=250px}
 
 ...because we've all been here before. Version control is worth the learning curve because:
 
@@ -32,7 +32,7 @@ If your code was a Word document, this is the point where you would turn on Trac
 
 There are a variety of version control systems available. We will be using Git, since it is by far the most commonly used system and it is free and open source.
 
-![interest in version control systems](images/GitPopularity.PNG){width=400px}
+![](images/GitPopularity.PNG){width=400px}
 
 
 You'll need the following installed and ready to use prior to this course:
