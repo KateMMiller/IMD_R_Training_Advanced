@@ -35,6 +35,14 @@ In this section we will get you started with using R markdown to build an intera
 
 If you don't understand why that second point is important, it's okay. What IS important is that we will be using html widgets to make our dashboard interactive. When we "knit" the dashboard we will generate an interactive HTML file that can be used by anyone with access to a web browser. The lucky recipient of the dashboard will not need R knowledge or R software. The dashboard--a simple html file--will not be able to run statistical analyses or do any kind of calculations on-the-fly, but it will be able to sort and filter data and generate tables and plots based on user-selected subsets of data. This feature of a simple html dashboard can be useful when we have large data sets and don't want to flip through 100 pages of plots to find the one we are looking for. 
 
+Here are screenshots of a dashboard made with only html widgets. The actual .Rmd file (`park_visits.Rmd`) that built this dashboard can be found in the RMarkdown example folder associated with this training.
+
+![](images/park_dash1.PNG)
+
+![](images/park_dash2.PNG)
+
+![](images/park_dash3.PNG)
+
 </details>
 <br>
 <details open><summary class='drop'>Flex Dashboard</summary>
@@ -164,8 +172,5 @@ All together, the code chunk should look something like this:
 <details open><summary class='drop'>Last Plot</summary>
 
 This one is up to you. You can create a different kind of `plotly()` figure (based on the same shared data frame) to put on your dashboard. OR you can try out one of these very cool [`echarts4r`](https://echarts4r.john-coene.com/articles/get_started.html) plots with your data. Note that in the examples, they use `|>` to pipe their functions instead of `%>%`. Either one will work. Also note that `echarts4r` is not yet compatible with `crosstalk`. But that's no reason to not use a widget on your dashboard. Interactive plots and tables can be useful even if they don't interact with `crosstalk` shared data frames. 
-
-Here is an example of an interactive map and histogram I made with `echarts4r` functions.
-![](images/flex8.PNG)
 
 [This page](https://www.htmlwidgets.org/showcase_leaflet.html) has links to many other really nice html widgets that you can use on your R markdown dashboards. Check them out!
