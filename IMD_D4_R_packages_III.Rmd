@@ -203,7 +203,7 @@ knitr::include_graphics("./images/package_commit.jpg")
 <h3>Install from GitHub</h3>
 The package is is currently only installed on your local machine. The easiest way for others to use your package are for them to install the package using devtools. This will install the package based on the code in the `main` branch. Packages can also be installed from a branch by adding `ref = 'branchname'` to the function call.
 
-```{r instgit, echo = F, eval = F}
+```{r instgit, echo = T, eval = F}
 devtools::install_github("KateMMiller/testpackage")
 ```
 
