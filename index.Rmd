@@ -104,6 +104,10 @@ rm(list = ls())
 ```{r RmarkdownIII, child = "IMD_D3_R_Markdown_III.Rmd"}
 ```
 
+```{r RmarkdownIV, child = "IMD_D3_Interactive.Rmd"}
+```
+
+
 ### Day 4: Version Control {.tabset}
 
 ```{r VersionControlI, child = "IMD_D4_Version_control_I.Rmd"}
