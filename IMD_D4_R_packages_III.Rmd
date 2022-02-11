@@ -24,8 +24,8 @@ Thoughtful and thorough error handling make your package user friendly. Coding b
 <details open><summary class = 'drop'>Checking for Suggests </summary>
 We're going to add one more function to our testpackage, so we can talk about suggests (i.e. suggested packages that aren't automatically installed when your package is installed) and error handling. The function will be called theme_IMD and will specify a custom theme for ggplot2, which is one of our suggests. Open a new script, name it theme_IMD, and copy the code chunk into it. 
 
-```{r newfun, eval=F, echo=T}
-#' @title theme_IMD: custom ggplot2 theme for forestNETN
+```{r newfun, echo=T, eval = F}
+#' @title theme_IMD: custom ggplot2 theme for plotting
 #'
 #'
 #' @description This is a custom ggplot2 theme that removes the default panel grids
